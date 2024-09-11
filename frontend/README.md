@@ -48,6 +48,10 @@ Para criar novos componentes, use `ng generate component component-name`. Há
 uma infinitude de outras diretivas que podem ser usadas com o generate, como:
 `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
+Use o comando `ng lint` para garantir que seu projeto segue os padrões de
+código esperados e altere os arquivos que se apresentarem fora do padrão!
+
 ## Dúvidas sobre a CLI do Angular
 
-Qualquer dúvida, use `ng help` ou acesse [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli).
+Qualquer dúvida, use `ng help` ou acesse
+[Angular CLI Overview and Command Reference](https://angular.dev/tools/cli).

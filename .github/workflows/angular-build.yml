@@ -1,0 +1,38 @@
+name: "Angular Build"
+
+defaults:
+  run:
+    working-directory: frontend
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.17.0]
+    steps:
+    - name: Checkout the source code
+      uses: actions/checkout@v3
+    
+    - name: Setup node ${{matrix.node-version}}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{matrix.node-version}}
+        cache: npm
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Linting project
+      run: npm run lint
+
+    - name: Build
+      run: npm run build

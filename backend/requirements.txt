@@ -1,0 +1,5 @@
+alembic
+fastapi[standard]
+sqlalchemy
+pre-commit
+psycopg2

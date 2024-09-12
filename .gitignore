@@ -1,0 +1,48 @@
+# Backend ---------------------------------------------------------------------
+
+backend/venv
+*.env
+__pycache__/
+
+# Frontend --------------------------------------------------------------------
+
+# Compiled output
+frontend/dist
+frontend/tmp
+frontend/out-tsc
+frontend/bazel-out
+
+# Node
+frontend/node_modules
+frontend/npm-debug.log
+frontend/yarn-error.log
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Miscellaneous
+frontend/.angular/cache
+frontend/.sass-cache/
+frontend/connect.lock
+frontend/coverage
+frontend/libpeerconnection.log
+frontend/testem.log
+frontend/typings
+
+# System files
+frontend/.DS_Store
+frontend/Thumbs.db

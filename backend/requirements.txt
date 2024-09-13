@@ -1,5 +1,6 @@
-alembic
-fastapi[standard]
-sqlalchemy
+django
+djangorestframework
+django-cors-headers
+django-spa
+django-filter
 pre-commit
-psycopg2

@@ -5,12 +5,8 @@ from src.exceptions.secrets_exceptions import UndefinedSecretException
 
 class Secrets:
     def __init__(self):
-        self.database_user: str = os.getenv("DATABASE_USER")
-        self.database_pass: str = os.getenv("DATABASE_PASS")
-        self.database_host: str = os.getenv("DATABASE_HOST")
-        self.database_port: str = os.getenv("DATABASE_PORT")
-        self.database_name: str = os.getenv("DATABASE_NAME")
         self.execution_environment: str = os.getenv("EXECUTION_ENVIRONMENT")
+        self.django_secret_key: str     = os.getenv("DJANGO_SECRET_KEY")
 
         self.test_environment = False
         if (
@@ -37,19 +33,6 @@ class Secrets:
             print("\n".join(undefined_secrets))
             print("-----------------------------------")
             raise UndefinedSecretException
-
-    @property
-    def database_url(self) -> str:
-        if self.test_environment:
-            return "postgresql://postgres:1234@localhost:5432/postgres"
-
-        return (
-            f"postgresql://{self.database_user}:{self.database_pass}"
-            "@"
-            f"{self.database_host}:{self.database_port}"
-            "/"
-            f"{self.database_name}"
-        )
 
 
 secrets = Secrets()

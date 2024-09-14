@@ -13,19 +13,18 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 
+from src.configurations.secrets import secrets
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-# Path to the frontend dist directory
-FRONTEND_DIR = os.path.join(
-    BASE_DIR, "..", "..", "frontend", "dist", "frontend"
-)
+print(BASE_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = (
-    "django-insecure-x==e&xy2%9*_3^%%h#2htywhocxla(yr(ysz^=3d@8up&*e!8g"
+    secrets.django_secret_key
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -43,7 +42,6 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "django.contrib.staticfiles",
     # apps adicionais
     "whitenoise.runserver_nostatic",
     "corsheaders",
@@ -57,21 +55,19 @@ MIDDLEWARE = [
     "spa.middleware.SPAMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "config.urls"
+ROOT_URLCONF = "src.configurations.urls"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            os.path.join(FRONTEND_DIR, "browser"),
-            # os.path.join(BASE_DIR,  'templates'),
+            os.path.join(BASE_DIR,  'templates'),
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -85,10 +81,10 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "config.wsgi.application"
+WSGI_APPLICATION = "src.wsgi.application"
 
 # Corsheaders (app para permitir CORS)
-CORS_ALLOWED_ORIGINS = ["http://localhost:8000", "http://127.0.0.1:8000"]
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -137,14 +133,6 @@ USE_TZ = True
 
 # App para servir arquivos estáticos
 STATICFILES_STORAGE = "spa.storage.SPAStaticFilesStorage"
-
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = "/static/"
-STATICFILES_DIRS = [os.path.join(FRONTEND_DIR, "browser")]
-
-# TODO - definir onde media vai ficar
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

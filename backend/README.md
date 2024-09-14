@@ -1,6 +1,7 @@
 # Learning Path (backend)
 
-O presente projeto foi desenvolvido com [Python](https://www.python.org/) v3.12.3 usando as seguintes dependências:
+O presente projeto foi desenvolvido com [Python](https://www.python.org/)
+v3.12.3 usando as seguintes dependências:
 - [Django](https://www.djangoproject.com/) v5.1.1
 
 Para manutenção do código, foram usados:
@@ -37,39 +38,49 @@ pre-commit install
 pre-commit run --all-files
 ```
 
-## Django
-Os comandos a seguir ajudam a gerenciar e executar o projeto Django.
+## Execução do projeto
 
-### 1. Execução
-Para iniciar o servidor de desenvolvimento local e visualizar o site em seu navegador, use o comando:
+Para iniciar o servidor de desenvolvimento local, use o comando:
+
 ```bash
 # Inicia o servidor local (porta opcional)
-python3 manage.py runserver [<porta>]
+python3 -m src.manage runserver [<porta>]
 ```
 
-### 2. Criando apps
-No Django, um app é uma aplicação web que faz parte do projeto. Cada app é responsável por uma funcionalidade específica, como um sistema de autenticação ou uma API.
-- Crie um novo app:
-```bash
-# Inicia o servidor local
-python3 manage.py startapp <nome_do_app>
-```
+Se estiver usando o VS Code, você pode rodar o projeto através da interface do
+editor, usando o arquivo `launch.json`, dentro da pasta `.vscode` do backend.
+Isso permite debugar o código!
 
-- Adicione o app ao projeto: Abra o arquivo `backend/src/settings.py` e adicione o nome do novo app à lista `INSTALLED_APPS`. Por exemplo:
+## Criação apps Django
 
-```bash
-INSTALLED_APPS = [
-   ...
-   'nome_do_app',
-]
-```
+No Django, um app é uma aplicação web que faz parte do projeto. Cada app é
+responsável por uma funcionalidade específica, como um sistema de
+autenticação ou uma API.
 
-### 3. Banco de dados
-Para gerenciar o banco de dados, você usará os seguintes comandos:
-- Gerar migrações: Sempre que um modelo for criado ou alterado, você precisa gerar arquivos de migração que descrevem essas mudanças (Isso cria arquivos na pasta ```migrations``` de cada app, descrevendo as alterações que precisam ser aplicadas ao banco de dados):
-```bash
-python3 manage.py makemigrations # gera migrações
-```
+1. Crie um novo app:
+   ```bash
+   # Inicia o servidor local
+   python src.manage startapp <nome_do_app>
+   ```
+
+2. Adicione o app ao projeto: Abra o arquivo `backend/src/settings.py` e adicione o nome do novo app à lista `INSTALLED_APPS`. Por exemplo:
+   ```bash
+   INSTALLED_APPS = [
+      ...
+      'nome_do_app',
+   ]
+   ```
+
+## Manutenção do Banco de dados
+A gerência do banco de dados consiste nos seguintes passos:
+
+1. Gerar migrações: sempre que um modelo for criado ou alterado, você deve
+   gerar arquivos de migração que descrevem essas mudanças. Tais arquivos serão
+   salvos na pasta `migrations` de cada app, descrevendo as alterações que serão
+   aplicadas ao banco de dados:
+   ```bash
+   python manage.py makemigrations # gera migrações
+   ```
 
 - Aplicar migrações: Para aplicar as migrações ao banco de dados e criar ou alterar as tabelas conforme necessário, execute:
 ```bash

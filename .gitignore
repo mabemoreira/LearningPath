@@ -3,6 +3,8 @@
 backend/venv
 *.env
 __pycache__/
+backend/src/static
+backend/src/db.sqlite3
 
 # Frontend --------------------------------------------------------------------
 

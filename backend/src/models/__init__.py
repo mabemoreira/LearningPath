@@ -1,11 +1,10 @@
-from datetime import datetime
-
-from sqlalchemy import BigInteger, Column, DateTime, String
+from django.db import models
 
 
-class DatabaseModel:
-    id = Column(BigInteger, primary_key=True)
-    created_at = Column(DateTime, default=datetime.now)
-    created_by = Column(String)
-    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
-    updated_by = Column(String)
+class BaseModel(models.Model):
+    class Meta:
+        abstract = True
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.CharField()
+    updated_at = models.DateTimeField(auto_now=True)
+    updated_by = models.CharField()

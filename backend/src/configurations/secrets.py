@@ -6,7 +6,7 @@ from src.exceptions.secrets_exceptions import UndefinedSecretException
 class Secrets:
     def __init__(self):
         self.execution_environment: str = os.getenv("EXECUTION_ENVIRONMENT")
-        self.django_secret_key: str     = os.getenv("DJANGO_SECRET_KEY")
+        self.django_secret_key: str = os.getenv("DJANGO_SECRET_KEY")
 
         self.test_environment = False
         if (

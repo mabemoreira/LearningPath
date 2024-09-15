@@ -1,0 +1,88 @@
+@import "src/app/tokens.scss";
+
+.header_28-13 {
+  position: relative;
+  box-sizing: border-box;
+}
+.header-logo_28-3 {
+  top: 20px;
+  left: 20px;
+  position: absolute;
+  display: flex;
+  width: 294px;
+  height: 60px;
+}
+.version_28-4 {
+  width: 294px;
+  height: 60px;
+}
+.text-learning-path_28-5 {
+  color: #45ada8;
+  @include logo-text;
+  font-weight: 700;
+  text-align: left;
+  width: 224px;
+  height: 28px;
+}
+
+.logo_28-176 {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+
+.menu_28-7 {
+  top: 35px;
+  left: 1028px;
+  position: absolute;
+  display: flex;
+  width: 372px;
+  height: 30px;
+}
+.text-login_28-8 {
+  color: $variable-collection-main-color;
+  @include menu-item-text;
+  font-weight: 700;
+  text-align: center;
+  text-wrap: nowrap;
+  width: 61px;
+  height: 30px;
+}
+
+.text-github_28-9 {
+  color: $variable-collection-main-color;
+  @include menu-item-text;
+  font-weight: 700;
+  text-align: center;
+  text-wrap: nowrap;
+  width: 78px;
+  height: 30px;
+}
+
+.text-equipe_28-10 {
+  color: $variable-collection-main-color;
+  @include menu-item-text;
+  font-weight: 700;
+  text-align: center;
+  text-wrap: nowrap;
+  width: 77px;
+  height: 30px;
+}
+
+.text-produto_28-11 {
+  color: $main-color;
+  @include menu-item-text;
+  font-weight: 700;
+  text-align: center;
+  text-wrap: nowrap;
+  width: 88px;
+  height: 30px;
+}
+
+.rectangle-25_28-12 {
+  top: 0px;
+  left: 0px;
+  position: absolute;
+  display: flex;
+  display: flex;
+}

@@ -1,0 +1,41 @@
+@import "src/app/tokens.scss";
+
+.footer_28-30 {
+  position: relative;
+  box-sizing: border-box;
+}
+.version_28-26 {
+  top: 20px;
+  left: 652px;
+  position: absolute;
+  display: flex;
+  width: 135px;
+  height: 44px;
+}
+.text-v0-1-0_28-27 {
+  color: #c2c4c6;
+  @include normal-text;
+  font-weight: 400;
+  text-align: center;
+  text-wrap: nowrap;
+  width: 42px;
+  height: 22px;
+}
+
+.text-updated-at-2024_28-28 {
+  color: #c2c4c6;
+  @include normal-text;
+  font-weight: 400;
+  text-align: center;
+  text-wrap: nowrap;
+  width: 135px;
+  height: 22px;
+}
+
+.rectangle-26_28-29 {
+  top: 0px;
+  left: 0px;
+  position: absolute;
+  display: flex;
+  display: flex;
+}

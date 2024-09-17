@@ -23,9 +23,7 @@ print(BASE_DIR)
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = (
-    secrets.django_secret_key
-)
+SECRET_KEY = secrets.django_secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -47,6 +45,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",
     # apps criados
+    "src",
 ]
 
 MIDDLEWARE = [
@@ -67,7 +66,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            os.path.join(BASE_DIR,  'templates'),
+            os.path.join(BASE_DIR, "templates"),
         ],
         "APP_DIRS": True,
         "OPTIONS": {

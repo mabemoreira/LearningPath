@@ -8,7 +8,6 @@ from src.models.custom_user import (
 from src.services.custom_user_service import create_custom_user
 
 
-# TODO - Usar mocks? A criacao basicamente so usa funcoes externas
 class CreateCustomUserTestCase(TestCase):
     def setUp(self):
         self.valid_user_data = {

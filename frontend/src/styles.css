@@ -1,1 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Magra:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap");
+
+:root,
+* {
+    --negative-contrast-color: #e84a5f;
+    --background-color: #f2f5f7;
+    --light-primary-color: #a8e6ce;
+    --primary-color: #45ada8;
+    --dark-primary-color: #547980;
+    --darker-primary-color: #2a363b;
+    --light-gray-color: #a8a7a7;
+    --gray-color: #474747;
+    --black-color: #363636;
+    --contrast-color: #ff8c94;
+
+    --base-font-family: "Urbanist";
+    --primary-font-family: "Montserrat";
+    --secondary-font-family: "Magra";
+
+    padding: 0;
+    margin: 0;
+    font-size: 16pt;
+    font-family: var(--base-font-family);
+}
+
+:root,
+a {
+    text-decoration: none;
+}
+
+body {
+    background-color: var(--background-color);
+}

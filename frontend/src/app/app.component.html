@@ -1,4 +1,7 @@
-<h1>Data from Django:</h1>
-<pre>{{ data | json }}</pre>
+<div>
+    <app-header></app-header>
 
-<button (click)="postDataToServer()">Post Data</button>
+    <router-outlet></router-outlet>
+
+    <app-footer></app-footer>
+</div>

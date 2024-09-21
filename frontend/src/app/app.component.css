@@ -1,0 +1,17 @@
+div {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+}
+
+app-header {
+    align-self: center;
+    width: 100%;
+}
+
+app-footer {
+    margin-top: auto;
+    align-self: center;
+    width: 100%;
+}

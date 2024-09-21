@@ -42,9 +42,24 @@ Para rodar o projeto, use `ng serve` e abra o navegador no endereço
 `http://localhost:4200/`. Cada nova alteração nos arquivos fonte serão
 automaticamente espelhadas nessa instância rodando.
 
+## Estrutura de pastas
+
+A estrutura de pastas a ser seguida está conforme o artigo do Ganesh Varahade,
+[Angular Best Practices: Tips for Project Structure and Organization](https://www.thinkitive.com/blog/angular-best-practices-tips-for-project-structure-and-organization/)!
+
+Ressalto as três pastas principais:
+
+1. **Core:** funções, serviços e modelos compartilhados por toda a aplicação,
+   sem relação direta com alguma feature. Deve ser importado epenas pelo
+   root-app!
+2. **Shared:** componentes, diretivas, pipes e modelos que estão sendo usados
+   por múltiplas features.
+3. **Features:** para cada feature implementada, uma pasta para ela deve ser
+   criada aqui dentro!
+
 ## Criando novos componentes
 
-Para criar novos componentes, use `ng generate component component-name`. Há 
+Para criar novos componentes, use `ng generate component component-name`. Há
 uma infinitude de outras diretivas que podem ser usadas com o generate, como:
 `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 

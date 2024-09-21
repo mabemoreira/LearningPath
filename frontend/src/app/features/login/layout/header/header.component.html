@@ -1,0 +1,31 @@
+<nav>
+    <a
+        #home
+        class="header-logo"
+        routerLink="/home"
+        (click)="activate_path(home.pathname.slice(1))"
+    >
+        <div class="header-logo-image"></div>
+        <p class="header-logo-text">Learning Path</p>
+    </a>
+    <a
+        #produto
+        routerLink="/produto"
+        [class]="am_i_active(produto.pathname.slice(1))"
+        (click)="activate_path(produto.pathname.slice(1))"
+    >
+        Produto
+    </a>
+    <a
+        #equipe
+        routerLink="/equipe"
+        [class]="am_i_active(equipe.pathname.slice(1))"
+        (click)="activate_path(equipe.pathname.slice(1))"
+    >
+        Equipe
+    </a>
+    <a href="https://github.com/mabemoreira/LearningPath" target="_blank">
+        Github
+    </a>
+    <a href="#">Login</a>
+</nav>

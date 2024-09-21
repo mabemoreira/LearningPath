@@ -1,0 +1,9 @@
+p {
+    text-align: center;
+    color: var(--light-gray-color);
+}
+
+div {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}

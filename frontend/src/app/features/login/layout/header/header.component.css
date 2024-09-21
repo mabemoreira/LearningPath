@@ -1,0 +1,44 @@
+.header-logo {
+    display: flex;
+    align-items: center;
+    padding-left: 0.5rem;
+    margin-right: auto;
+}
+
+.header-logo-image {
+    width: 3rem;
+    height: 3rem;
+    background-image: url(../../../../../assets/logo.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.header-logo-text {
+    padding-left: 0.5rem;
+    font-family: var(--primary-font-family);
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 2rem;
+}
+
+nav {
+    height: 5rem;
+    display: flex;
+}
+
+nav a:nth-child(n + 2) {
+    display: flex;
+    align-items: center;
+    padding-right: 1rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+nav a:nth-child(n + 2).active {
+    text-decoration: underline;
+}
+
+nav :last-child {
+    padding-right: 2rem !important;
+}

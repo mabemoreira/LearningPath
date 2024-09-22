@@ -3,12 +3,18 @@ import json
 from django.forms import ValidationError
 from django.http import JsonResponse
 from django.views import View
-from src.services.custom_user_service import create_custom_user
+from src.services.custom_user_service import create_custom_user, read_user
 
 
 class UserController(View):
     def get(self, request):
-        pass
+        try:
+            retorno = read_user(int(request.body))
+            if retorno == -1:
+                return JsonResponse({"error": "User not found"}, status=404)
+            return JsonResponse(retorno, status=200)
+        except ValidationError as e:
+            return JsonResponse({"error": e.message}, status=500)
 
     def post(self, request):
         try:

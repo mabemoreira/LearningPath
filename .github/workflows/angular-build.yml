@@ -11,7 +11,7 @@ on:
       - main
       - develop
     paths:
-      - frontend
+      - 'frontend/**'
 
 jobs:
   build:

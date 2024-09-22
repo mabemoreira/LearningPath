@@ -11,7 +11,7 @@ on:
       - main
       - develop
     paths:
-      - backend
+      - 'backend/**'
 
 jobs:
   build:

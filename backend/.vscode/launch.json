@@ -5,7 +5,22 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Django",
+            "name": "Python Debugger: Tests",
+            "type": "debugpy",
+            "request": "launch",
+            "args":[
+                "test",
+                "${relativeFileDirname}",
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}/src/manage.py",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        },
+        {
+            "name": "Python Debugger: Application",
             "type": "debugpy",
             "request": "launch",
             "args": [
@@ -13,7 +28,10 @@
             ],
             "django": true,
             "autoStartBrowser": false,
-            "program": "${workspaceFolder}/src/manage.py"
+            "program": "${workspaceFolder}/src/manage.py",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
         }
     ]
 }

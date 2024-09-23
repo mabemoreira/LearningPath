@@ -3,10 +3,10 @@ repos:
     rev: 24.8.0
     hooks:
       - id: black
-        args: ["-l", "80", "-t", "py312"]
+        args: ["-l", "90", "-t", "py312"]
   - repo: https://github.com/pycqa/isort
     rev: 5.13.2
     hooks:
       - id: isort
         name: isort
-        args: ["--profile", "black", "-l", "80"]
+        args: ["--profile", "black", "-l", "90"]

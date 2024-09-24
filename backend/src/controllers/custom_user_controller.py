@@ -1,31 +1,59 @@
 import json
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.forms import ValidationError
-from django.http import JsonResponse
+from django.http import HttpRequest, JsonResponse
 from django.views import View
-from src.services.custom_user_service import create_custom_user, read_user
+from src.exceptions.response_exceptions import (
+    EntityNotFound,
+    InternalServerError,
+    UnprocessableEntity,
+)
+from src.services.custom_user_service import (
+    create_custom_user,
+    delete_custom_user,
+    read_user,
+)
+
+# class UserController(View):
+#     def get(self, request):
+#         try:
+#             retorno = read_user(int(request.body))
+#             if retorno == -1:
+#                 return JsonResponse({"error": "User not found"}, status=404)
+#             return JsonResponse(retorno, status=200)
+#         except ValidationError as e:
+#             return JsonResponse({"error": e.message}, status=500)
+
+#     def post(self, request):
 
 
 class UserController(View):
-    def get(self, request):
+    def get(self, request: HttpRequest, user_id: int):
         try:
-            retorno = read_user(int(request.body))
-            if retorno == -1:
-                return JsonResponse({"error": "User not found"}, status=404)
-            return JsonResponse(retorno, status=200)
-        except ValidationError as e:
-            return JsonResponse({"error": e.message}, status=500)
+            pass
+        except Exception as e:
+            return InternalServerError()
 
-    def post(self, request):
+    def post(self, request: HttpRequest):
         try:
-            return JsonResponse(
-                create_custom_user(json.loads(request.body)), status=200
-            )
+            return JsonResponse(create_custom_user(json.loads(request.body)), status=200)
         except ValidationError as e:
-            return JsonResponse({"error": e.message}, status=500)
+            return UnprocessableEntity()
+        except Exception as e:
+            return InternalServerError()
 
-    def delete(self, request):
-        pass
+    def delete(self, request: HttpRequest, user_id: int):
+        try:
+            delete_custom_user(user_id)
+            return JsonResponse({}, status=204)
+        except ObjectDoesNotExist as e:
+            return EntityNotFound()
+        except Exception as e:
+            return InternalServerError()
 
-    def put(self, request):
-        pass
+    def put(self, request: HttpRequest):
+        try:
+            pass
+        except Exception as e:
+            return InternalServerError()

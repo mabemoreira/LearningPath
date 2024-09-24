@@ -10,10 +10,15 @@ on:
     branches:
       - main
       - develop
+    paths:
+      - 'backend/**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    env:
+      DJANGO_SECRET_KEY: fake-key
 
     steps:
     - name: Checkout the source code

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "django.contrib.staticfiles",
     # apps adicionais
     "whitenoise.runserver_nostatic",
     "corsheaders",
@@ -129,6 +130,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
+STATIC_URL = f"{BASE_DIR}{os.path.sep}admin{os.path.sep}static{os.path.sep}"
 
 # App para servir arquivos estáticos
 STATICFILES_STORAGE = "spa.storage.SPAStaticFilesStorage"

@@ -12,26 +12,17 @@ from src.exceptions.response_exceptions import (
 from src.services.custom_user_service import (
     create_custom_user,
     delete_custom_user,
-    read_user,
+    read_custom_user,
 )
-
-# class UserController(View):
-#     def get(self, request):
-#         try:
-#             retorno = read_user(int(request.body))
-#             if retorno == -1:
-#                 return JsonResponse({"error": "User not found"}, status=404)
-#             return JsonResponse(retorno, status=200)
-#         except ValidationError as e:
-#             return JsonResponse({"error": e.message}, status=500)
-
-#     def post(self, request):
 
 
 class UserController(View):
     def get(self, request: HttpRequest, user_id: int):
         try:
-            pass
+            user = read_custom_user(user_id)
+            return JsonResponse(user, status=200)
+        except ObjectDoesNotExist as e:
+            return EntityNotFound()
         except Exception as e:
             return InternalServerError()
 

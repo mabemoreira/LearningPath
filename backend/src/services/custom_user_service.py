@@ -21,18 +21,20 @@ def create_custom_user(data: dict) -> dict:
     return CustomUserSerializer(custom_user).data
 
 
-def read_user(id) -> dict:
+def read_custom_user(user_id) -> dict:
+    """Retorna os dados do usuário com o id passado.
+    Params:
+        user_id: id do usuário
+
+    Returns:
+        dict: dados do usuário
+
+    Raises:
+        ObjectDoesNotExist: se o usuário não existir
+        ValueError: se o id for inválido
     """
-    Retorna os dados do usuário com o id passado.
-    :param id: id do usuário
-    :return: dict com os dados do usuário
-    :raises: CustomUser.DoesNotExist se o usuário não existir
-    """
-    try:
-        custom_user = CustomUser.objects.get(id=id)
-        return CustomUserSerializer(custom_user).data
-    except CustomUser.DoesNotExist:
-        return -1
+    custom_user = CustomUser.objects.get(id=user_id)
+    return CustomUserSerializer(custom_user).data
 
 
 def delete_custom_user(user_id: int) -> None:

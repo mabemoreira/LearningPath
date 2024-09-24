@@ -9,13 +9,20 @@ from src.exceptions.response_exceptions import (
     InternalServerError,
     UnprocessableEntity,
 )
-from src.services.custom_user_service import create_custom_user, delete_custom_user
+from src.services.custom_user_service import (
+    create_custom_user,
+    delete_custom_user,
+    read_custom_user,
+)
 
 
 class UserController(View):
     def get(self, request: HttpRequest, user_id: int):
         try:
-            pass
+            user = read_custom_user(user_id)
+            return JsonResponse(user, status=200)
+        except ObjectDoesNotExist as e:
+            return EntityNotFound()
         except Exception as e:
             return InternalServerError()
 

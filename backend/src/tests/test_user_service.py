@@ -2,7 +2,11 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 from src.models.custom_user import CustomUser
-from src.services.custom_user_service import create_custom_user, delete_custom_user
+from src.services.custom_user_service import (
+    create_custom_user,
+    delete_custom_user,
+    read_custom_user,
+)
 
 VALID_USER_INPUT_MOCK = {
     "username": "testuser",
@@ -55,6 +59,26 @@ class TestCreateCustomUserService(TestCase):
         for data in INVALID_USER_INPUT_MOCKS:
             with self.assertRaises(Exception):
                 create_custom_user(data)
+
+
+class ReadUserTestCase(TestCase):
+    def setUp(self) -> None:
+        create_custom_user(VALID_USER_INPUT_MOCK)
+
+    def tearDown(self) -> None:
+        if len(User.objects.filter(id=1)):
+            User.objects.filter(id=1).delete()
+
+    def test_read_user_not_found(self):
+        with self.assertRaises(ObjectDoesNotExist):
+            read_custom_user(0)
+        with self.assertRaises(ObjectDoesNotExist):
+            read_custom_user(2)
+
+    def test_read_user_successfully(self):
+        result = read_custom_user(1)
+        assert result["id"] == 1
+        assert result["user"]["email"] == VALID_USER_INPUT_MOCK["email"]
 
 
 class TestDeleteCustomUserService(TestCase):

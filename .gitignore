@@ -2,7 +2,9 @@
 
 backend/venv
 *.env
+!test.env
 __pycache__/
+.pytest_cache/
 backend/src/static
 backend/src/db.sqlite3
 
@@ -10,7 +12,6 @@ backend/src/db.sqlite3
 
 # Compiled output
 frontend/dist
-frontend/tmp
 frontend/out-tsc
 frontend/bazel-out
 
@@ -48,4 +49,4 @@ frontend/typings
 # System files
 frontend/.DS_Store
 frontend/Thumbs.db
-/tmp
+tmp/

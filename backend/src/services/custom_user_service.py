@@ -51,3 +51,26 @@ def delete_custom_user(user_id: int) -> None:
     """
     user = User.objects.get(id=user_id)
     user.delete()
+
+
+def update_custom_user(data: dict, user_id: int) -> dict:
+    """Atualiza os dados do usuário com o id passado.
+
+    Params:
+        user_id: id do usuário
+
+    Returns:
+        dict: dados do usuário atualizado
+
+    Raises:
+        ObjectDoesNotExist: se o usuário não existir
+        ValueError: se o id for inválido
+    """
+    user = User.objects.get(id=user_id)
+    user_serializer = UserSerializer(user, data=data, partial=True)
+    user_serializer.is_valid(raise_exception=True)
+    user.username = data.get("username", user.username)
+    user.email = data.get("email", user.email)
+    user.save()
+    custom_user = CustomUser.objects.get(user=user)
+    return CustomUserSerializer(custom_user).data

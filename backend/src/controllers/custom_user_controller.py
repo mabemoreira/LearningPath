@@ -13,6 +13,7 @@ from src.services.custom_user_service import (
     create_custom_user,
     delete_custom_user,
     read_custom_user,
+    update_custom_user,
 )
 
 
@@ -43,8 +44,12 @@ class UserController(View):
         except Exception as e:
             return InternalServerError()
 
-    def put(self, request: HttpRequest):
+    def put(self, request: HttpRequest, user_id: int):
         try:
-            pass
+            data = json.loads(request.body)
+            response = update_custom_user(data, user_id)
+            return JsonResponse(response, status=200)
+        except ObjectDoesNotExist as e:
+            return EntityNotFound()
         except Exception as e:
             return InternalServerError()

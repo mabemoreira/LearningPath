@@ -146,7 +146,7 @@ class TestUpdateCustomUserService(TestCase):
         custom_user = CustomUser.objects.get(user=user)
 
         for data in VALID_USER_UPDATE_MOCK:
-            result = update_custom_user(custom_user.id, data)
+            result = update_custom_user(data, custom_user.id)
             user.refresh_from_db()
             custom_user.refresh_from_db()
 

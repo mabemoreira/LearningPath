@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
-from src.models.custom_user import CustomUser
+from src.models.custom_user_model import CustomUser
 from src.services.custom_user_service import (
     create_custom_user,
     delete_custom_user,

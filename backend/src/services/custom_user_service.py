@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from src.models.custom_user import CustomUser, CustomUserSerializer, UserSerializer
+from src.models.custom_user_model import CustomUser, CustomUserSerializer, UserSerializer
 
 
 def create_custom_user(data: dict) -> dict:

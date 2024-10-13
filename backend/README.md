@@ -57,6 +57,20 @@ python -m src.manage runserver [<porta>]
 Com o servidor local rodando, é possível acessar a UI da API (swagger) acessando:
 `http://localhost:<porta>/swagger/`!
 
+### Autenticação
+
+A authenticação por token requer que o cabeçalho de toda requisição feita à aplicação
+contenha:
+
+```json
+{
+   "authorization": "Token <token>"
+}
+```
+
+Note que `<token>` é o token obtido durante o login e que ele deve ser precedido pela
+palavra chave "Token" e um espaço.
+
 ## Criação apps Django
 
 No Django, um app é uma aplicação web que faz parte do projeto. Cada app é

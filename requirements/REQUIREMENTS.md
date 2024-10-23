@@ -92,7 +92,8 @@ Prioridade: Alta
 
 -> Aplicativos de pomodoro utilizam isso.
 
-Descrição: O sistema permite ao usuário ativar um modo de concentração, bloqueando notificações e interrompendo aplicativos que possam distrair Entrada: O usuário ativa o modo de concentração.  
+Descrição: O sistema permite ao usuário ativar um modo de concentração, bloqueando notificações e interrompendo aplicativos que possam distrair
+Entrada: O usuário ativa o modo de concentração.  
 Processamento: O sistema bloqueia notificações e sugere sons ambiente.  
 Saída: Relatório de tempo em modo de concentração.  
 Prioridade: Alta
@@ -100,10 +101,6 @@ Prioridade: Alta
 ### 3.2. Requisitos Não Funcionais
 
 #### 3.2.1. Usabilidade
-
-Necessário reescrever no formato como do slide
-
-![](./assets/requisitos-slide.png)
 
 Descrição: A interface com o usuário do sistema deve ser projetada para fácil utilização, apropriada para um público com básico conhecimento em informática ou que usaram aplicativos semelhantes, sem treinamento adicional no sistema  
 Prioridade: Alta

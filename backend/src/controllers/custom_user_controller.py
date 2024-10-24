@@ -1,14 +1,15 @@
-import json
-
-from django.core.exceptions import ObjectDoesNotExist
-from django.forms import ValidationError
-from django.http import HttpRequest, JsonResponse
-from django.views import View
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.http import JsonResponse
+from drf_spectacular.utils import extend_schema
+from rest_framework.request import Request
+from rest_framework.views import APIView
 from src.exceptions.response_exceptions import (
     EntityNotFound,
+    ExceptionSerializer,
     InternalServerError,
     UnprocessableEntity,
 )
+from src.models.custom_user_model import CustomUserSerializer, UserSerializer
 from src.services.custom_user_service import (
     create_custom_user,
     delete_custom_user,
@@ -17,8 +18,23 @@ from src.services.custom_user_service import (
 )
 
 
-class UserController(View):
-    def get(self, request: HttpRequest, user_id: int):
+class UserController(APIView):
+    def get_permissions(self):
+        permissions = super().get_permissions()
+
+        # Only post method should allow unauthenticated requests
+        if self.request.method.lower() == "post":
+            return []
+        return permissions
+
+    @extend_schema(
+        responses={
+            200: CustomUserSerializer,
+            EntityNotFound.status_code: ExceptionSerializer,
+            InternalServerError.status_code: ExceptionSerializer,
+        },
+    )
+    def get(self, request: Request, user_id: int):
         try:
             user = read_custom_user(user_id)
             return JsonResponse(user, status=200)
@@ -27,15 +43,32 @@ class UserController(View):
         except Exception as e:
             return InternalServerError()
 
-    def post(self, request: HttpRequest):
+    @extend_schema(
+        auth=[],
+        request=UserSerializer,
+        responses={
+            200: CustomUserSerializer,
+            UnprocessableEntity.status_code: ExceptionSerializer,
+            InternalServerError.status_code: ExceptionSerializer,
+        },
+    )
+    def post(self, request: Request):
         try:
-            return JsonResponse(create_custom_user(json.loads(request.body)), status=200)
+            return JsonResponse(create_custom_user(request.data), status=200)
         except ValidationError as e:
             return UnprocessableEntity()
         except Exception as e:
             return InternalServerError()
 
-    def delete(self, request: HttpRequest, user_id: int):
+    @extend_schema(
+        request=UserSerializer,
+        responses={
+            204: None,
+            EntityNotFound.status_code: ExceptionSerializer,
+            InternalServerError.status_code: ExceptionSerializer,
+        },
+    )
+    def delete(self, request: Request, user_id: int):
         try:
             delete_custom_user(user_id)
             return JsonResponse({}, status=204)
@@ -44,11 +77,21 @@ class UserController(View):
         except Exception as e:
             return InternalServerError()
 
-    def put(self, request: HttpRequest, user_id: int):
+    @extend_schema(
+        request=UserSerializer,
+        responses={
+            200: CustomUserSerializer,
+            UnprocessableEntity.status_code: ExceptionSerializer,
+            EntityNotFound.status_code: ExceptionSerializer,
+            InternalServerError.status_code: ExceptionSerializer,
+        },
+    )
+    def put(self, request: Request, user_id: int):
         try:
-            data = json.loads(request.body)
-            response = update_custom_user(data, user_id)
-            return JsonResponse(response, status=200)
+            data = request.data
+            return JsonResponse(update_custom_user(data, user_id), status=200)
+        except ValidationError as e:
+            return UnprocessableEntity()
         except ObjectDoesNotExist as e:
             return EntityNotFound()
         except Exception as e:

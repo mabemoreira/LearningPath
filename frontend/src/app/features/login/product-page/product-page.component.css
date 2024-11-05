@@ -1,0 +1,56 @@
+body {
+    font-family: Montserrat, sans-serif;
+    color: #363636;
+    background-color: #f7f7f7;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: left; 
+}
+
+.title {
+    color: var(--Black, #363636);
+    font-size: 32px; 
+    font-style: normal;
+    font-weight: 900;
+    line-height: normal;
+    margin-bottom: 15px;
+}
+
+.section-title {
+    color: var(--Black, #363636);
+    font-family: Magra;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-top: 15px;
+}
+
+.text-content {
+    display: flex;
+    width: 1000px;
+    height: 95px;
+flex-direction: column;
+justify-content: center;
+flex-shrink: 0;
+    width: 100%;
+    color: var(--Black, #363636);
+    font-family: Urbanist;
+    font-size: 15px; 
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.4;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+footer {
+    text-align: left; 
+    margin-top: 20px;
+    font-size: 10px;
+    color: #999;
+}

@@ -1,4 +1,4 @@
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ValidationError
 from django.http import JsonResponse
 from drf_spectacular.utils import extend_schema
 from rest_framework.request import Request
@@ -8,6 +8,7 @@ from src.exceptions.response_exceptions import (
     EntityNotFound,
     ExceptionSerializer,
     InternalServerError,
+    UnauthorizedAccess,
     UnprocessableEntity,
 )
 from src.models.study_plan_model import StudyPlan, StudyPlanSerializer
@@ -26,14 +27,17 @@ class StudyPlanController(APIView):
             200: StudyPlanSerializer,
             EntityNotFound.status_code: ExceptionSerializer,
             InternalServerError.status_code: ExceptionSerializer,
+            UnauthorizedAccess.status_code: ExceptionSerializer,
         },
     )
     def get(self, request: Request, study_plan_id: int):
         try:
-            study_plan = read_study_plan(study_plan_id)
+            study_plan = read_study_plan(study_plan_id, request.user)
             return JsonResponse(study_plan, status=200)
         except ObjectDoesNotExist as e:
             return EntityNotFound()
+        except PermissionDenied as e:
+            return UnauthorizedAccess()
         except Exception as e:
             return InternalServerError()
 
@@ -51,7 +55,6 @@ class StudyPlanController(APIView):
         except ValidationError as e:
             return UnprocessableEntity()
         except Exception as e:
-            print(e)
             return InternalServerError()
 
     @extend_schema(
@@ -60,14 +63,17 @@ class StudyPlanController(APIView):
             204: None,
             EntityNotFound.status_code: ExceptionSerializer,
             InternalServerError.status_code: ExceptionSerializer,
+            UnauthorizedAccess.status_code: ExceptionSerializer,
         },
     )
     def delete(self, request: Request, study_plan_id: int):
         try:
-            delete_study_plan(study_plan_id)
+            delete_study_plan(study_plan_id, request.user)
             return JsonResponse({}, status=204)
-        except ObjectDoesNotExist as e:
+        except ObjectDoesNotExist:
             return EntityNotFound()
+        except PermissionDenied:
+            return UnauthorizedAccess()
         except Exception as e:
             return InternalServerError()
 
@@ -78,17 +84,21 @@ class StudyPlanController(APIView):
             UnprocessableEntity.status_code: ExceptionSerializer,
             EntityNotFound.status_code: ExceptionSerializer,
             InternalServerError.status_code: ExceptionSerializer,
+            UnauthorizedAccess.status_code: ExceptionSerializer,
         },
     )
     def put(self, request: Request, study_plan_id: int):
         try:
             data = request.data
-            return JsonResponse(update_study_plan(data, study_plan_id), status=200)
-        except DomainDoesNotExist as e:
-            return UnprocessableEntity(e.details)
-        except ValidationError as e:
-            return UnprocessableEntity()
+            user = request.user
+            return JsonResponse(update_study_plan(data, study_plan_id, user), status=200)
         except ObjectDoesNotExist as e:
             return EntityNotFound()
+        except PermissionDenied as e:
+            return UnauthorizedAccess()
+        except ValidationError as e:
+            return UnprocessableEntity()
+        except DomainDoesNotExist as e:
+            return UnprocessableEntity(e.details)
         except Exception as e:
             return InternalServerError()

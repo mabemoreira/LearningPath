@@ -2,7 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 class DomainDoesNotExist(ObjectDoesNotExist):
-    def __init__(self, details="Undefined domain was found!"):
+    def __init__(self, details="Domínio indefinido foi encontrado!"):
         super().__init__(details)
         self.details = details
 

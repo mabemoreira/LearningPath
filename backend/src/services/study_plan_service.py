@@ -1,4 +1,5 @@
-from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from src.exceptions.business_rules_exceptions import DomainDoesNotExist
 from src.models.custom_user_model import CustomUser
 from src.models.domain_model import Domain
@@ -18,14 +19,19 @@ def create_study_plan(data: dict, user) -> dict:
     Raises:
         ValidationError: se os dados forem inválidos.
     """
-    data["author"] = CustomUser.objects.get(id=user.id)
+    # verifica se os dados sao validos
     StudyPlanSerializer(data=data).is_valid(raise_exception=True)  # verificacao dos dados
+
+    # adiciona o autor e cria o plano de estudos
+    data["author"] = CustomUser.objects.get(id=user.id)
     study_plan = StudyPlan.objects.create(**data)
-    study_plan.save()  # salva no BD
+
+    # salva e retorna os dados serializados
+    study_plan.save()
     return StudyPlanSerializer(study_plan).data
 
 
-def read_study_plan(study_plan_id) -> dict:
+def read_study_plan(study_plan_id: int, user: User) -> dict:
     """Retorna os dados do plano de estudos com o id passado.
     Params:
         study_plan_id: id do plano de estudos
@@ -35,17 +41,28 @@ def read_study_plan(study_plan_id) -> dict:
 
     Raises:
         ObjectDoesNotExist: se o plano de estudos não existir
-        ValueError: se o id for inválido
+        PermissionDenied: se o usuário não tiver permissão para acessar o plano
     """
+    # busca o plano de estudos, se nao existir gera uma excessao
     study_plan = StudyPlan.objects.get(id=study_plan_id)
+
+    # gera uma excessao se usuario nao tiver permissao para acessar o plano
+    # TODO: permitir get se o usuário seguir o plano de estudos
+    if not study_plan.access_allowed(user):
+        raise PermissionDenied(
+            "Você não tem permissão para acessar este plano de estudos."
+        )
+
+    # dados serializados
     result = StudyPlanSerializer(study_plan).data
+    # adiciona os tópicos
     result["topics"] = StudyPlanTopicSerializer(
         StudyPlanTopic.objects.filter(study_plan=study_plan), many=True
     ).data
-    return StudyPlanSerializer(study_plan).data
+    return result
 
 
-def delete_study_plan(study_plan_id: int) -> None:
+def delete_study_plan(study_plan_id: int, user: User) -> None:
     """Deleta um plano de estudos através do id.
 
     Params:
@@ -56,13 +73,23 @@ def delete_study_plan(study_plan_id: int) -> None:
 
     Raises:
         ObjectDoesNotExists: se o plano de estudos não for encontrado.
+        PermissionDenied: se o usuário não tiver permissão para deletar o plano.
     """
+    # busca o plano de estudos, se nao existir gera uma excessao
     study_plan = StudyPlan.objects.get(id=study_plan_id)
+
+    # gera uma excessao se usuario nao tiver permissao para deletar o plano
+    if not study_plan.access_allowed(user):
+        raise PermissionDenied(
+            "Você não tem permissão para deletar este plano de estudos."
+        )
+
+    # salva o plano de estudos como deletado
     study_plan.deleted = True
     study_plan.save()
 
 
-def update_study_plan(data: dict, study_plan_id: int) -> dict:
+def update_study_plan(data: dict, study_plan_id: int, user: User) -> dict:
     """Atualiza os dados do plano de estudos com o id passado.
 
     Params:
@@ -73,19 +100,33 @@ def update_study_plan(data: dict, study_plan_id: int) -> dict:
 
     Raises:
         ObjectDoesNotExist: se o plano de estudos não existir
-        ValueError: se o id for inválido
-
+        PermissionDenied: se o usuário não tiver permissão para atualizar o plano
+        ValidationError: se os dados forem inválidos
+        DomainDoesNotExist: se o domínio de visibilidade não existir
     """
+    # busca o plano de estudos, se nao existir gera uma excessao
     study_plan = StudyPlan.objects.get(id=study_plan_id)
+
+    # gera uma excessao se usuario nao tiver permissao para atualizar o plano
+    if not study_plan.access_allowed(user):
+        raise PermissionDenied(
+            "Você não tem permissão para atualizar este plano de estudos."
+        )
+
+    # serializa os dados, se nao forem validos gera uma excessao
     study_plan_serializer = StudyPlanSerializer(study_plan, data=data, partial=True)
     study_plan_serializer.is_valid(raise_exception=True)
+
+    # atualiza os dados do plano
     study_plan.title = data.get("title", study_plan.title)
+    # atualiza o domínio de visibilidade, se nao existir gera uma excessao
     try:
-        study_plan.visibility = Domain.objects.get(
-            name=data["visibility"], type="visibility", relationship="StudyPlan"
+        study_plan.set_visibility(data.get("visibility", study_plan.visibility.name))
+    except ObjectDoesNotExist as e:
+        raise DomainDoesNotExist(
+            f"Domínio de visibilidade não encontrado: {data["visibility"]}"
         )
-    except ObjectDoesNotExist:
-        raise DomainDoesNotExist(f"Visibility domain not found: {data["visibility"]}")
-    study_plan.deleted = data.get("deleted", study_plan.deleted)
+
+    # salva o plano e retorna dados serializados
     study_plan.save()
     return StudyPlanSerializer(study_plan).data

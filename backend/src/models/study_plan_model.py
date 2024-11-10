@@ -2,7 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from rest_framework import serializers
 from src.models.base_model import BaseModel
-from src.models.custom_user_model import CustomUser, CustomUserSerializer
+from src.models.custom_user_model import CustomUser, User
 from src.models.domain_model import Domain, DomainSerializer
 
 
@@ -22,6 +22,43 @@ class StudyPlan(BaseModel):
         CustomUser, on_delete=models.CASCADE, null=False, blank=False
     )
     deleted = models.BooleanField(default=False)
+
+    def is_private(self):
+        """
+        Verifica se o plano de estudos é privado.
+
+        Returns:
+            bool: True se o plano de estudos é privado, False caso contrário
+        """
+        return self.visibility.name == "private"
+
+    def set_visibility(self, visibility):
+        """
+        Define a visibilidade do plano de estudos.
+
+        Params:
+            visibility: visibilidade do plano de estudos
+
+        Raises:
+            ObjectDoesNotExist: se a visibilidade não existir
+        """
+        self.visibility = Domain.objects.get(
+            name=visibility, type="visibility", relationship="StudyPlan"
+        )
+
+    def access_allowed(self, user: User) -> bool:
+        """Verifica se o usuário tem permissão para acessar o plano de estudos.
+
+        Params:
+            study_plan: plano de estudos
+            user: usuário
+
+        Returns:
+            bool: True se o usuário tem permissão, False caso contrário
+        """
+        if self.is_private() and not self.author.id == user.id:
+            return False
+        return True
 
 
 class StudyPlanSerializer(serializers.ModelSerializer):
@@ -43,3 +80,12 @@ class StudyPlanSerializer(serializers.ModelSerializer):
             "type": obj.visibility.type,
         }
         return visibility_info
+
+    def save(self, **kwargs) -> bool:
+        """
+        Salva o objeto no banco de dados.
+
+        Returns:
+            bool: True se o objeto foi salvo, False caso contrário
+        """
+        return super().save(**kwargs)

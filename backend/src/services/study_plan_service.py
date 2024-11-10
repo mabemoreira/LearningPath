@@ -22,9 +22,12 @@ def create_study_plan(data: dict, user) -> dict:
     # verifica se os dados sao validos
     StudyPlanSerializer(data=data).is_valid(raise_exception=True)  # verificacao dos dados
 
-    # adiciona o autor e cria o plano de estudos
+    # cria o plano de estudos
     data["author"] = CustomUser.objects.get(id=user.id)
+    visibility = data.pop("visibility", None)
     study_plan = StudyPlan.objects.create(**data)
+    if visibility:
+        study_plan.set_visibility(visibility)
 
     # salva e retorna os dados serializados
     study_plan.save()
@@ -78,8 +81,8 @@ def delete_study_plan(study_plan_id: int, user: User) -> None:
     # busca o plano de estudos, se nao existir gera uma excessao
     study_plan = StudyPlan.objects.get(id=study_plan_id)
 
-    # gera uma excessao se usuario nao tiver permissao para deletar o plano
-    if not study_plan.access_allowed(user):
+    # gera uma excessao se usuario nao for o autor
+    if not user == study_plan.author.user:
         raise PermissionDenied(
             "Você não tem permissão para deletar este plano de estudos."
         )
@@ -107,8 +110,8 @@ def update_study_plan(data: dict, study_plan_id: int, user: User) -> dict:
     # busca o plano de estudos, se nao existir gera uma excessao
     study_plan = StudyPlan.objects.get(id=study_plan_id)
 
-    # gera uma excessao se usuario nao tiver permissao para atualizar o plano
-    if not study_plan.access_allowed(user):
+    # gera uma excessao se usuario nao for o autor
+    if not user == study_plan.author.user:
         raise PermissionDenied(
             "Você não tem permissão para atualizar este plano de estudos."
         )

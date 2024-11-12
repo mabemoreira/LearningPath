@@ -26,6 +26,16 @@ class EntityNotFound(JsonResponse):
         super().__init__({"details": details})
 
 
+class UnauthorizedAccess(JsonResponse):
+    status_code = 403
+
+    def __init__(self, details: str = None):
+        if details is None:
+            details = "Acesso não autorizado!"
+
+        super().__init__({"details": details})
+
+
 class UnprocessableEntity(JsonResponse):
     status_code = 422
 

@@ -8,9 +8,8 @@ from src.models.study_plan_topic_model import StudyPlanTopic, StudyPlanTopicSeri
 
 
 def create_study_plan(data: dict, user) -> dict:
-    """Cria um StudyPlan com base nos dados passados.
-
-    Params:
+    """
+    Paras:
         data (dict): dados para criação de usuário (obrigatório: title, visibility, author)
 
     Returns:
@@ -35,10 +34,7 @@ def create_study_plan(data: dict, user) -> dict:
 
 
 def read_study_plan(study_plan_id: int, user: User) -> dict:
-    """Retorna os dados do plano de estudos com o id passado.
-    Params:
-        study_plan_id: id do plano de estudos
-
+    """
     Returns:
         dict: dados do plano de estudos
 
@@ -66,10 +62,7 @@ def read_study_plan(study_plan_id: int, user: User) -> dict:
 
 
 def delete_study_plan(study_plan_id: int, user: User) -> None:
-    """Deleta um plano de estudos através do id.
-
-    Params:
-        study_plan_id (int)
+    """
 
     Returns:
         None
@@ -93,10 +86,7 @@ def delete_study_plan(study_plan_id: int, user: User) -> None:
 
 
 def update_study_plan(data: dict, study_plan_id: int, user: User) -> dict:
-    """Atualiza os dados do plano de estudos com o id passado.
-
-    Params:
-        study_plan_id: id do plano de estudos
+    """
 
     Returns:
         dict: dados do plano de estudos atualizado

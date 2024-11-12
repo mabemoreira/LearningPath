@@ -3,8 +3,7 @@ from src.models.custom_user_model import CustomUser, CustomUserSerializer, UserS
 
 
 def create_custom_user(data: dict) -> dict:
-    """Cria um CustomUser com base nos dados passados.
-
+    """
     Params:
         data (dict): dados para criação de usuário (obrigatório: username, password)
 
@@ -22,10 +21,7 @@ def create_custom_user(data: dict) -> dict:
 
 
 def read_custom_user(user_id) -> dict:
-    """Retorna os dados do usuário com o id passado.
-    Params:
-        user_id: id do usuário
-
+    """
     Returns:
         dict: dados do usuário
 
@@ -38,10 +34,7 @@ def read_custom_user(user_id) -> dict:
 
 
 def delete_custom_user(user_id: int) -> None:
-    """Deleta um usuário através do id.
-
-    Params:
-        user_id (int)
+    """
 
     Returns:
         None
@@ -54,10 +47,7 @@ def delete_custom_user(user_id: int) -> None:
 
 
 def update_custom_user(data: dict, user_id: int) -> dict:
-    """Atualiza os dados do usuário com o id passado.
-
-    Params:
-        user_id: id do usuário
+    """
 
     Returns:
         dict: dados do usuário atualizado

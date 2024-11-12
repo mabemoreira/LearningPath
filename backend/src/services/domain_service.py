@@ -2,9 +2,7 @@ from src.models.domain_model import Domain, DomainSerializer
 
 
 def read_domain(domain_id) -> dict:
-    """Retorna os dados do usuário com o id passado.
-    Params:
-        domain_id: id do dominio
+    """Retorna os dados do domínio com o id passado.
 
     Returns:
         dict: dados do dominio

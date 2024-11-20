@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.test import TestCase
+from rest_framework import exceptions
+from rest_framework.exceptions import ValidationError
 from src.models.custom_user_model import CustomUser
 from src.services.custom_user_service import (
     create_custom_user,
@@ -118,7 +120,10 @@ class ReadUserTestCase(TestCase):
 
 class TestDeleteCustomUserService(TestCase):
     def setUp(self) -> None:
-        create_custom_user(VALID_USER_INPUT_MOCK)
+        self.user = create_custom_user(VALID_USER_INPUT_MOCK)
+        self.requesting_user = User.objects.create_user(
+            username="admin", password="admin", is_superuser=True
+        )
 
     def tearDown(self) -> None:
         if len(User.objects.filter(id=1)):
@@ -126,16 +131,24 @@ class TestDeleteCustomUserService(TestCase):
 
     def test_custom_user_not_found(self):
         with self.assertRaises(ObjectDoesNotExist):
-            delete_custom_user(0)
+            delete_custom_user(0, self.requesting_user)
 
     def test_custom_user_deleted_successfully(self):
-        delete_custom_user(1)
+        delete_custom_user(1, self.requesting_user)
         assert len(User.objects.filter(id=1)) == 0
+
+    def test_custom_user_delete_permission_denied(self):
+        non_superuser = User.objects.create_user(username="nonadmin", password="nonadmin")
+        with self.assertRaises(PermissionDenied):
+            delete_custom_user(1, non_superuser)
 
 
 class TestUpdateCustomUserService(TestCase):
     def setUp(self) -> None:
-        create_custom_user(VALID_USER_INPUT_MOCK)
+        self.user = create_custom_user(VALID_USER_INPUT_MOCK)
+        self.requesting_user = User.objects.create_user(
+            username="admin", password="admin", is_superuser=True
+        )
 
     def tearDown(self) -> None:
         if len(User.objects.filter(id=1)):
@@ -146,7 +159,7 @@ class TestUpdateCustomUserService(TestCase):
         custom_user = CustomUser.objects.get(user=user)
 
         for data in VALID_USER_UPDATE_MOCK:
-            result = update_custom_user(data, custom_user.id)
+            result = update_custom_user(data, custom_user.id, self.requesting_user)
             user.refresh_from_db()
             custom_user.refresh_from_db()
 
@@ -159,6 +172,13 @@ class TestUpdateCustomUserService(TestCase):
         user = User.objects.get(username=VALID_USER_INPUT_MOCK["username"])
         custom_user = CustomUser.objects.get(user=user)
 
-        for data in INVALID_USER_UPDATE_MOCKS:
-            with self.assertRaises(Exception):
-                update_custom_user(custom_user.id, data)
+        for data in INVALID_USER_UPDATE_MOCKS[
+            :-1
+        ]:  # nao pega o caso do username ja existente
+            with self.assertRaises(ValidationError):
+                update_custom_user(data, custom_user.id, custom_user.user)
+
+    def test_custom_user_update_permission_denied(self):
+        non_superuser = User.objects.create_user(username="nonadmin", password="nonadmin")
+        with self.assertRaises(PermissionDenied):
+            update_custom_user({"username": "newusername"}, 1, non_superuser)

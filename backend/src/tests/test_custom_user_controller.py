@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
@@ -11,7 +12,7 @@ class TestCustomUserController(TestCase):
     api_client = APIClient()
 
     def setUp(self):
-        user = User.objects.create_user("Authentication User")
+        user = User.objects.create_user("Authentication User", is_superuser=True)
         token = Token.objects.create(user=user)
         self.api_client.credentials(HTTP_AUTHORIZATION=f"Token {token.key}")
 
@@ -27,7 +28,7 @@ class TestCustomUserController(TestCase):
 
     def test_failure_custom_user_delete_entity_not_found(self):
         response = self.api_client.delete("/user/0/")
-        assert type(response) is EntityNotFound
+        assert response.status_code == EntityNotFound.status_code
 
     def test_failure_custom_user_delete_internal_server_error(self):
         with patch(

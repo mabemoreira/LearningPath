@@ -17,8 +17,16 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False, read_only=True)
+    user = serializers.SerializerMethodField("get_user")
 
     class Meta:
         model = CustomUser
-        fields = "__all__"
+        fields = ["id", "user"]
+
+    def get_user(self, obj):
+        user_info = {
+            "id": obj.user.id,
+            "username": obj.user.username,
+            "email": obj.user.email,
+        }
+        return user_info

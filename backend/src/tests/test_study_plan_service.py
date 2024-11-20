@@ -175,7 +175,7 @@ class TestFollowStudyPlanService(TestCase):
     def test_follow_study_plan_no_permission(self):
         with self.assertRaises(PermissionDenied):
             follow_study_plan("", self.private_study_plan.id, self.user2.user)
-            
+
 
 class TestCloneStudyPlanService(TestCase):
     def setUp(self):
@@ -199,4 +199,3 @@ class TestCloneStudyPlanService(TestCase):
         another_user = User.objects.create(username="otheruser")
         with self.assertRaises(PermissionDenied):
             clone_study_plan("", another_user, self.study_plan.id)
-

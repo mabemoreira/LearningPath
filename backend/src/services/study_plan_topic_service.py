@@ -5,6 +5,8 @@ from src.models.custom_user_model import CustomUser
 from src.models.domain_model import Domain
 from src.models.study_plan_model import StudyPlan, StudyPlanSerializer
 from src.models.study_plan_topic_model import StudyPlanTopic, StudyPlanTopicSerializer
+from ..models.user_follows_study_plan_model import UserFollowsStudyPlan
+from ..models.user_does_study_plan_and_topic_model import UserDoesStudyPlanAndTopic
 
 
 def create_study_plan_topic(data: dict, study_plan_id: int) -> StudyPlanTopic:
@@ -31,6 +33,13 @@ def create_study_plan_topic(data: dict, study_plan_id: int) -> StudyPlanTopic:
         description=data["description"],
         study_plan_id=study_plan_id,
     )
+
+    # cria relacao de "does" para usuarios que seguem o plano
+    for follow in UserFollowsStudyPlan.objects.filter(study_plan_id=study_plan_id):
+        user = follow.user
+        UserDoesStudyPlanAndTopic.objects.create(
+            user_id=user.id, study_plan_topic_id=study_plan_topic.id
+        )
 
     # salva e retorna os dados serializados
     study_plan_topic.save()

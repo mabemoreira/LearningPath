@@ -5,6 +5,10 @@ from src.models.custom_user_model import CustomUser
 from src.models.domain_model import Domain
 from src.models.study_plan_model import StudyPlan, StudyPlanSerializer
 from src.models.study_plan_topic_model import StudyPlanTopic, StudyPlanTopicSerializer
+from src.models.user_does_study_plan_and_topic_model import (
+    UserDoesStudyPlanAndTopic,
+    UserDoesStudyPlanAndTopicSerializer,
+)
 from src.models.user_follows_study_plan_model import (
     UserFollowsStudyPlan,
     UserFollowsStudyPlanSerializer,
@@ -33,6 +37,9 @@ def create_study_plan(data: dict, user) -> dict:
     if visibility:
         study_plan.set_visibility(visibility)
 
+    # segue o plano de estudos
+    follow_study_plan({}, study_plan.id, user)
+
     # salva e retorna os dados serializados
     study_plan.save()
     return StudyPlanSerializer(study_plan).data
@@ -54,7 +61,6 @@ def read_study_plan(study_plan_id: int, user: User) -> dict:
     study_plan = StudyPlan.objects.get(id=study_plan_id)
 
     # gera uma excessao se usuario nao tiver permissao para acessar o plano
-    # TODO: permitir get se o usuário seguir o plano de estudos
     if not study_plan.access_allowed(user):
         raise PermissionDenied(
             "Você não tem permissão para acessar este plano de estudos."
@@ -168,8 +174,44 @@ def follow_study_plan(data: dict, study_plan_id: int, user: User) -> dict:
     )
     follow.save()
 
+    # cria relacao entre o usuario e os topicos do plano
+    for topic in StudyPlanTopic.objects.filter(study_plan=study_plan):
+        UserDoesStudyPlanAndTopic.objects.create(
+            user=CustomUser.objects.get(id=user.id),
+            study_plan_topic=topic,
+            study_plan=study_plan,
+        )
+
     # retorna os dados serializados
     return UserFollowsStudyPlanSerializer(follow).data
+
+
+def unfollow_study_plan(data: dict, study_plan_id: int, user: User) -> None:
+    """Remove um plano de estudos da lista de planos seguidos pelo usuário.
+
+    Params:
+        study_plan_id: id do plano de estudos
+
+    Returns:
+        None
+
+    Raises:
+        ObjectDoesNotExist: se o usuario, plano ou follow não existir
+        PermissionDenied: se o usuário não tiver permissão para ver o plano
+    """
+    # busca o plano e o user, se nao existir gera uma excessao
+    study_plan = StudyPlan.objects.get(id=study_plan_id)
+    user = CustomUser.objects.get(id=user.id)
+
+    # gera uma excessao se usuario nao tiver permissao para ver o plano
+    if not study_plan.access_allowed(user):
+        raise PermissionDenied(
+            "Você não tem permissão para ver este plano de estudos."
+        )
+
+    # remove o plano de estudos da lista de planos seguidos pelo usuário
+    UserDoesStudyPlanAndTopic.objects.filter(study_plan=study_plan, user=user).delete()
+    UserFollowsStudyPlan.objects.filter(user=user, study_plan=study_plan).delete()
 
 
 def clone_study_plan(data: dict, user: User, study_plan_id: int) -> dict:
@@ -199,6 +241,20 @@ def clone_study_plan(data: dict, user: User, study_plan_id: int) -> dict:
     new_data["visibility"] = data.get("visibility", study_plan.visibility.name)
     new_data.pop("id")
 
+    # cria o plano de estudos
     plan_data = create_study_plan(new_data, user)
+    cloned_plan = StudyPlan.objects.get(id=plan_data["id"])
 
+    # clona os topicos do plano
+    for topic in StudyPlanTopic.objects.filter(study_plan=study_plan):
+        topic_data = StudyPlanTopicSerializer(topic).data
+        topic_data.pop("id")
+        topic_data["study_plan"] = cloned_plan.id
+        # cria clone dos topicos
+        topic = StudyPlanTopic.objects.create(**topic_data)
+
+    # segue o plano de estudos
+    follow_study_plan({}, cloned_plan.id, user)
+
+    # retorna os dados do plano clonado
     return StudyPlanSerializer(StudyPlan.objects.get(id=plan_data["id"])).data

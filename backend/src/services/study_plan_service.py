@@ -170,3 +170,37 @@ def follow_study_plan(data: dict, study_plan_id: int, user: User) -> dict:
 
     # retorna os dados serializados
     return UserFollowsStudyPlanSerializer(follow).data
+
+
+def clone_study_plan(data: dict, user: User, study_plan_id: int) -> dict:
+    """Clona um plano de estudos com base nos dados passados.
+
+    Params:
+        data: dados para criação do plano de estudos
+        user: usuário que está clonando o plano
+        study_plan_id: id do plano de estudos a ser clonado
+
+    Returns:
+        dict: dados do plano de estudos clonado
+
+    Raises:
+        ObjectDoesNotExist: se o plano de estudos não existir
+        PermissionDenied: se o usuário não tiver permissão para clonar o plano
+    """
+    study_plan = StudyPlan.objects.get(id=study_plan_id)
+
+    if not study_plan.access_allowed(user):
+        raise PermissionDenied(
+            "Você não tem permissão para clonar este plano de estudos."
+        )
+
+    new_data = StudyPlanSerializer(study_plan).data
+    new_data["title"] = f"Cópia de {new_data['title']}"
+    new_data["visibility"] = data.get("visibility", study_plan.visibility.name)
+    new_data.pop("id")
+
+    plan_data = create_study_plan(new_data, user)
+
+    print("dados do novo plano de estudos:", plan_data)
+
+    return StudyPlanSerializer(StudyPlan.objects.get(id=plan_data["id"])).data

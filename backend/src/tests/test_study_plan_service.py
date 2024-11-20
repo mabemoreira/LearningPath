@@ -5,6 +5,7 @@ from src.models.custom_user_model import CustomUser
 from src.models.domain_model import Domain
 from src.models.study_plan_model import StudyPlan
 from src.services.study_plan_service import (
+    clone_study_plan,
     create_study_plan,
     delete_study_plan,
     follow_study_plan,
@@ -174,3 +175,28 @@ class TestFollowStudyPlanService(TestCase):
     def test_follow_study_plan_no_permission(self):
         with self.assertRaises(PermissionDenied):
             follow_study_plan("", self.private_study_plan.id, self.user2.user)
+            
+
+class TestCloneStudyPlanService(TestCase):
+    def setUp(self):
+        self.user = CustomUser.objects.create(
+            user=User.objects.create(username="testuser")
+        )
+        self.study_plan = StudyPlan.objects.create(
+            title=VALID_STUDY_PLAN_DATA[0]["title"],
+            visibility=Domain.objects.get(name="private"),
+            author=self.user,
+        )
+
+    def test_clone_study_plan_successfully(self):
+        result = clone_study_plan(
+            {"visibility": "public"}, self.user.user, self.study_plan.id
+        )
+        self.assertNotEqual(result["id"], self.study_plan.id)
+        self.assertEqual(result["title"], f"Cópia de {self.study_plan.title}")
+
+    def test_clone_study_plan_no_permission(self):
+        another_user = User.objects.create(username="otheruser")
+        with self.assertRaises(PermissionDenied):
+            clone_study_plan("", another_user, self.study_plan.id)
+

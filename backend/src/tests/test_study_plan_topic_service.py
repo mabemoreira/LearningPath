@@ -121,12 +121,14 @@ class TestReadStudyPlanTopicService(TestCase):
 
 class TestDeleteStudyPlanTopicService(TestCase):
     def setUp(self):
+        # Configuração do ambiente
         self.user = CustomUser.objects.create(
             user=User.objects.create(username="testuser")
         )
+        self.domain = Domain.objects.create(name="public")
         self.study_plan = StudyPlan.objects.create(
             title="Test Plan",
-            visibility=Domain.objects.get(name="public"),
+            visibility=self.domain,
             author=self.user,
         )
         self.study_plan_topic = StudyPlanTopic.objects.create(
@@ -135,21 +137,33 @@ class TestDeleteStudyPlanTopicService(TestCase):
             study_plan=self.study_plan,
         )
 
-    @patch("src.services.study_plan_topic_service.StudyPlanTopic.objects.get")
-    def test_delete_study_plan_topic_successfully(self, mock_get):
-        mock_get.return_value = self.study_plan_topic
+    def test_delete_study_plan_topic_successfully(self):
+        # Certifica-se de que o objeto existe
+        self.assertTrue(
+            StudyPlanTopic.objects.filter(id=self.study_plan_topic.id).exists()
+        )
 
+        # Chama a função para deletar o tópico
         delete_study_plan_topic(self.study_plan_topic.id, self.user.user)
+
+        # Verifica se o objeto foi deletado
         with self.assertRaises(ObjectDoesNotExist):
             StudyPlanTopic.objects.get(id=self.study_plan_topic.id)
 
-    @patch("src.services.study_plan_topic_service.StudyPlanTopic.objects.get")
-    def test_delete_study_plan_topic_no_permission(self, mock_get):
-        mock_get.return_value = self.study_plan_topic
+    @patch("src.models.StudyPlan.access_allowed")
+    def test_delete_study_plan_topic_no_permission(self, mock_access_allowed):
+        # Configura o mock para retornar False
+        mock_access_allowed.return_value = False
+
+        # Cria um outro usuário sem permissão
         another_user = User.objects.create(username="otheruser")
 
+        # Verifica se a exceção PermissionDenied é levantada
         with self.assertRaises(PermissionDenied):
             delete_study_plan_topic(self.study_plan_topic.id, another_user)
+
+        # Verifica que o mock foi chamado corretamente
+        mock_access_allowed.assert_called_once_with(another_user)
 
 
 class TestUpdateStudyPlanTopicService(TestCase):

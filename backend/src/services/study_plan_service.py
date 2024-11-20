@@ -127,7 +127,7 @@ def update_study_plan(data: dict, study_plan_id: int, user: User) -> dict:
         study_plan.set_visibility(data.get("visibility", study_plan.visibility.name))
     except ObjectDoesNotExist as e:
         raise DomainDoesNotExist(
-            f"Domínio de visibilidade não encontrado: {data["visibility"]}"
+            f"Domínio de visibilidade não encontrado: {data['visibility']}"
         )
 
     # salva o plano e retorna dados serializados

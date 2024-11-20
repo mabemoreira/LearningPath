@@ -27,7 +27,7 @@ class UserFollowsStudyPlanSerializer(serializers.ModelSerializer):
         fields = ["id", "user", "study_plan", "progress", "time_spent"]
 
     def get_user(self, obj):
-        user_info = {"id": obj.user.id, "username": obj.author.user.username}
+        user_info = {"id": obj.user.user.id, "username": obj.user.user.username}
         return user_info
 
     def get_study_plan(self, obj):

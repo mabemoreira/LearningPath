@@ -4,9 +4,11 @@ from django.test import TestCase
 from src.models.custom_user_model import CustomUser
 from src.models.domain_model import Domain
 from src.models.study_plan_model import StudyPlan
+from ..models.user_follows_study_plan_model import UserFollowsStudyPlan
 from src.services.study_plan_service import (
     create_study_plan,
     delete_study_plan,
+    follow_study_plan,
     read_study_plan,
     update_study_plan,
 )
@@ -137,3 +139,36 @@ class TestUpdateStudyPlanService(TestCase):
         another_user = User.objects.create(username="otheruser")
         with self.assertRaises(PermissionDenied):
             update_study_plan(UPDATED_STUDY_PLAN_DATA, self.study_plan.id, another_user)
+
+class TestFollowStudyPlanService(TestCase):
+    def setUp(self):
+        self.user1 = CustomUser.objects.create(
+            user=User.objects.create(username="testuser1")
+        )
+        self.user2 = CustomUser.objects.create(
+            user=User.objects.create(username="testuser2")
+        )
+        self.private_study_plan = StudyPlan.objects.create(
+            title=VALID_STUDY_PLAN_DATA[0]["title"],
+            visibility=Domain.objects.get(name="private"),
+            author=self.user1,
+        )
+        self.public_study_plan = StudyPlan.objects.create(
+            title=VALID_STUDY_PLAN_DATA[0]["title"],
+            visibility=Domain.objects.get(name="public"),
+            author=self.user1,
+        )
+
+    def test_follow_study_plan_successfully(self):
+        study_plan_id = self.public_study_plan.id
+        result = follow_study_plan("", study_plan_id, self.user2.user)
+        follow = UserFollowsStudyPlan.objects.get(
+            user=self.user2, study_plan=self.public_study_plan
+        )
+        self.assertEqual(result["study_plan"]["id"], study_plan_id)
+        self.assertEqual(follow.id, result["id"])
+        self.assertEqual(follow.user.id, self.user2.id)
+
+    def test_follow_study_plan_no_permission(self):
+        with self.assertRaises(PermissionDenied):
+            follow_study_plan("", self.private_study_plan.id, self.user2.user)

@@ -5,7 +5,7 @@ from src.models.custom_user_model import CustomUser
 from src.models.domain_model import Domain
 from src.models.study_plan_model import StudyPlan, StudyPlanSerializer
 from src.models.study_plan_topic_model import StudyPlanTopic, StudyPlanTopicSerializer
-
+from src.models.user_follows_study_plan_model import UserFollowsStudyPlan, UserFollowsStudyPlanSerializer
 
 def create_study_plan(data: dict, user) -> dict:
     """Cria um StudyPlan com base nos dados passados.
@@ -133,3 +133,36 @@ def update_study_plan(data: dict, study_plan_id: int, user: User) -> dict:
     # salva o plano e retorna dados serializados
     study_plan.save()
     return StudyPlanSerializer(study_plan).data
+
+def follow_study_plan(data:dict, study_plan_id: int, user: User) -> dict:
+    """Adiciona um plano de estudos à lista de planos seguidos pelo usuário.
+
+    Params:
+        study_plan_id: id do plano de estudos
+
+    Returns:
+        dict: dados do plano de estudos seguido
+
+    Raises:
+        ObjectDoesNotExist: se o plano de estudos não existir
+        PermissionDenied: se o usuário não tiver permissão para seguir o plano
+    """
+    # busca o plano e o user, se nao existir gera uma excessao
+    study_plan = StudyPlan.objects.get(id=study_plan_id)
+    user = CustomUser.objects.get(id=user.id)
+
+    # gera uma excessao se usuario nao tiver permissao para ver o plano
+    if not study_plan.access_allowed(user):
+        raise PermissionDenied(
+            "Você não tem permissão para seguir este plano de estudos."
+        )
+    
+    # adiciona o plano de estudos à lista de planos seguidos pelo usuário
+    follow = UserFollowsStudyPlan.objects.create(
+        user=CustomUser.objects.get(id=user.id),
+        study_plan=study_plan
+    )
+    follow.save()
+
+    # retorna os dados serializados
+    return UserFollowsStudyPlanSerializer(follow).data

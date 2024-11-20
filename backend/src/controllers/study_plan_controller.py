@@ -18,6 +18,7 @@ from src.services.study_plan_service import (
     delete_study_plan,
     follow_study_plan,
     read_study_plan,
+    unfollow_study_plan,
     update_study_plan,
 )
 
@@ -105,8 +106,24 @@ class StudyPlanController(APIView):
         },
     )
     def delete(self, request: Request, study_plan_id: int):
+        if "follow" in request.path:
+            return self.unfollow_plan(request, study_plan_id)
+        return self.delete_plan(request, study_plan_id)
+
+    def delete_plan(self, request: Request, study_plan_id: int):
         try:
             delete_study_plan(study_plan_id, request.user)
+            return JsonResponse({}, status=204)
+        except ObjectDoesNotExist:
+            return EntityNotFound()
+        except PermissionDenied:
+            return UnauthorizedAccess()
+        except Exception as e:
+            return InternalServerError()
+
+    def unfollow_plan(self, request: Request, study_plan_id: int):
+        try:
+            unfollow_study_plan("", study_plan_id, request.user)
             return JsonResponse({}, status=204)
         except ObjectDoesNotExist:
             return EntityNotFound()

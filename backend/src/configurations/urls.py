@@ -27,7 +27,7 @@ urlpatterns = [
     ),
     path(
         "study_plan/follow/<int:study_plan_id>/",
-        StudyPlanController.as_view(http_method_names=["post"]),
+        StudyPlanController.as_view(http_method_names=["post", "delete"]),
     ),
     path(
         "study_plan/<int:study_plan_id>/",

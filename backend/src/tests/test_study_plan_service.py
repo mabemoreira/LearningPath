@@ -4,7 +4,6 @@ from django.test import TestCase
 from src.models.custom_user_model import CustomUser
 from src.models.domain_model import Domain
 from src.models.study_plan_model import StudyPlan
-from ..models.user_follows_study_plan_model import UserFollowsStudyPlan
 from src.services.study_plan_service import (
     create_study_plan,
     delete_study_plan,
@@ -12,6 +11,8 @@ from src.services.study_plan_service import (
     read_study_plan,
     update_study_plan,
 )
+
+from ..models.user_follows_study_plan_model import UserFollowsStudyPlan
 
 VALID_STUDY_PLAN_DATA = [
     {"title": "Valid Plan 1", "visibility": "public"},
@@ -139,6 +140,7 @@ class TestUpdateStudyPlanService(TestCase):
         another_user = User.objects.create(username="otheruser")
         with self.assertRaises(PermissionDenied):
             update_study_plan(UPDATED_STUDY_PLAN_DATA, self.study_plan.id, another_user)
+
 
 class TestFollowStudyPlanService(TestCase):
     def setUp(self):

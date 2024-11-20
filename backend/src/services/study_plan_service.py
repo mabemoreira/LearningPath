@@ -5,7 +5,11 @@ from src.models.custom_user_model import CustomUser
 from src.models.domain_model import Domain
 from src.models.study_plan_model import StudyPlan, StudyPlanSerializer
 from src.models.study_plan_topic_model import StudyPlanTopic, StudyPlanTopicSerializer
-from src.models.user_follows_study_plan_model import UserFollowsStudyPlan, UserFollowsStudyPlanSerializer
+from src.models.user_follows_study_plan_model import (
+    UserFollowsStudyPlan,
+    UserFollowsStudyPlanSerializer,
+)
+
 
 def create_study_plan(data: dict, user) -> dict:
     """Cria um StudyPlan com base nos dados passados.
@@ -134,7 +138,8 @@ def update_study_plan(data: dict, study_plan_id: int, user: User) -> dict:
     study_plan.save()
     return StudyPlanSerializer(study_plan).data
 
-def follow_study_plan(data:dict, study_plan_id: int, user: User) -> dict:
+
+def follow_study_plan(data: dict, study_plan_id: int, user: User) -> dict:
     """Adiciona um plano de estudos à lista de planos seguidos pelo usuário.
 
     Params:
@@ -156,11 +161,10 @@ def follow_study_plan(data:dict, study_plan_id: int, user: User) -> dict:
         raise PermissionDenied(
             "Você não tem permissão para seguir este plano de estudos."
         )
-    
+
     # adiciona o plano de estudos à lista de planos seguidos pelo usuário
     follow = UserFollowsStudyPlan.objects.create(
-        user=CustomUser.objects.get(id=user.id),
-        study_plan=study_plan
+        user=CustomUser.objects.get(id=user.id), study_plan=study_plan
     )
     follow.save()
 

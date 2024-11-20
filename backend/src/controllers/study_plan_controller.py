@@ -13,8 +13,10 @@ from src.exceptions.response_exceptions import (
 )
 from src.models.study_plan_model import StudyPlan, StudyPlanSerializer
 from src.services.study_plan_service import (
+    clone_study_plan,
     create_study_plan,
     delete_study_plan,
+    follow_study_plan,
     read_study_plan,
     update_study_plan,
 )
@@ -47,9 +49,45 @@ class StudyPlanController(APIView):
             200: StudyPlanSerializer,
             UnprocessableEntity.status_code: ExceptionSerializer,
             InternalServerError.status_code: ExceptionSerializer,
+            EntityNotFound.status_code: ExceptionSerializer,
+            UnauthorizedAccess.status_code: ExceptionSerializer,
         },
     )
-    def post(self, request: Request):
+    def post(self, request: Request, study_plan_id: int = None):
+        if study_plan_id:
+            if "clone" in request.path:
+                return self.post_clone(request, study_plan_id)
+            elif "follow" in request.path:
+                return self.post_follow(request, study_plan_id)
+            else:
+                return JsonResponse({"detail": "Ação não permitida"}, status=400)
+        return self.post_create(request)
+
+    def post_clone(self, request: Request, study_plan_id: int):
+        try:
+            return JsonResponse(
+                clone_study_plan(request.data, request.user, study_plan_id), status=200
+            )
+        except PermissionDenied as e:
+            return UnauthorizedAccess()
+        except ObjectDoesNotExist as e:
+            return EntityNotFound()
+        except Exception as e:
+            return InternalServerError()
+
+    def post_follow(self, request: Request, study_plan_id: int):
+        try:
+            return JsonResponse(
+                follow_study_plan("", study_plan_id, request.user), status=200
+            )
+        except PermissionDenied as e:
+            return UnauthorizedAccess()
+        except ObjectDoesNotExist as e:
+            return EntityNotFound()
+        except Exception as e:
+            return InternalServerError()
+
+    def post_create(self, request: Request):
         try:
             return JsonResponse(create_study_plan(request.data, request.user), status=200)
         except ValidationError as e:

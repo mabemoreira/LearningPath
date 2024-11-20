@@ -201,6 +201,4 @@ def clone_study_plan(data: dict, user: User, study_plan_id: int) -> dict:
 
     plan_data = create_study_plan(new_data, user)
 
-    print("dados do novo plano de estudos:", plan_data)
-
     return StudyPlanSerializer(StudyPlan.objects.get(id=plan_data["id"])).data

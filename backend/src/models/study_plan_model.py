@@ -5,6 +5,8 @@ from src.models.base_model import BaseModel
 from src.models.custom_user_model import CustomUser, User
 from src.models.domain_model import Domain, DomainSerializer
 
+from .user_follows_study_plan_model import UserFollowsStudyPlan
+
 
 def default_visibility():
     try:
@@ -56,7 +58,17 @@ class StudyPlan(BaseModel):
         Returns:
             bool: True se o usuário tem permissão, False caso contrário
         """
-        if self.is_private() and not self.author.id == user.id:
+        # plano foi deletado e usuario nao o segue
+        if (
+            self.deleted
+            and not UserFollowsStudyPlan.objects.filter(
+                user=user,
+                study_plan=self,
+            ).exists()
+        ):
+            return False
+        # plano eh privado e usuario nao eh o autor
+        elif self.is_private() and not self.author.id == user.id:
             return False
         return True
 

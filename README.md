@@ -62,6 +62,8 @@ Para a avaliação A4, escolhemos implementar uma arquitetura em camadas na noss
 Segue o diagrama C4:
 ![Diagrama do Sistema](readmeAssets/C4%20-%20Avaliação%204.drawio.png)
 [Baixar arquivo original](https://drive.google.com/file/d/1BJyhDH47fbebxdDqXOKrLCm6mTBW9CNz/view?usp=sharing)
+
+
 **Padrão de projeto: Adapter/Wrapper**   
 Na branch feature/padrao-projeto, resolvemos implementar esse padrão pois o Study Plan tinha diversos métodos posts, que poderiam ser abstraídos em um grande post que posteriormente seria específicado. Sendo assim, o cliente interagirá com o frontend, que mandará uma request para o Study Plan Controller. Ele, por sua vez, adapta o post em posts específicos, isto é, a request nesse caso é o post, que são passados para o Study Plan Service.
 

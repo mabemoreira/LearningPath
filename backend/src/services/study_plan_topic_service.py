@@ -38,6 +38,17 @@ def create_study_plan_topic(data: dict, study_plan_id: int) -> StudyPlanTopic:
     return StudyPlanTopicSerializer(study_plan_topic).data
 
 
+def check_permission_topic(study_plan_topic: StudyPlanTopic, user: User) -> None:
+    """
+    Raises:
+        PermissionDenied: se o usuário não tiver permissão para acessar o tópico
+    """
+    if not study_plan_topic.study_plan.access_allowed(user):
+        raise PermissionDenied(
+            "Você não tem permissão para acessar este tópico do plano de estudos."
+        )
+
+
 def read_study_plan_topic(study_plan_topic_id: int, user: User) -> dict:
     """
     Retorna os dados do tópico do plano de estudos com o id passado.
@@ -57,10 +68,7 @@ def read_study_plan_topic(study_plan_topic_id: int, user: User) -> dict:
     study_plan_topic = StudyPlanTopic.objects.get(id=study_plan_topic_id)
 
     # gera uma excessao se usuario nao tiver permissao para acessar o tópico
-    if not study_plan_topic.study_plan.access_allowed(user):
-        raise PermissionDenied(
-            "Você não tem permissão para acessar este tópico do plano de estudos."
-        )
+    check_permission_topic(study_plan_topic, user)
 
     # dados serializados
     return StudyPlanTopicSerializer(study_plan_topic).data
@@ -83,10 +91,7 @@ def delete_study_plan_topic(study_plan_topic_id: int, user: User) -> None:
     study_plan_topic = StudyPlanTopic.objects.get(id=study_plan_topic_id)
 
     # gera uma excessao se usuario nao tiver permissao para deletar o tópico
-    if not study_plan_topic.study_plan.access_allowed(user):
-        raise PermissionDenied(
-            "Você não tem permissão para deletar este tópico do plano de estudos."
-        )
+    check_permission_topic(study_plan_topic, user)
 
     # deleta o tópico
     study_plan_topic.delete()
@@ -112,10 +117,7 @@ def update_study_plan_topic(study_plan_topic_id: int, data: dict, user: User) ->
     study_plan_topic = StudyPlanTopic.objects.get(id=study_plan_topic_id)
 
     # gera uma excessao se usuario nao tiver permissao para atualizar o tópico
-    if not study_plan_topic.study_plan.access_allowed(user):
-        raise PermissionDenied(
-            "Você não tem permissão para atualizar este tópico do plano de estudos."
-        )
+    check_permission_topic(study_plan_topic, user)
 
     # verifica se os dados sao validos
     StudyPlanTopicSerializer(study_plan_topic, data=data).is_valid(raise_exception=True)

@@ -37,6 +37,23 @@ def create_study_plan(data: dict, user) -> dict:
     return StudyPlanSerializer(study_plan).data
 
 
+def check_permission_plan(
+    requesting_user: User, study_plan: StudyPlan = None, user: User = None
+) -> None:
+    """
+    Raises:
+        PermissionDenied: se o usuário não tiver permissão para acessar o plano
+    """
+    if not user and not study_plan.access_allowed(requesting_user):
+        raise PermissionDenied(
+            "Você não tem permissão para acessar este plano de estudos."
+        )
+    if user and user != study_plan.author.user:
+        raise PermissionDenied(
+            "Você não tem permissão para deletar este plano de estudos."
+        )
+
+
 def read_study_plan(study_plan_id: int, user: User) -> dict:
     """
     Returns:
@@ -51,10 +68,7 @@ def read_study_plan(study_plan_id: int, user: User) -> dict:
 
     # gera uma excessao se usuario nao tiver permissao para acessar o plano
     # TODO: permitir get se o usuário seguir o plano de estudos
-    if not study_plan.access_allowed(user):
-        raise PermissionDenied(
-            "Você não tem permissão para acessar este plano de estudos."
-        )
+    check_permission_plan(user, study_plan)
 
     # dados serializados
     result = StudyPlanSerializer(study_plan).data
@@ -79,10 +93,7 @@ def delete_study_plan(study_plan_id: int, user: User) -> None:
     study_plan = StudyPlan.objects.get(id=study_plan_id)
 
     # gera uma excessao se usuario nao for o autor
-    if not user == study_plan.author.user:
-        raise PermissionDenied(
-            "Você não tem permissão para deletar este plano de estudos."
-        )
+    check_permission_plan(requesting_user=user, user=study_plan.author)
 
     # salva o plano de estudos como deletado
     study_plan.deleted = True
@@ -105,10 +116,7 @@ def update_study_plan(data: dict, study_plan_id: int, user: User) -> dict:
     study_plan = StudyPlan.objects.get(id=study_plan_id)
 
     # gera uma excessao se usuario nao for o autor
-    if not user == study_plan.author.user:
-        raise PermissionDenied(
-            "Você não tem permissão para atualizar este plano de estudos."
-        )
+    check_permission_plan(requesting_user=user, user=study_plan.author)
 
     # serializa os dados, se nao forem validos gera uma excessao
     study_plan_serializer = StudyPlanSerializer(study_plan, data=data, partial=True)
@@ -147,10 +155,7 @@ def follow_study_plan(data: dict, study_plan_id: int, user: User) -> dict:
     user = CustomUser.objects.get(id=user.id)
 
     # gera uma excessao se usuario nao tiver permissao para ver o plano
-    if not study_plan.access_allowed(user):
-        raise PermissionDenied(
-            "Você não tem permissão para seguir este plano de estudos."
-        )
+    check_permission_plan(requesting_user=user, study_plan=study_plan)
 
     # adiciona o plano de estudos à lista de planos seguidos pelo usuário
     follow = UserFollowsStudyPlan.objects.create(
@@ -178,12 +183,7 @@ def clone_study_plan(data: dict, user: User, study_plan_id: int) -> dict:
         PermissionDenied: se o usuário não tiver permissão para clonar o plano
     """
     study_plan = StudyPlan.objects.get(id=study_plan_id)
-
-    if not study_plan.access_allowed(user):
-        raise PermissionDenied(
-            "Você não tem permissão para clonar este plano de estudos."
-        )
-
+    check_permission_plan(requesting_user=user, study_plan=study_plan)
     new_data = StudyPlanSerializer(study_plan).data
     new_data["title"] = f"Cópia de {new_data['title']}"
     new_data["visibility"] = data.get("visibility", study_plan.visibility.name)

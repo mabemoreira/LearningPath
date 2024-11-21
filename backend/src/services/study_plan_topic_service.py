@@ -9,11 +9,6 @@ from src.models.study_plan_topic_model import StudyPlanTopic, StudyPlanTopicSeri
 
 def create_study_plan_topic(data: dict, study_plan_id: int) -> StudyPlanTopic:
     """
-    Cria um StudyPlanTopic com base nos dados passados.
-
-    Params:
-        data (dict): dados para criação de tópico do plano de estudos (obrigatório: title, description)
-        study_plan_id (int): id do plano de estudos
 
     Returns:
         dict: dados do tópico criado
@@ -51,10 +46,6 @@ def check_permission_topic(study_plan_topic: StudyPlanTopic, user: User) -> None
 
 def read_study_plan_topic(study_plan_topic_id: int, user: User) -> dict:
     """
-    Retorna os dados do tópico do plano de estudos com o id passado.
-
-    Params:
-        study_plan_topic_id: id do tópico do plano de estudos
 
     Returns:
         dict: dados do tópico do plano de estudos
@@ -99,12 +90,6 @@ def delete_study_plan_topic(study_plan_topic_id: int, user: User) -> None:
 
 def update_study_plan_topic(study_plan_topic_id: int, data: dict, user: User) -> dict:
     """
-    Atualiza os dados do tópico do plano de estudos com o id passado.
-
-    Params:
-        study_plan_topic_id: id do tópico do plano de estudos
-        data: dados para atualização do tópico do plano de estudos
-
     Returns:
         dict: dados do tópico do plano de estudos atualizados
 

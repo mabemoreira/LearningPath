@@ -45,7 +45,7 @@ def check_permission_user(user: User, requesting_user: User) -> None:
 
 
 def delete_custom_user(user_id: int, requesting_user: User) -> None:
-    """Deleta um usuário através do id.
+    """
 
     Params:
         user_id (int)
@@ -65,8 +65,7 @@ def delete_custom_user(user_id: int, requesting_user: User) -> None:
 
 
 def update_custom_user(data: dict, user_id: int, requesting_user: User) -> dict:
-    """Atualiza os dados do usuário com o id passado.
-
+    """
     Params:
         user_id: id do usuário
         requesting_user (User): usuário que está fazendo a solicitação

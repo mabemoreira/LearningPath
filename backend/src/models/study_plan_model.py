@@ -73,7 +73,6 @@ class StudyPlanSerializer(serializers.ModelSerializer):
 
     def save(self, **kwargs) -> bool:
         """
-        Salva o objeto no banco de dados.
 
         Returns:
             bool: True se o objeto foi salvo, False caso contrário

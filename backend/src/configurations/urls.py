@@ -22,6 +22,14 @@ urlpatterns = [
     # Study plan endpoints
     path("study_plan/", StudyPlanController.as_view(http_method_names=["post"])),
     path(
+        "study_plan/clone/<int:study_plan_id>/",
+        StudyPlanController.as_view(http_method_names=["post"]),
+    ),
+    path(
+        "study_plan/follow/<int:study_plan_id>/",
+        StudyPlanController.as_view(http_method_names=["post"]),
+    ),
+    path(
         "study_plan/<int:study_plan_id>/",
         StudyPlanController.as_view(http_method_names=["put", "get", "delete"]),
     ),

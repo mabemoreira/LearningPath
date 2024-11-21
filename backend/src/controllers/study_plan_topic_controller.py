@@ -11,31 +11,29 @@ from src.exceptions.response_exceptions import (
     UnauthorizedAccess,
     UnprocessableEntity,
 )
-from src.models.study_plan_model import StudyPlan, StudyPlanSerializer
+from src.models.study_plan_topic_model import StudyPlanTopic, StudyPlanTopicSerializer
 from src.services.study_plan_service import (
-    clone_study_plan,
-    create_study_plan,
-    delete_study_plan,
-    follow_study_plan,
-    read_study_plan,
-    update_study_plan,
+    create_study_plan_topic,
+    delete_study_plan_topic,
+    read_study_plan_topic,
+    update_study_plan_topic,
 )
 
 
-class StudyPlanController(APIView):
+class StudyPlanTopicController(APIView):
 
     @extend_schema(
         responses={
-            200: StudyPlanSerializer,
+            200: StudyPlanTopicSerializer,
             EntityNotFound.status_code: ExceptionSerializer,
             InternalServerError.status_code: ExceptionSerializer,
             UnauthorizedAccess.status_code: ExceptionSerializer,
         },
     )
-    def get(self, request: Request, study_plan_id: int):
+    def get(self, request: Request, study_plan_topic_id: int):
         try:
-            study_plan = read_study_plan(study_plan_id, request.user)
-            return JsonResponse(study_plan, status=200)
+            study_plan_topic = read_study_plan_topic(study_plan_topic_id, request.user)
+            return JsonResponse(study_plan_topic, status=200)
         except ObjectDoesNotExist as e:
             return EntityNotFound()
         except PermissionDenied as e:
@@ -44,59 +42,25 @@ class StudyPlanController(APIView):
             return InternalServerError()
 
     @extend_schema(
-        request=StudyPlanSerializer,
+        request=StudyPlanTopicSerializer,
         responses={
-            200: StudyPlanSerializer,
+            200: StudyPlanTopicSerializer,
             UnprocessableEntity.status_code: ExceptionSerializer,
             InternalServerError.status_code: ExceptionSerializer,
-            EntityNotFound.status_code: ExceptionSerializer,
-            UnauthorizedAccess.status_code: ExceptionSerializer,
         },
     )
-    def post(self, request: Request, study_plan_id: int = None):
-        if study_plan_id:
-            if "clone" in request.path:
-                return self.post_clone(request, study_plan_id)
-            elif "follow" in request.path:
-                return self.post_follow(request, study_plan_id)
-            else:
-                return JsonResponse({"detail": "Ação não permitida"}, status=400)
-        return self.post_create(request)
-
-    def post_clone(self, request: Request, study_plan_id: int):
+    def post(self, request: Request):
         try:
             return JsonResponse(
-                clone_study_plan(request.data, request.user, study_plan_id), status=200
+                create_study_plan_topic(request.data, request.user), status=200
             )
-        except PermissionDenied as e:
-            return UnauthorizedAccess()
-        except ObjectDoesNotExist as e:
-            return EntityNotFound()
-        except Exception as e:
-            return InternalServerError()
-
-    def post_follow(self, request: Request, study_plan_id: int):
-        try:
-            return JsonResponse(
-                follow_study_plan("", study_plan_id, request.user), status=200
-            )
-        except PermissionDenied as e:
-            return UnauthorizedAccess()
-        except ObjectDoesNotExist as e:
-            return EntityNotFound()
-        except Exception as e:
-            return InternalServerError()
-
-    def post_create(self, request: Request):
-        try:
-            return JsonResponse(create_study_plan(request.data, request.user), status=200)
         except ValidationError as e:
             return UnprocessableEntity()
         except Exception as e:
             return InternalServerError()
 
     @extend_schema(
-        request=StudyPlanSerializer,
+        request=StudyPlanTopicSerializer,
         responses={
             204: None,
             EntityNotFound.status_code: ExceptionSerializer,
@@ -104,32 +68,34 @@ class StudyPlanController(APIView):
             UnauthorizedAccess.status_code: ExceptionSerializer,
         },
     )
-    def delete(self, request: Request, study_plan_id: int):
+    def delete(self, request: Request, study_plan_topic_id: int):
         try:
-            delete_study_plan(study_plan_id, request.user)
+            delete_study_plan_topic(study_plan_topic_id, request.user)
             return JsonResponse({}, status=204)
-        except ObjectDoesNotExist:
+        except ObjectDoesNotExist as e:
             return EntityNotFound()
-        except PermissionDenied:
+        except PermissionDenied as e:
             return UnauthorizedAccess()
         except Exception as e:
             return InternalServerError()
 
     @extend_schema(
-        request=StudyPlanSerializer,
+        request=StudyPlanTopicSerializer,
         responses={
-            200: StudyPlanSerializer,
+            200: StudyPlanTopicSerializer,
             UnprocessableEntity.status_code: ExceptionSerializer,
             EntityNotFound.status_code: ExceptionSerializer,
             InternalServerError.status_code: ExceptionSerializer,
             UnauthorizedAccess.status_code: ExceptionSerializer,
         },
     )
-    def put(self, request: Request, study_plan_id: int):
+    def put(self, request: Request, study_plan_topic_id: int):
         try:
             data = request.data
             user = request.user
-            return JsonResponse(update_study_plan(data, study_plan_id, user), status=200)
+            return JsonResponse(
+                update_study_plan_topic(data, study_plan_topic_id, user), status=200
+            )
         except ObjectDoesNotExist as e:
             return EntityNotFound()
         except PermissionDenied as e:

@@ -1,4 +1,6 @@
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
+from rest_framework.exceptions import ValidationError
 from src.models.custom_user_model import CustomUser, CustomUserSerializer, UserSerializer
 
 
@@ -33,21 +35,33 @@ def read_custom_user(user_id) -> dict:
     return CustomUserSerializer(custom_user).data
 
 
-def delete_custom_user(user_id: int) -> None:
-    """
+def delete_custom_user(user_id: int, requesting_user: User) -> None:
+    """Deleta um usuário através do id.
+
+    Params:
+        user_id (int)
+        requesting_user (User): usuário que está fazendo a solicitação
 
     Returns:
         None
 
     Raises:
         ObjectDoesNotExists: se o usuário não for encontrado.
+        PermissionDenied: se o usuário não tiver permissão para deletar.
     """
+    if not requesting_user.is_superuser and requesting_user.id != user_id:
+        raise PermissionDenied("Você não tem permissão para deletar este usuário.")
+
     user = User.objects.get(id=user_id)
     user.delete()
 
 
-def update_custom_user(data: dict, user_id: int) -> dict:
-    """
+def update_custom_user(data: dict, user_id: int, requesting_user: User) -> dict:
+    """Atualiza os dados do usuário com o id passado.
+
+    Params:
+        user_id: id do usuário
+        requesting_user (User): usuário que está fazendo a solicitação
 
     Returns:
         dict: dados do usuário atualizado
@@ -55,7 +69,12 @@ def update_custom_user(data: dict, user_id: int) -> dict:
     Raises:
         ObjectDoesNotExist: se o usuário não existir
         ValueError: se o id for inválido
+        PermissionDenied: se o usuário não tiver permissão para atualizar.
+        ValidationError: se os dados forem inválidos.
     """
+    if not requesting_user.is_superuser and requesting_user.id != user_id:
+        raise PermissionDenied("Você não tem permissão para atualizar este usuário.")
+
     user = User.objects.get(id=user_id)
     user_serializer = UserSerializer(user, data=data, partial=True)
     user_serializer.is_valid(raise_exception=True)

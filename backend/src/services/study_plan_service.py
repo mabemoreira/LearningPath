@@ -156,7 +156,7 @@ def follow_study_plan(data: dict, study_plan_id: int, user: User) -> dict:
     user = CustomUser.objects.get(id=user.id)
 
     # gera uma excessao se usuario nao tiver permissao para ver o plano
-    check_permission_plan(requesting_user=user, study_plan=study_plan)
+    check_permission_plan(user, study_plan)
 
     # adiciona o plano de estudos à lista de planos seguidos pelo usuário
     follow = UserFollowsStudyPlan.objects.create(
@@ -184,7 +184,7 @@ def clone_study_plan(data: dict, user: User, study_plan_id: int) -> dict:
         PermissionDenied: se o usuário não tiver permissão para clonar o plano
     """
     study_plan = StudyPlan.objects.get(id=study_plan_id)
-    check_permission_plan(requesting_user=user, study_plan=study_plan)
+    check_permission_plan(user, study_plan)
     new_data = StudyPlanSerializer(study_plan).data
     new_data["title"] = f"Cópia de {new_data['title']}"
     new_data["visibility"] = data.get("visibility", study_plan.visibility.name)

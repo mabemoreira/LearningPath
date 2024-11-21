@@ -58,9 +58,8 @@ def delete_custom_user(user_id: int, requesting_user: User) -> None:
         ObjectDoesNotExists: se o usuário não for encontrado.
         PermissionDenied: se o usuário não tiver permissão para deletar.
     """
-    check_permission_user(user, requesting_user)
-
     user = User.objects.get(id=user_id)
+    check_permission_user(user, requesting_user)
     user.delete()
 
 
@@ -79,8 +78,8 @@ def update_custom_user(data: dict, user_id: int, requesting_user: User) -> dict:
         PermissionDenied: se o usuário não tiver permissão para atualizar.
         ValidationError: se os dados forem inválidos.
     """
-    check_permission_user(user, requesting_user)
     user = User.objects.get(id=user_id)
+    check_permission_user(user, requesting_user)
     user_serializer = UserSerializer(user, data=data, partial=True)
     user_serializer.is_valid(raise_exception=True)
     user.username = data.get("username", user.username)

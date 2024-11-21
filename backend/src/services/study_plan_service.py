@@ -94,7 +94,7 @@ def delete_study_plan(study_plan_id: int, user: User) -> None:
     study_plan = StudyPlan.objects.get(id=study_plan_id)
 
     # gera uma excessao se usuario nao for o autor
-    check_is_author(user, study_plan.author)
+    check_is_author(user, study_plan)
 
     # salva o plano de estudos como deletado
     study_plan.deleted = True
@@ -117,7 +117,7 @@ def update_study_plan(data: dict, study_plan_id: int, user: User) -> dict:
     study_plan = StudyPlan.objects.get(id=study_plan_id)
 
     # gera uma excessao se usuario nao for o autor
-    check_is_author(user, study_plan.author)
+    check_is_author(user, study_plan)
 
     # serializa os dados, se nao forem validos gera uma excessao
     study_plan_serializer = StudyPlanSerializer(study_plan, data=data, partial=True)

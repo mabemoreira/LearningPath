@@ -1,1 +1,20 @@
-<p>team-page works!</p>
+<div class="team-container">
+    <h1>Equipe</h1>
+    <div class="team-members">
+      <div *ngFor="let member of teamMembers" class="member-card">
+        <div class="avatar">
+          <img [src]="member.avatar" [alt]="member.name">
+        </div>
+        <h2>{{ member.name }}</h2>
+        <p>{{ member.description }}</p>
+        <div class="social-links">
+          <a [href]="member.github" target="_blank">
+            <img src="assets/github-icon.svg" alt="GitHub">
+          </a>
+          <a [href]="member.linkedin" target="_blank">
+            <img src="assets/linkedin-icon.svg" alt="LinkedIn">
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>

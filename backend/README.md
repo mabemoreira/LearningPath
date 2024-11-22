@@ -96,7 +96,9 @@ autenticação ou uma API.
 
 A gerência do banco de dados consiste nos seguintes passos:
 
-1. Gerar migrações: sempre que um modelo for criado ou alterado, você deve gerar arquivos
+1. No arquivo `models/__init__`, é necessário importar os modelos (tabelas)
+
+2. Gerar migrações: sempre que um modelo for criado ou alterado, você deve gerar arquivos
    de migração que descrevem essas mudanças. Tais arquivos serão salvos na pasta
    `migrations` de cada app, descrevendo as alterações que serão aplicadas ao banco de
    dados:
@@ -104,7 +106,7 @@ A gerência do banco de dados consiste nos seguintes passos:
    python -m src.manage makemigrations # gera migrações
    ```
 
-2. Aplicar migrações: Para aplicar as migrações ao banco de dados e criar ou alterar
+3. Aplicar migrações: Para aplicar as migrações ao banco de dados e criar ou alterar
    as tabelas conforme necessário, execute:
    ```bash
    python -m src.manage migrate # aplica migrações

@@ -79,7 +79,7 @@ class StudyPlanController(APIView):
     def post_follow(self, request: Request, study_plan_id: int):
         try:
             return JsonResponse(
-                follow_study_plan("", study_plan_id, request.user), status=200
+                follow_study_plan(dict(), study_plan_id, request.user), status=200
             )
         except PermissionDenied as e:
             return UnauthorizedAccess()

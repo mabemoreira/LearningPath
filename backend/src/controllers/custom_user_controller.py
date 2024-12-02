@@ -1,4 +1,4 @@
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ValidationError
 from django.http import JsonResponse
 from drf_spectacular.utils import extend_schema
 from rest_framework.request import Request
@@ -7,6 +7,7 @@ from src.exceptions.response_exceptions import (
     EntityNotFound,
     ExceptionSerializer,
     InternalServerError,
+    UnauthorizedAccess,
     UnprocessableEntity,
 )
 from src.models.custom_user_model import CustomUserSerializer, UserSerializer
@@ -66,14 +67,17 @@ class UserController(APIView):
             204: None,
             EntityNotFound.status_code: ExceptionSerializer,
             InternalServerError.status_code: ExceptionSerializer,
+            UnauthorizedAccess.status_code: ExceptionSerializer,
         },
     )
     def delete(self, request: Request, user_id: int):
         try:
-            delete_custom_user(user_id)
+            delete_custom_user(user_id, request.user)
             return JsonResponse({}, status=204)
         except ObjectDoesNotExist as e:
             return EntityNotFound()
+        except PermissionDenied as e:
+            return UnauthorizedAccess()
         except Exception as e:
             return InternalServerError()
 
@@ -84,15 +88,20 @@ class UserController(APIView):
             UnprocessableEntity.status_code: ExceptionSerializer,
             EntityNotFound.status_code: ExceptionSerializer,
             InternalServerError.status_code: ExceptionSerializer,
+            UnauthorizedAccess.status_code: ExceptionSerializer,
         },
     )
     def put(self, request: Request, user_id: int):
         try:
             data = request.data
-            return JsonResponse(update_custom_user(data, user_id), status=200)
+            return JsonResponse(
+                update_custom_user(data, user_id, request.user), status=200
+            )
         except ValidationError as e:
             return UnprocessableEntity()
         except ObjectDoesNotExist as e:
             return EntityNotFound()
+        except PermissionDenied as e:
+            return UnauthorizedAccess()
         except Exception as e:
             return InternalServerError()

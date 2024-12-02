@@ -25,8 +25,6 @@ class StudyPlan(BaseModel):
 
     def is_private(self):
         """
-        Verifica se o plano de estudos é privado.
-
         Returns:
             bool: True se o plano de estudos é privado, False caso contrário
         """
@@ -34,10 +32,6 @@ class StudyPlan(BaseModel):
 
     def set_visibility(self, visibility):
         """
-        Define a visibilidade do plano de estudos.
-
-        Params:
-            visibility: visibilidade do plano de estudos
 
         Raises:
             ObjectDoesNotExist: se a visibilidade não existir
@@ -47,16 +41,13 @@ class StudyPlan(BaseModel):
         )
 
     def access_allowed(self, user: User) -> bool:
-        """Verifica se o usuário tem permissão para acessar o plano de estudos.
-
-        Params:
-            study_plan: plano de estudos
-            user: usuário
+        """
 
         Returns:
             bool: True se o usuário tem permissão, False caso contrário
         """
         from src.models.user_follows_study_plan_model import UserFollowsStudyPlan
+
         # plano foi deletado e usuario nao o segue
         if (
             self.deleted
@@ -94,7 +85,6 @@ class StudyPlanSerializer(serializers.ModelSerializer):
 
     def save(self, **kwargs) -> bool:
         """
-        Salva o objeto no banco de dados.
 
         Returns:
             bool: True se o objeto foi salvo, False caso contrário

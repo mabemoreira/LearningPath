@@ -164,7 +164,7 @@ class TestFollowStudyPlanService(TestCase):
 
     def test_follow_study_plan_successfully(self):
         study_plan_id = self.public_study_plan.id
-        result = follow_study_plan("", study_plan_id, self.user2.user)
+        result = follow_study_plan(dict(), study_plan_id, self.user2.user)
         follow = UserFollowsStudyPlan.objects.get(
             user=self.user2, study_plan=self.public_study_plan
         )
@@ -174,7 +174,7 @@ class TestFollowStudyPlanService(TestCase):
 
     def test_follow_study_plan_no_permission(self):
         with self.assertRaises(PermissionDenied):
-            follow_study_plan("", self.private_study_plan.id, self.user2.user)
+            follow_study_plan(dict(), self.private_study_plan.id, self.user2.user)
 
 
 class TestCloneStudyPlanService(TestCase):
@@ -198,4 +198,4 @@ class TestCloneStudyPlanService(TestCase):
     def test_clone_study_plan_no_permission(self):
         another_user = User.objects.create(username="otheruser")
         with self.assertRaises(PermissionDenied):
-            clone_study_plan("", another_user, self.study_plan.id)
+            clone_study_plan(dict(), another_user, self.study_plan.id)

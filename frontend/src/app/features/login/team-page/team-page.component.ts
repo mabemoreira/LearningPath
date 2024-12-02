@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-team-page',
     standalone: true,
-    imports: [],
+    imports: [CommonModule],
     templateUrl: './team-page.component.html',
     styleUrl: './team-page.component.css',
 })
@@ -13,40 +14,40 @@ export class TeamPageComponent {
           {
             name: 'Henrique Parede',
             description: 'Um apreciador de café, Star Wars e dormir tarde',
-            avatar: 'assets/github-icon.svg',
-            github: 'https://github.com/pessoa1',
-            linkedin: 'https://linkedin.com/in/pessoa1'
+            avatar: '../../../../assets/fotohenrique.png',
+            github: 'https://github.com/Henrique-hpds',
+            linkedin: 'https://l1nk.dev/xYz0Z'
           },
           {
             name: 'Maria Beatriz Moreira',
             description: 'Cinéfila, amante de livros e esfomeada',
-            avatar: 'assets/avatar2.jpg',
-            github: 'https://github.com/pessoa2',
-            linkedin: 'https://linkedin.com/in/pessoa2'
+            avatar: '../../../../assets/fotomabe.jpeg',
+            github: 'https://github.com/mabemoreira',
+            linkedin: 'https://l1nk.dev/7whU7'
           },
 
           {
             name: 'Pedro Brasil',
             description: 'Um fã de jogar durante as aulas',
-            avatar: 'assets/avatar2.jpg',
-            github: 'https://github.com/pessoa2',
-            linkedin: 'https://linkedin.com/in/pessoa2'
+            avatar: '../../../../assets/fotopedro.png',
+            github: 'https://github.com/PedroBrasil111',
+            linkedin: 'https://acesse.one/jj7p4'
           },
 
           {
             name: 'Thiago Camargo',
             description: 'Ama cachorros',
-            avatar: 'assets/avatar2.jpg',
-            github: 'https://github.com/pessoa2',
-            linkedin: 'https://linkedin.com/in/pessoa2'
+            avatar: '../../../../assets/fotothiago.jpeg',
+            github: 'https://github.com/THdeCamargoJ',
+            linkedin: 'https://l1nk.dev/rCK6C'
           },
 
           {
             name: 'Raphael Salles',
             description: 'Tem uma apreciação única por banhos',
-            avatar: 'assets/avatar2.jpg',
-            github: 'https://github.com/pessoa2',
-            linkedin: 'https://linkedin.com/in/pessoa2'
+            avatar: '../../../../assets/fotorapha.jpeg',
+            github: 'https://github.com/RaphaelSVSouza',
+            linkedin: 'https://www.linkedin.com/in/raphael-sv-souza/'
           }
         ];
       }

@@ -12,10 +12,10 @@ from src.services.custom_user_service import (
 )
 
 VALID_USER_INPUT_MOCK = [
-    # 4 caracteres (minimo do Django)
+    # 8 caracteres
     {
         "username": "testuser",
-        "password": "1234",
+        "password": "1234abcd",
         "email": "testuser@example.com",
     },
     # 128 caracteres (limite do Django)
@@ -45,12 +45,14 @@ INVALID_USER_INPUT_MOCKS = [
         "password": "TestPassword123",
         "email": "testuser@example.com",
     },
-    # # senha menor que 4 caracteres
-    # {
-    #     "username": "testuser2",
-    #     "password": "123",
-    #     "email": "testeteste@teste.com"
-    # },
+    # senha com 7 caracteres
+    {"username": "testuser2", "password": "123h456", "email": "testeteste@teste.com"},
+    # senha com 129 caracteres
+    {
+        "username": "testuser2",
+        "password": "123h456",
+        "email": "a1B9k3xY7Q5tZ2mNp6R4Lc8Wd0HvXyCzPqMTJrVoKfEhGuAiBvRnTsUwOpLM3X8Y9Q4kZ7J2a6Nd5RmtCqXpHvWyKoVTJ1LfEhGuA0PzRaaaaaaaaaaaaaaaaaaaaaaaa",
+    },
 ]
 
 VALID_USER_UPDATE_MOCK = [

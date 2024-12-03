@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog'
+import { LoginModalComponent } from '../../login-modal/login-modal.component';
 
 @Component({
     selector: 'app-header',
@@ -19,6 +21,16 @@ export class HeaderComponent {
             active: false,
         },
     ];
+
+    constructor(public dialog: MatDialog) {
+
+    }
+
+    public openLoginModal(): void {
+        this.dialog.open(
+            LoginModalComponent
+        );
+    }
 
     private get_path(requested_path: string): NavBarPath | undefined {
         return this.nav_bar_paths.find((path) => requested_path === path.name);

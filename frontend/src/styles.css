@@ -5,6 +5,7 @@
 
 :root,
 * {
+    --negative-contrast-color-light: hsl(352, 78%, 90%);
     --negative-contrast-color: #e84a5f;
     --background-color: #f2f5f7;
     --light-primary-color: #a8e6ce;
@@ -12,6 +13,7 @@
     --dark-primary-color: #547980;
     --darker-primary-color: #2a363b;
     --light-gray-color: #a8a7a7;
+    --lighter-gray-color: #d9d9d9;
     --gray-color: #474747;
     --black-color: #363636;
     --contrast-color: #ff8c94;
@@ -31,6 +33,17 @@ a {
     text-decoration: none;
 }
 
+:root, .mdc-button:not(:disabled) {
+    background-color: var(--primary-color) !important;
+}
+
+:root, .mdc-button:disabled {
+    background-color: var(--lighter-gray-color);
+}
+
 body {
     background-color: var(--background-color);
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

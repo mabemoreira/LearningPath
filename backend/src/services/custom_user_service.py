@@ -15,6 +15,9 @@ def create_custom_user(data: dict) -> dict:
     Raises:
         ValidationError: se os dados forem inválidos.
     """
+    password = data.get("password")
+    if not password or len(password) < 8 or len(password) > 128:
+        raise ValidationError("Password must be between 8 and 128 characters.")
     UserSerializer(data=data).is_valid(raise_exception=True)  # verificacao dos dados
     user = User.objects.create_user(**data)  # cria o usuario na tabela do Django
     custom_user = CustomUser.objects.create(user=user)  # cria o CustomUser

@@ -11,6 +11,7 @@
             "args":[
                 "test",
                 "${relativeFileDirname}",
+                "--verbosity", "3"
             ],
             "django": true,
             "autoStartBrowser": false,
@@ -24,7 +25,8 @@
             "type": "debugpy",
             "request": "launch",
             "args": [
-                "runserver"
+                "runserver",
+                 "--verbosity", "3"
             ],
             "django": true,
             "autoStartBrowser": false,

@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from src.exceptions.business_rules_exceptions import DomainDoesNotExist
@@ -16,7 +18,25 @@ def create_study_plan_topic(data: dict, study_plan_id: int) -> StudyPlanTopic:
     Raises:
         ValidationError: se os dados forem inválidos.
     """
+    title = data.get("title", "")
+    description = data.get("description", "")
 
+    # Verifica se o título é válido
+    if not (1 <= len(title) <= 255) or not re.match(r"^[\w\sÀ-ÿçÇ]+$", title):
+        raise Exception(
+            "Title must be between 1 and 255 characters and contain only letters, numbers, or spaces."
+        )
+
+    # Verifica se a descrição é válida (se fornecida)
+    if description and (
+        not (1 <= len(description) <= 255) or not re.match(r"^[\w\sÀ-ÿçÇ]+$", description)
+    ):
+        raise Exception(
+            "Description must be between 1 and 255 characters and contain only letters, numbers, or spaces."
+        )
+
+    # Verifica se os dados são válidos
+    StudyPlanTopicSerializer(data=data).is_valid(raise_exception=True)
     # verifica se os dados sao validos
     StudyPlanTopicSerializer(data=data).is_valid(raise_exception=True)
 

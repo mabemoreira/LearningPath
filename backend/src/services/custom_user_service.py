@@ -15,6 +15,7 @@ def create_custom_user(data: dict) -> dict:
     Raises:
         ValidationError: se os dados forem inválidos.
     """
+
     UserSerializer(data=data).is_valid(raise_exception=True)  # verificacao dos dados
     user = User.objects.create_user(**data)  # cria o usuario na tabela do Django
     custom_user = CustomUser.objects.create(user=user)  # cria o CustomUser

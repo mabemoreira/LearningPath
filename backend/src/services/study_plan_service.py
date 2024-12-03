@@ -33,15 +33,15 @@ def create_study_plan(data: dict, user) -> dict:
     data["author"] = CustomUser.objects.get(id=user.id)
     visibility = data.pop("visibility", None)
     study_plan = StudyPlan.objects.create(**data)
+    # visibilidade eh setada como 'private' por padrao, isso atualiza
     if visibility:
         study_plan.set_visibility(visibility)
 
-    # segue o plano de estudos
+    # usuario deve seguir o proprio plano de estudos assim que eh criado
     follow_study_plan({}, study_plan.id, user)
 
-    # salva e retorna os dados serializados
     study_plan.save()
-    return StudyPlanSerializer(study_plan).data
+    return StudyPlanSerializer(study_plan).data  # json com dados do plano
 
 
 def check_is_author(user, study_plan):

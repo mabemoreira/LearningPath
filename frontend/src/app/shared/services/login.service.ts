@@ -24,4 +24,11 @@ export class LoginService {
       {username, password}
     );
   }
+
+  logout(): Observable<void> {
+    return this.httpClient.post<void>(
+      `${this.learningPathApiUrl}auth/logout/`,
+      {}
+    );
+  }
 }

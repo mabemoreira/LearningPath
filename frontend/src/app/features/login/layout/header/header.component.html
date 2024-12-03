@@ -27,5 +27,6 @@
     <a href="https://github.com/mabemoreira/LearningPath" target="_blank">
         Github
     </a>
-    <a (click)="openLoginModal()">Login</a>
+    <a *ngIf="!userIsLoggedIn" (click)="openLoginModal()">Login</a>
+    <a *ngIf="userIsLoggedIn" (click)="logout()">Logout</a>
 </nav>

@@ -9,7 +9,7 @@ export function authenticationInterceptor(
     const authToken: null | string = localStorage.getItem("auth-token");
 
     if (authToken) {
-        req.headers.set("authorization", `Token ${authToken}`);
+        req = req.clone({headers: req.headers.set("authorization", `Token ${authToken}`)});
     }
 
     return next(req);

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { Observable, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +18,8 @@ export class LoginService {
     );
   }
 
-  createAccount(username: string, password: string): Observable<any> {
-    return this.httpClient.post<any>(
+  createAccount(username: string, password: string): Observable<{id: number; username: string}> {
+    return this.httpClient.post<{id: number; username: string}>(
       `${this.learningPathApiUrl}user/`,
       {username, password}
     );

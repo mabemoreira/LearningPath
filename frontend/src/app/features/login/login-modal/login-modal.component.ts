@@ -1,11 +1,23 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogRef, MatDialogContent, MatDialogTitle, MatDialogActions, } from '@angular/material/dialog';
+import {
+  MatDialogRef,
+  MatDialogContent,
+  MatDialogTitle,
+  MatDialogActions,
+} from '@angular/material/dialog';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { LoginService } from '../../../shared/services/login.service';
-import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms'
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+  ReactiveFormsModule
+} from '@angular/forms'
 
 @Component({
   selector: 'app-login-modal',
@@ -138,7 +150,7 @@ export class LoginModalComponent {
       this.userInformationForm.get('username')?.value,
       this.userInformationForm.get('password')?.value
     ).subscribe({
-      next: (response: {id: number; user: string}) => {
+      next: _response => {
         this.changeContext('account-created');
         return true;
       },

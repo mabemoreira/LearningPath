@@ -33,6 +33,10 @@ urlpatterns = [
         "study_plan/<int:study_plan_id>/",
         StudyPlanController.as_view(http_method_names=["put", "get", "delete"]),
     ),
+    path(
+        "study_plan/get_all/",
+        StudyPlanController.as_view(http_method_names=["get"]),
+    ),
     # Authentication endpoints
     path("auth/login/", LoginView.as_view()),
     path("auth/logout/", LogoutView.as_view()),

@@ -1,0 +1,75 @@
+body {
+    font-family: Montserrat, sans-serif;
+    color: #363636;
+    background-color: #f7f7f7;
+    padding: 20px;
+}
+
+.plan-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    row-gap: 10px;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+.plan-page {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: left; /* Centraliza os itens horizontalmente */
+    align-items: center; /* Centraliza os itens verticalmente */
+
+}
+
+h1 {
+    width: 100%; /* Faz o título ocupar toda a largura */
+    text-align: center; /* Centraliza o título */
+    margin-bottom: 20px; /* Adiciona espaço abaixo do título */
+}
+
+.plan-buttons-container {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os botões quebrem para a linha seguinte */
+    gap: 10px; /* Espaçamento entre os botões */
+    justify-content: center; /* Centraliza os botões horizontalmente */
+}
+
+.plan-button {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.goto-plan-button {
+    width: 100%;
+    height: 100%;
+    font-size: 18px;
+    background-color: #ff5a5a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.goto-plan-button:hover {
+    background-color: #363636;
+}
+
+.create-plan-button {
+    width: 100%;
+    height: 100%;
+    font-size: 18px;
+    background-color: #ff5a5a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.create-plan-button:hover {
+    background-color: #363636;
+}

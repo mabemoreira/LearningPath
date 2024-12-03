@@ -168,6 +168,24 @@ def follow_study_plan(data: dict, study_plan_id: int, user: User) -> dict:
     return UserFollowsStudyPlanSerializer(follow).data
 
 
+def get_visible_study_plans(data: dict, user: User) -> dict:
+    """Retorna todos os planos de estudos visíveis.
+
+    Returns:
+        dict: dados dos planos de estudos visíveis
+
+    Raises:
+        ObjectDoesNotExist: se o plano de estudos não existir
+        PermissionDenied: se o usuário não tiver permissão para acessar o plano
+    """
+    study_plans = StudyPlan.objects.filter(visibility__name="public")
+    return StudyPlanSerializer(study_plans, many=True).data
+    for plan in StudyPlan.objects.filter(visibility__name="private"):
+        if plan.access_allowed(user):
+            study_plans.append(plan)
+    return StudyPlanSerializer(study_plans, many=True).data
+
+
 def clone_study_plan(data: dict, user: User, study_plan_id: int) -> dict:
     """Clona um plano de estudos com base nos dados passados.
 

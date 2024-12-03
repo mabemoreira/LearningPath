@@ -1,10 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-team-page',
     standalone: true,
-    imports: [CommonModule],
+    imports: [
+      CommonModule,
+    ],
     templateUrl: './team-page.component.html',
     styleUrl: './team-page.component.css',
 })

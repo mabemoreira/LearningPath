@@ -2,11 +2,16 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog'
 import { LoginModalComponent } from '../../login-modal/login-modal.component';
+import { CommonModule } from '@angular/common';
+import { LoginService } from '../../../../shared/services/login.service';
 
 @Component({
     selector: 'app-header',
     standalone: true,
-    imports: [RouterLink],
+    imports: [
+        RouterLink,
+        CommonModule,
+    ],
     templateUrl: './header.component.html',
     styleUrl: './header.component.css',
 })
@@ -21,14 +26,20 @@ export class HeaderComponent {
             active: false,
         },
     ];
+    userIsLoggedIn = false;
 
-    constructor(public dialog: MatDialog) {
-
+    constructor(
+        public dialog: MatDialog,
+        public loginService: LoginService,
+    ) {
+        this.userIsLoggedIn = !!localStorage.getItem('auth-token');
     }
 
     public openLoginModal(): void {
         this.dialog.open(
             LoginModalComponent
+        ).afterClosed().subscribe(
+            _ => this.userIsLoggedIn = !!localStorage.getItem('auth-token')
         );
     }
 
@@ -54,6 +65,13 @@ export class HeaderComponent {
         }
 
         return '';
+    }
+
+    logout(): void {
+        this.loginService.logout().subscribe(_ => {
+            localStorage.removeItem("auth-token");
+            this.userIsLoggedIn = false;
+        });
     }
 }
 

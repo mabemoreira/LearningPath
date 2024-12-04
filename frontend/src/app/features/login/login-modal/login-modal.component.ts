@@ -135,7 +135,7 @@ export class LoginModalComponent {
       this.userInformationForm.get('password')?.value
     ).subscribe({
       next: (response: {token: string}) => {
-        localStorage.setItem('auth.token', response.token);
+        localStorage.setItem('auth-token', response.token);
         this.dialogRef.close();
         return true;
       },

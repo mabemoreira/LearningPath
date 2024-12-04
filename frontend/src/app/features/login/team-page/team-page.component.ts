@@ -19,7 +19,7 @@ export class TeamPageComponent {
             linkedin: 'https://l1nk.dev/xYz0Z'
           },
           {
-            name: 'Maria Beatriz Moreira',
+            name: 'M.B. Moreira',
             description: 'Cinéfila, amante de livros e esfomeada',
             avatar: '../../../../assets/fotomabe.jpeg',
             github: 'https://github.com/mabemoreira',

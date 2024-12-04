@@ -27,13 +27,6 @@
     <a href="https://github.com/mabemoreira/LearningPath" target="_blank">
         Github
     </a>
-    <a
-        #planos
-        routerLink="/planos"
-        [class]="am_i_active(planos.pathname.slice(1))"
-        (click)="activate_path(planos.pathname.slice(1))"
-    >
-        Planos
-    </a>
-    <a href="#">Login</a>
+    <a *ngIf="!userIsLoggedIn" (click)="openLoginModal()">Login</a>
+    <a *ngIf="userIsLoggedIn" (click)="logout()">Logout</a>
 </nav>

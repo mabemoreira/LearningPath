@@ -1,91 +1,105 @@
 /* Estilos principais para a equipe */
 .team-container {
-    text-align: center;
-    padding: 40px;
-    background-color: #f4f4f4;
-  }
-  
-  .team-container h1 {
-    font-size: 2.5rem;
-    margin-bottom: 30px;
-    font-weight: bold;
-  }
-  
+  text-align: center;
+  padding: 40px;
+  background-color: #f4f4f4;
+}
+
+.team-container h1 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+
+.team-members {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: nowrap; /* Impede que os itens quebrem para a próxima linha */
+  overflow-x: auto; /* Adiciona barra de rolagem horizontal em telas menores */
+}
+
+
+.team-members {
+display: flex;
+justify-content: center;
+align-items: center; /* Garante alinhamento vertical perfeito */
+gap: 20px;
+flex-wrap: nowrap; /* Impede a quebra de linha */
+height: auto; /* Ajusta a altura dinamicamente */
+overflow: hidden; /* Remove qualquer rolagem desnecessária */
+}
+
+.member-card {
+flex: 1 1 calc(100% / 5 - 20px); /* Divide os cartões igualmente */
+max-width: calc(100% / 5 - 20px); /* Limita o tamanho máximo */
+height: auto; /* Garante que os cartões ajustem a altura sem forçar o contêiner */
+box-sizing: border-box; /* Inclui padding e borda no cálculo do tamanho */
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+.team-members {
+    flex-wrap: wrap; /* Permite a quebra de linha em telas menores */
+}
+
+.member-card {
+    flex: 1 1 100%; /* Cada cartão ocupa a largura inteira */
+    max-width: 100%;
+    margin-bottom: 20px; /* Espaçamento entre cartões */
+}
+}
+
+.member-card:hover {
+transform: scale(1.05); /* Mantém o efeito de zoom */
+overflow: visible; /* Garante que nenhum conteúdo seja cortado */
+}
+
+.avatar {
+width: 100px;
+height: 100px;
+margin: 0 auto 15px;
+overflow: hidden;
+border-radius: 50%;
+transition: transform 0.3s ease-in-out; /* Adiciona um efeito suave */
+}
+
+.avatar img {
+width: 100%;
+height: 100%;
+object-fit: cover; /* Garante que a imagem fique proporcional dentro do círculo */
+transition: transform 0.3s ease-in-out; /* Suaviza o zoom da imagem */
+}
+
+.member-card:hover .avatar img {
+transform: scale(1.1); /* Faz a imagem aumentar um pouco no hover */
+}
+
+/* Estilo dos links sociais */
+.social-links a {
+  margin: 0 10px;
+  display: inline-block;
+}
+
+.social-links img {
+  width: 24px;
+  height: 24px;
+  transition: opacity 0.3s ease;
+}
+
+.social-links a:hover img {
+  opacity: 0.7;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
   .team-members {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
   }
-  
-  /* Estilo de cada cartão de membro */
+
   .member-card {
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 250px;
-    padding: 20px;
-    text-align: center;
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .member-card:hover {
-    transform: scale(1.05);
-  }
-  
-  .member-card h2 {
-    font-size: 1.5rem;
-    color: #333;
-    margin: 15px 0;
-  }
-  
-  .member-card p {
-    font-size: 1rem;
-    color: #777;
+    width: 90%;
     margin-bottom: 20px;
   }
-  
-  /* Estilo do avatar (imagem circular) */
-  .avatar {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto 15px;
-    overflow: hidden;
-    border-radius: 50%;
-  }
-  
-  .avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  /* Estilo dos links sociais */
-  .social-links a {
-    margin: 0 10px;
-    display: inline-block;
-  }
-  
-  .social-links img {
-    width: 24px;
-    height: 24px;
-    transition: opacity 0.3s ease;
-  }
-  
-  .social-links a:hover img {
-    opacity: 0.7;
-  }
-  
-  /* Responsividade para telas menores */
-  @media (max-width: 768px) {
-    .team-members {
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    .member-card {
-      width: 90%;
-      margin-bottom: 20px;
-    }
-  }
-  
+}

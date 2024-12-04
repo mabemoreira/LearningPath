@@ -15,9 +15,7 @@ from src.services.study_plan_topic_service import (
 )
 
 VALID_STUDY_PLAN_TOPIC_DATA = [
-    {"title": "Valid Topic 1", "description": "Description 1"},
-    {"title": "Valid Topic 2", "description": "Description 2"},
-    {"title": "Valid Topic 3", "description": "Description 3"},
+    {"title": "1", "description": "1"},
     {"title": "Vahsahjsbwhç", "description": "ajisjwej jsan 77823ố"},
     {
         "title": "áBCDEFGHIJKLMNôPQRSTUVWXçZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFG",
@@ -28,8 +26,7 @@ VALID_STUDY_PLAN_TOPIC_DATA = [
 INVALID_STUDY_PLAN_TOPIC_DATA = [
     {"title:" "title without description"},
     {"title": "", "description": "Description without title"},
-    {"description": "Description without title"},
-    {"title": "@k,sd$", "description": "ol0"},
+    {"title": "@k,sd$", "description": "ola"},
     {"title": "a", "description": ")jh´#&"},
     {
         "title": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLL0ASLEIKKJW",

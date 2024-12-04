@@ -33,20 +33,20 @@ jobs:
       run: |
         python -m venv venv
         source venv/bin/activate
-        pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install --upgrade pip -v
+        pip install -r requirements.txt -v
 
     - name: Check for missing migrations
       run: |
         source venv/bin/activate
-        python3 -m src.manage makemigrations --check --dry-run
+        python3 -m src.manage makemigrations --check --dry-run -v 3
 
     - name: Migrate the database
       run: |
         source venv/bin/activate
-        python3 -m src.manage migrate
+        python3 -m src.manage migrate -v 3
 
     - name: Run Django tests
       run: |
         source venv/bin/activate
-        python3 -m src.manage test
+        python3 -m src.manage test --verbosity=2

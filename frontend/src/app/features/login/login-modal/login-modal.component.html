@@ -1,0 +1,46 @@
+<div
+    mat-dialog-title
+    class="login-modal-header"
+>
+    <div *ngIf="context !== 'account-created'" class="header-logo-image"></div>
+    <fa-icon
+        *ngIf="context === 'account-created'"
+        class="check-icon"
+        [icon]="faCircleCheck"
+        size="6x"
+    ></fa-icon>
+    <p *ngIf="context === 'login'">Login</p>
+    <p *ngIf="context === 'account-creation'">Criar Conta</p>
+    <p *ngIf="context === 'account-created'">Conta Criada!</p>
+</div>
+
+<mat-dialog-content *ngIf="context !== 'account-created'" class="login-modal-body">
+    <form [formGroup]="userInformationForm">
+        <input id="user" formControlName="username" type="text" placeholder="Usuário"/>
+        <p *ngIf="!(context === 'login') && !userInformationForm.get('username')?.valid && userInformationForm.get('username')?.touched" class="form-errors">
+            {{userInformationForm.get('username')?.errors?.['error']}}
+        </p>
+        <input id="password" formControlName="password" type="password" placeholder="Senha"/>
+        <p
+            *ngIf="!(context === 'login') && !userInformationForm.get('password')?.valid && userInformationForm.get('password')?.touched"
+            class="form-errors"
+            [innerHTML]="userInformationForm.get('password')?.errors?.['error']"
+        >    
+        </p>
+        <input  *ngIf="context === 'account-creation'" id="passwordCheck" formControlName="passwordCheck" type="password" placeholder="Confirme sua senha"/>
+        <p *ngIf="!userInformationForm.get('passwordCheck')?.valid && userInformationForm.get('passwordCheck')?.touched" class="form-errors">
+            {{userInformationForm.get('passwordCheck')?.errors?.['error']}}
+        </p>
+    </form>
+    <p *ngIf="formErrors" class="form-errors">
+        {{formErrors}}
+    </p>
+</mat-dialog-content>
+
+<mat-dialog-actions class="login-modal-footer">
+    <button mat-flat-button *ngIf="context === 'login'" [disabled]="!userInformationForm.valid" (click)="login()">Continuar</button>
+    <p *ngIf="context === 'login'">Nove por aqui? <a (click)="changeContext('account-creation')">Crie a sua conta.</a></p>
+    
+    <button mat-flat-button *ngIf="context === 'account-creation'" [disabled]="!userInformationForm.valid" (click)="createAccount()">Criar</button>
+    <p *ngIf="context !== 'login'"><a (click)="changeContext('login')">Voltar para o login.</a></p>
+</mat-dialog-actions>

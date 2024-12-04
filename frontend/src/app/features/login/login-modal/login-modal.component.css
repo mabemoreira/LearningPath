@@ -1,0 +1,120 @@
+.header-logo-image {
+    width: 5rem;
+    height: 5rem;
+    background-image: url(../../../../assets/logo.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+a {
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+.login-modal-header,
+.login-modal-body,
+.login-modal-footer {
+    padding: 0;
+    width: 15rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+.login-modal-header {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 2rem;
+}
+
+.login-modal-header::before {
+    height: 0;
+}
+
+.login-modal-header p {
+    margin-top: 1rem;
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: var(--primary-font-family);
+}
+
+.login-modal-body {
+    margin-top: 1rem;
+}
+
+.login-modal-body form {
+    display: flex;
+    align-self: center;
+    flex-direction: column;
+}
+
+.login-modal-body form input {
+    background-color: var(--lighter-gray-color);
+    border-radius: 0.25rem;
+    border-width: 3px;
+    border-color: transparent;
+    color: var(--gray-color);
+    padding: 0.5rem;
+}
+
+.login-modal-body form input:focus {
+    outline: none;
+    border-color: transparent !important;
+    border-bottom-color: var(--primary-color) !important;
+    background-color: var(--lighter-gray-color) !important;
+    color: var(--gray-color) !important;
+}
+
+.login-modal-body form input.ng-invalid.ng-touched {
+    border-width: 3px;
+    background-color: var(--negative-contrast-color-light);
+    border-color: var(--negative-contrast-color);
+}
+
+.login-modal-body form input:not(:first-child){
+    margin-top: 0.5rem;
+}
+
+.login-modal-footer {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+::ng-deep .mdc-button__label {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.mdc-button {
+    padding: 1.5rem;
+    min-width: 8rem;
+}
+
+.login-modal-footer p {
+    margin-top: 0.5rem
+}
+
+.login-modal-footer p, .login-modal-footer p * {
+    font-size: 0.75rem;
+}
+
+.check-icon {
+    color: var(--primary-color);
+    display: flex;
+    justify-content: center;
+}
+
+.form-errors {
+    margin-top: 0.25rem;
+}
+
+.form-errors, .form-errors * {
+    color: var(--negative-contrast-color);
+    font-size: 0.75rem;
+    list-style-position: inside;
+    line-height: 0.75rem;
+}

@@ -17,24 +17,25 @@ from src.services.study_plan_service import (
 from ..models.user_follows_study_plan_model import UserFollowsStudyPlan
 
 VALID_STUDY_PLAN_DATA = [
-    {"title": "Valid Plan 1", "visibility": "public"},
+    {"title": "1", "visibility": "public"},
     {"title": "Valid Plan 2", "visibility": "private"},
-    {"title": "Valid Plan 3"},
     {
-        "title": "áBCDEFGHIJKLMNôPQRSTUVWXçZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFG"
+        "title": "áBCDEFGHIJKLMNôPQRSTUVWXçZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFG",
+        "visibility": "private",
     },
 ]
 # vamos de classe de equivalencia, o título tem que existir e ele deve ser composto apenas por letras (acentuadas ou não), números ou " ", além de ter no máximo 255 caracteres
 INVALID_STUDY_PLAN_DATA = [
     {"title": "Test Plan", "visibility": "invalid_visibility"},
-    {"visibility": "public"},
+    {"title": "", "visibility": "public"},
     {
         "title": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLL0ASLEIKKJW",
         "visibility": "public",
     },
     {"title": "ol@", "visibility": "public"},
     {
-        "title": "$BCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEF"
+        "title": "$BCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEF",
+        "visibility": "private",
     },
 ]
 

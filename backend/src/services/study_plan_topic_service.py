@@ -37,13 +37,11 @@ def create_study_plan_topic(data: dict, study_plan_id: int) -> StudyPlanTopic:
 
     # Verifica se os dados são válidos
     StudyPlanTopicSerializer(data=data).is_valid(raise_exception=True)
-    # verifica se os dados sao validos
-    StudyPlanTopicSerializer(data=data).is_valid(raise_exception=True)
 
     # cria o topico do plano de estudos
     study_plan_topic = StudyPlanTopic.objects.create(
-        title=data["title"],
-        description=data["description"],
+        title=title,
+        description=description,
         study_plan_id=study_plan_id,
     )
 

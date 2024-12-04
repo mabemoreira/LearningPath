@@ -1,3 +1,5 @@
+import json
+
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ValidationError
 from django.http import JsonResponse
 from drf_spectacular.utils import extend_schema
@@ -62,6 +64,11 @@ class StudyPlanController(APIView):
             else:
                 return JsonResponse({"detail": "Ação não permitida"}, status=400)
         return self.post_create(request)
+
+    def queryset_to_json(queryset):
+        # Usando o método values() para obter um dicionário
+        data = list(queryset.values())
+        return json.dumps(data)
 
     def post_clone(self, request: Request, study_plan_id: int):
         try:

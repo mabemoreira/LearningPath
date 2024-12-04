@@ -1,5 +1,9 @@
+import json
+
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.serializers import serialize
 from django.db import models
+from django.http import JsonResponse
 from rest_framework import serializers
 from src.models.base_model import BaseModel
 from src.models.custom_user_model import CustomUser, User
@@ -46,7 +50,7 @@ class StudyPlan(BaseModel):
         Returns:
             bool: True se o usuário tem permissão, False caso contrário
         """
-        if self.is_private() and not self.author.id == user.id:
+        if self.is_private() and not self.author.user.id == user.id:
             return False
         return True
 
@@ -54,10 +58,11 @@ class StudyPlan(BaseModel):
 class StudyPlanSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField("get_author")
     visibility = serializers.SerializerMethodField("get_visibility")
+    topics = serializers.SerializerMethodField("get_topics")
 
     class Meta:
         model = StudyPlan
-        fields = ["id", "title", "visibility", "author", "deleted"]
+        fields = ["id", "title", "visibility", "author", "deleted", "topics"]
 
     def get_author(self, obj):
         author_info = {"id": obj.author.id, "username": obj.author.user.username}
@@ -70,6 +75,15 @@ class StudyPlanSerializer(serializers.ModelSerializer):
             "type": obj.visibility.type,
         }
         return visibility_info
+
+    def get_topics(self, obj):
+        output = []
+        queryset = obj.studyplantopic_set.all()
+        for query in queryset:
+            output.append(
+                {"id": query.id, "title": query.title, "description": query.description}
+            )
+        return output
 
     def save(self, **kwargs) -> bool:
         """

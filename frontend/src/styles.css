@@ -45,5 +45,23 @@ body {
     background-color: var(--background-color);
 }
 
+.page-title {
+    margin-top: 2rem;;
+    font-family: var(--primary-font-family);
+    font-size: 2rem;
+    font-weight: 800;
+}
+
+.page-section-title {
+    margin-top: 1rem;
+    font-family: var(--secondary-font-family);
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+
+.page-section-body {
+    margin-top: 0.5rem;
+}
+
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: var(--base-font-family), "Helvetica Neue", sans-serif; }

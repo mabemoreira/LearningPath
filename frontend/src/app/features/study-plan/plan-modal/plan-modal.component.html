@@ -1,0 +1,50 @@
+<div mat-dialog-title class="plan-modal-header">
+    <h2>Criar Plano</h2>
+</div>
+
+<mat-dialog-content class="plan-modal-body">
+    <form [formGroup]="planForm">
+        <input
+            id="title"
+            formControlName="title"
+            type="text"
+            placeholder="Título do Plano"
+        />
+        <p
+            *ngIf="!planForm.get('title')?.valid && planForm.get('title')?.touched"
+            class="form-errors"
+        >
+            {{ planForm.get('title')?.errors?.['error'] }}
+        </p>
+
+        <mat-form-field appearance="fill" class="dropdown-field">
+            <mat-label>Visibilidade</mat-label>
+            <mat-select formControlName="visibility">
+                <mat-option *ngFor="let option of visibilityOptions" [value]="option.value">
+                    {{ option.label }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <p
+            *ngIf="!planForm.get('visibility')?.valid && planForm.get('visibility')?.touched"
+            class="form-errors"
+        >
+            {{ planForm.get('visibility')?.errors?.['error'] }}
+        </p>
+    </form>
+    <p *ngIf="formErrors" class="form-errors">
+        {{ formErrors }}
+    </p>
+</mat-dialog-content>
+
+<mat-dialog-actions class="plan-modal-footer">
+    <button
+        mat-flat-button
+        color="primary"
+        [disabled]="!planForm.valid"
+        (click)="createPlan()"
+    >
+        Criar
+    </button>
+    <button mat-flat-button color="warn" (click)="close()">Cancelar</button>
+</mat-dialog-actions>

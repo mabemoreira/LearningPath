@@ -26,6 +26,10 @@ export class HeaderComponent {
             name: 'equipe',
             active: false,
         },
+        {
+            name: 'planos',
+            active: false,
+        }
     ];
 
     get userIsLoggedIn(): boolean {

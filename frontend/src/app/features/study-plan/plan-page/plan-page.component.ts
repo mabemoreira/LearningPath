@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from '../layout/header/header.component';
-import { FooterComponent } from '../layout/footer/footer.component';
+import { HeaderComponent } from '../../login/layout/header/header.component';
+import { FooterComponent } from '../../login/layout/footer/footer.component';
 import { ApiService } from '../../../api.service';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { PlanModalComponent } from '../plan-modal/plan-modal.component';
 
 @Component({
   selector: 'app-plan-page',
@@ -15,11 +17,20 @@ import { Router } from '@angular/router';
 export class PlanPageComponent {
   studyPlans: any[] = []; // Variável para armazenar os dados retornados
   
-  constructor(private apiService: ApiService, private router: Router) {}
+  constructor(private apiService: ApiService,
+    private router: Router,
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.fetchStudyPlans();
   }
+  
+  public openLoginModal(): void {
+    this.dialog.open(
+        PlanModalComponent
+    ).afterClosed().subscribe();
+}
 
   studyPlanData = {
     name: 'New Study Plan',
@@ -35,18 +46,6 @@ export class PlanPageComponent {
       },
       (error) => {
         console.error('Erro ao buscar study plans:', error);
-      }
-    );
-  }
-
-  createStudyPlan() {
-    this.apiService.createStudyPlan(this.studyPlanData).subscribe(
-      (response) => {
-        console.log('Study plan criado com sucesso:', response);
-        alert('Study plan criado com sucesso!');
-      },
-      (error) => {
-        console.error('Erro ao criar o study plan:', error);
       }
     );
   }

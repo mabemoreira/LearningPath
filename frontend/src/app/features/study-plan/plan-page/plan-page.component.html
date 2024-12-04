@@ -2,7 +2,7 @@
   <h1>Página de planos</h1>
   <div class="plan-wrapper">
     <div class="plan-button">
-      <button class="create-plan-button" (click)="createStudyPlan()">+</button>
+      <button class="create-plan-button" (click)="openLoginModal()">+</button>
     </div>
     <div class="plan-button" *ngFor="let plan of studyPlans">
       <button class="goto-plan-button" (click)="openStudyPlan(plan.id)">{{plan.title}}</button>

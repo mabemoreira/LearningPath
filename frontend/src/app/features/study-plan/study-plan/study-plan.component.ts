@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ApiService } from '../api.service';
+import { ApiService } from '../../../api.service';
 import { getStatsOptions } from '@angular-devkit/build-angular/src/tools/webpack/utils/helpers';
 import { CommonModule } from '@angular/common';
 

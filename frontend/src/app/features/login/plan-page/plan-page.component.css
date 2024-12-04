@@ -10,6 +10,7 @@ body {
     flex-wrap: wrap;
     justify-content: space-between;
     row-gap: 10px;
+    gap: 10px;
     margin-left: 0.5rem;
     margin-right: 0.5rem;
 }
@@ -20,7 +21,6 @@ body {
     gap: 10px;
     justify-content: left; /* Centraliza os itens horizontalmente */
     align-items: center; /* Centraliza os itens verticalmente */
-
 }
 
 h1 {
@@ -42,13 +42,14 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-basis: 150px; /* Faz os itens terem uma base fixa */
 }
 
 .goto-plan-button {
     width: 100%;
     height: 100%;
     font-size: 18px;
-    background-color: #ff5a5a;
+    background-color: #45ada8;
     color: white;
     border: none;
     border-radius: 8px;
@@ -56,20 +57,20 @@ h1 {
 }
 
 .goto-plan-button:hover {
-    background-color: #363636;
+    background-color: #547980;
 }
 
 .create-plan-button {
     width: 100%;
     height: 100%;
     font-size: 18px;
-    background-color: #ff5a5a;
-    color: white;
+    background-color: #9de0ad;
+    color: black;
     border: none;
     border-radius: 8px;
     cursor: pointer;
 }
 
 .create-plan-button:hover {
-    background-color: #363636;
+    background-color: #547980;
 }

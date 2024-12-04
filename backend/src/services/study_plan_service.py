@@ -179,7 +179,6 @@ def get_visible_study_plans(data: dict, user: User) -> dict:
         PermissionDenied: se o usuário não tiver permissão para acessar o plano
     """
     study_plans = StudyPlan.objects.filter(visibility__name="public")
-    return StudyPlanSerializer(study_plans, many=True).data
     for plan in StudyPlan.objects.filter(visibility__name="private"):
         if plan.access_allowed(user):
             study_plans.append(plan)

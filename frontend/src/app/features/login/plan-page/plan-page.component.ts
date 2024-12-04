@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../layout/header/header.component';
 import { FooterComponent } from '../layout/footer/footer.component';
 import { ApiService } from '../../../api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-plan-page',
@@ -14,13 +15,12 @@ import { ApiService } from '../../../api.service';
 export class PlanPageComponent {
   studyPlans: any[] = []; // Variável para armazenar os dados retornados
   
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private router: Router) {}
 
   ngOnInit() {
     this.fetchStudyPlans();
   }
 
-  // Dados fictícios para criação do study plan
   studyPlanData = {
     name: 'New Study Plan',
     description: 'Description of the new study plan'
@@ -52,15 +52,7 @@ export class PlanPageComponent {
   }
 
   openStudyPlan(id: number) {
-    this.apiService.getStudyPlanById(id).subscribe(
-      (response) => {
-        console.log('Study plan com ID:', id, response);
-      },
-      (error) => {
-        console.error('Erro ao abrir o study plan com ID:', id, error);
-      }
-    );
-    console.log('Abrir o study plan com ID:', id);
+    this.router.navigate([`/planos/${id}`]);
   }
 
 }

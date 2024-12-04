@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 from pathlib import Path
+from django.conf import settings
 
 from src.configurations.secrets import secrets
 
@@ -120,16 +121,22 @@ AUTH_PASSWORD_VALIDATORS = [
 # Rest framework - Token Authentication
 # https://www.django-rest-framework.org/
 
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.TokenAuthentication",
-    ],
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
-    ],
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-}
-
+if settings.DEBUG:  # ou você pode usar uma variável específica para distinguir entre produção e desenvolvimento
+    REST_FRAMEWORK = {
+        "DEFAULT_AUTHENTICATION_CLASSES": [],  # Remover a autenticação por token
+        "DEFAULT_PERMISSION_CLASSES": [
+            "rest_framework.permissions.AllowAny",  # Permite acesso a todas as rotas sem autenticação
+        ],
+    }
+else:
+    REST_FRAMEWORK = {
+        "DEFAULT_AUTHENTICATION_CLASSES": [
+            "rest_framework.authentication.TokenAuthentication",
+        ],
+        "DEFAULT_PERMISSION_CLASSES": [
+            "rest_framework.permissions.IsAuthenticated",
+        ],
+    }
 # Swagger Docs
 # https://drf-spectacular.readthedocs.io/en/latest/
 

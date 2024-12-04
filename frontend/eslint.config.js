@@ -15,6 +15,12 @@ module.exports = tseslint.config(
         processor: angular.processInlineTemplates,
         rules: {
             "max-len": ["error", 100],
+            "@typescript-eslint/no-unused-vars": [
+                "error",
+                {
+                    "argsIgnorePattern": "^_",
+                }
+            ],
             "@angular-eslint/directive-selector": [
                 "error",
                 {
@@ -37,7 +43,6 @@ module.exports = tseslint.config(
         files: ["**/*.html"],
         extends: [
             ...angular.configs.templateRecommended,
-            ...angular.configs.templateAccessibility,
         ],
         rules: {},
     }

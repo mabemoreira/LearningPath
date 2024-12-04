@@ -17,12 +17,12 @@
 <mat-dialog-content *ngIf="context !== 'account-created'" class="login-modal-body">
     <form [formGroup]="userInformationForm">
         <input id="user" formControlName="username" type="text" placeholder="Usuário"/>
-        <p *ngIf="!userInformationForm.get('username')?.valid && userInformationForm.get('username')?.touched" class="form-errors">
+        <p *ngIf="!(context === 'login') && !userInformationForm.get('username')?.valid && userInformationForm.get('username')?.touched" class="form-errors">
             {{userInformationForm.get('username')?.errors?.['error']}}
         </p>
         <input id="password" formControlName="password" type="password" placeholder="Senha"/>
         <p
-            *ngIf="!userInformationForm.get('password')?.valid && userInformationForm.get('password')?.touched"
+            *ngIf="!(context === 'login') && !userInformationForm.get('password')?.valid && userInformationForm.get('password')?.touched"
             class="form-errors"
             [innerHTML]="userInformationForm.get('password')?.errors?.['error']"
         >    
@@ -42,5 +42,5 @@
     <p *ngIf="context === 'login'">Nove por aqui? <a (click)="changeContext('account-creation')">Crie a sua conta.</a></p>
     
     <button mat-flat-button *ngIf="context === 'account-creation'" [disabled]="!userInformationForm.valid" (click)="createAccount()">Criar</button>
-    <a *ngIf="context === 'account-created'" (click)="changeContext('login')">Voltar para o login.</a>
+    <p *ngIf="context !== 'login'"><a (click)="changeContext('login')">Voltar para o login.</a></p>
 </mat-dialog-actions>

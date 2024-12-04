@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog'
 import { LoginModalComponent } from '../../login-modal/login-modal.component';
 import { CommonModule } from '@angular/common';
 import { LoginService } from '../../../../shared/services/login.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-header',
@@ -26,21 +27,20 @@ export class HeaderComponent {
             active: false,
         },
     ];
-    userIsLoggedIn = false;
+
+    get userIsLoggedIn(): boolean {
+        return !!localStorage.getItem('auth-token');
+    }
 
     constructor(
         public dialog: MatDialog,
         public loginService: LoginService,
-    ) {
-        this.userIsLoggedIn = !!localStorage.getItem('auth-token');
-    }
+    ) { }
 
     public openLoginModal(): void {
         this.dialog.open(
             LoginModalComponent
-        ).afterClosed().subscribe(
-            _ => this.userIsLoggedIn = !!localStorage.getItem('auth-token')
-        );
+        ).afterClosed().subscribe();
     }
 
     private get_path(requested_path: string): NavBarPath | undefined {
@@ -69,8 +69,7 @@ export class HeaderComponent {
 
     logout(): void {
         this.loginService.logout().subscribe(_ => {
-            localStorage.removeItem("auth-token");
-            this.userIsLoggedIn = false;
+            localStorage.removeItem(environment.AuthToken);
         });
     }
 }

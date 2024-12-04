@@ -18,6 +18,8 @@ import {
   ValidationErrors,
   ReactiveFormsModule
 } from '@angular/forms'
+import { environment } from '../../../../environments/environment';
+import { UserService } from '../../../shared/services/user.service';
 
 @Component({
   selector: 'app-login-modal',
@@ -93,7 +95,7 @@ export class LoginModalComponent {
             return null;
           }
           return {
-            error: 'The passwords are not matching!'
+            error: 'As senhas estão diferentes!'
           };
         }
       ],
@@ -108,6 +110,7 @@ export class LoginModalComponent {
   constructor(
     private dialogRef: MatDialogRef<LoginModalComponent>,
     private loginService: LoginService,
+    private userService: UserService,
   ) {
     this.changeContext(this.context);
   }
@@ -135,7 +138,7 @@ export class LoginModalComponent {
       this.userInformationForm.get('password')?.value
     ).subscribe({
       next: (response: {token: string}) => {
-        localStorage.setItem('auth-token', response.token);
+        localStorage.setItem(environment.AuthToken, response.token);
         this.dialogRef.close();
         return true;
       },
@@ -146,11 +149,11 @@ export class LoginModalComponent {
   }
 
   createAccount() {
-    this.loginService.createAccount(
+    this.userService.createUser(
       this.userInformationForm.get('username')?.value,
       this.userInformationForm.get('password')?.value
     ).subscribe({
-      next: _response => {
+      next: _ => {
         this.changeContext('account-created');
         return true;
       },

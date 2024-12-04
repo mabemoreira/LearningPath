@@ -51,20 +51,24 @@ a {
 .login-modal-body form input {
     background-color: var(--lighter-gray-color);
     border-radius: 0.25rem;
-    border-width: 0;
+    border-width: 3px;
+    border-color: transparent;
     color: var(--gray-color);
     padding: 0.5rem;
+}
+
+.login-modal-body form input:focus {
+    outline: none;
+    border-color: transparent !important;
+    border-bottom-color: var(--primary-color) !important;
+    background-color: var(--lighter-gray-color) !important;
+    color: var(--gray-color) !important;
 }
 
 .login-modal-body form input.ng-invalid.ng-touched {
     border-width: 3px;
     background-color: var(--negative-contrast-color-light);
     border-color: var(--negative-contrast-color);
-}
-
-.ng-valid {
-    border-width: 5px;
-    border-color: aqua;
 }
 
 .login-modal-body form input:not(:first-child){

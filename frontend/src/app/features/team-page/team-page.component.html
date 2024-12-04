@@ -1,0 +1,22 @@
+<div class="team-page">
+    <div class="page-title">Equipe</div>
+    <div class="team-member-cards-row">
+      <div *ngFor="let member of teamMembers" class="team-member-card">
+        <div class="team-member-card-header">
+          <img class="profile-pic" [src]="member.avatar" [alt]="member.name">
+        </div>
+        <div class="team-member-card-body">
+          <p class="member-name">{{ member.name }}</p>
+          <p class="member-description">{{ member.description }}</p>
+        </div>
+        <div class="team-member-card-footer">
+          <a [href]="member.github" target="_blank">
+            <fa-icon class="footer-icon" size="lg" [icon]="faGithub"></fa-icon>
+          </a>
+          <a [href]="member.linkedin" target="_blank">
+            <fa-icon class="footer-icon" size="lg" [icon]="faLinkedin"></fa-icon>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>

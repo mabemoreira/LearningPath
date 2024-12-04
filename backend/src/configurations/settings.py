@@ -12,8 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 from pathlib import Path
-from django.conf import settings
 
+from django.conf import settings
 from src.configurations.secrets import secrets
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -127,7 +127,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Rest framework - Token Authentication
 # https://www.django-rest-framework.org/
 
-if settings.DEBUG:  # ou você pode usar uma variável específica para distinguir entre produção e desenvolvimento
+if (
+    settings.DEBUG
+):  # ou você pode usar uma variável específica para distinguir entre produção e desenvolvimento
     REST_FRAMEWORK = {
         "DEFAULT_AUTHENTICATION_CLASSES": [],  # Remover a autenticação por token
         "DEFAULT_PERMISSION_CLASSES": [

@@ -52,8 +52,8 @@ class StudyPlan(BaseModel):
         if (
             self.deleted
             and not UserFollowsStudyPlan.objects.filter(
-                user=user,
-                study_plan=self,
+                user__id=user.id,
+                study_plan=self.id,
             ).exists()
         ):
             return False

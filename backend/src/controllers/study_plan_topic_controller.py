@@ -15,6 +15,7 @@ from src.models.study_plan_topic_model import StudyPlanTopic, StudyPlanTopicSeri
 from src.services.study_plan_topic_service import (
     create_study_plan_topic,
     delete_study_plan_topic,
+    mark_study_plan_topic,
     read_study_plan_topic,
     update_study_plan_topic,
 )
@@ -49,12 +50,18 @@ class StudyPlanTopicController(APIView):
             InternalServerError.status_code: ExceptionSerializer,
         },
     )
-    def post(self, request: Request, study_plan_id: int):
+    def post(self, request: Request, study_plan_id: int = None, topic_id: int = None):
         try:
-            return JsonResponse(
-                create_study_plan_topic(request.data, request.user, study_plan_id),
-                status=200,
-            )
+            if "mark" in request.path:
+                return JsonResponse(
+                    mark_study_plan_topic(request.data, request.user, topic_id),
+                    status=200,
+                )
+            else:
+                return JsonResponse(
+                    create_study_plan_topic(request.data, request.user, study_plan_id),
+                    status=200,
+                )
         except ValidationError as e:
             return UnprocessableEntity()
         except Exception as e:

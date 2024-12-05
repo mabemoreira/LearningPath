@@ -17,6 +17,7 @@ from src.services.study_plan_service import (
     create_study_plan,
     delete_study_plan,
     follow_study_plan,
+    get_execute_study_plan,
     get_visible_study_plans,
     read_study_plan,
     unfollow_study_plan,
@@ -37,8 +38,13 @@ class StudyPlanController(APIView):
     def get(self, request: Request, study_plan_id: int = -1):
         try:
             if study_plan_id > 0:
-                study_plan = read_study_plan(study_plan_id, request.user)
-                return JsonResponse(study_plan, status=200)
+                if "execute" in request.path:
+                    return JsonResponse(
+                        get_execute_study_plan(request.user, study_plan_id), status=200
+                    )
+                else:
+                    study_plan = read_study_plan(study_plan_id, request.user)
+                    return JsonResponse(study_plan, status=200)
             elif "get_all" in request.path:
                 return self.get_all(request)
         except ObjectDoesNotExist as e:

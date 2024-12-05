@@ -8,7 +8,10 @@ from src.models.domain_model import Domain
 from src.models.study_plan_model import StudyPlan, StudyPlanSerializer
 from src.models.study_plan_topic_model import StudyPlanTopic, StudyPlanTopicSerializer
 
-from ..models.user_does_study_plan_and_topic_model import UserDoesStudyPlanAndTopic
+from ..models.user_does_study_plan_and_topic_model import (
+    UserDoesStudyPlanAndTopic,
+    UserDoesStudyPlanAndTopicSerializer,
+)
 from ..models.user_follows_study_plan_model import UserFollowsStudyPlan
 
 
@@ -119,6 +122,43 @@ def delete_study_plan_topic(study_plan_topic_id: int, user: User) -> None:
 
     # deleta o tópico
     study_plan_topic.delete()
+
+
+def mark_study_plan_topic(data: dict, user: User, topic_id: int) -> dict:
+    """
+    Marca o tópico do plano de estudos com o id passado como concluído.
+
+    Params:
+        data: dados do tópico do plano de estudos
+        user: usuário
+        study_plan_id: id do plano de estudos
+
+    Returns:
+        dict: dados do tópico do plano de estudos atualizados
+
+    Raises:
+        ObjectDoesNotExist: se o tópico do plano de estudos não existir
+        PermissionDenied: se o usuário não tiver permissão para marcar o tópico como concluído
+    """
+
+    # busca o tópico do plano de estudos, se nao existir gera uma excessao
+    study_plan_topic = StudyPlanTopic.objects.get(id=topic_id)
+
+    # gera uma excessao se usuario nao tiver permissao para marcar o tópico como concluído
+    check_permission_topic(study_plan_topic, user)
+
+    # verifica se os dados sao validos
+    if UserDoesStudyPlanAndTopic.objects.filter(
+        user_id=user.id, study_plan_topic_id=study_plan_topic.id
+    ).exists():
+        does = UserDoesStudyPlanAndTopic.objects.get(
+            user_id=user.id, study_plan_topic_id=study_plan_topic.id
+        )
+        does.done = not does.done
+        does.save()
+    else:
+        return PermissionDenied()
+    return UserDoesStudyPlanAndTopicSerializer(does).data
 
 
 def update_study_plan_topic(study_plan_topic_id: int, data: dict, user: User) -> dict:

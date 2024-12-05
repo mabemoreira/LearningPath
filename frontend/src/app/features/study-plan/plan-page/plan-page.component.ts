@@ -60,7 +60,11 @@ export class PlanPageComponent {
     );
   }
 
-  openStudyPlan(id: number) {
+  executePlan(id: number) {
+    this.router.navigate([`/planos/${id}/executar`]);
+  }
+
+  editPlan(id: number) {
     this.router.navigate([`/planos/${id}`]);
   }
 

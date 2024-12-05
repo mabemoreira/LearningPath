@@ -1,0 +1,19 @@
+<div id="wrapper" class="wrapper">
+    <div class="title" id="title">
+        <h1>{{title}}</h1>
+    </div>
+    <div class="topics" id="topics" *ngFor="let topic of topics">
+        <div class="topic-checkbox" id="topic-checkbox">
+            <input (click)="markAsDoneOrUndone(topic.id)" type="checkbox" id="topic-checkbox" name="topic-checkbox"
+                [checked]="topic.done">
+        </div>
+        <div class="topic-title" id="topic-title">
+            <h2>{{topic.title}}</h2>
+        </div>
+        <div class="topic-info" id="topic-info">
+            <div class="topic-description" id="topic-description">
+                <h2>{{topic.description}}</h2>
+            </div>
+        </div>
+    </div>
+</div>

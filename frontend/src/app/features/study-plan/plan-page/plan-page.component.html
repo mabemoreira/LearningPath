@@ -5,7 +5,9 @@
       <button class="create-plan-button" (click)="openStudyPlanModal()">+</button>
     </div>
     <div class="plan-button" *ngFor="let plan of studyPlans">
-      <button class="goto-plan-button" (click)="openStudyPlan(plan.id)">{{plan.title}}</button>
+      <button class="edit-plan-button" (click)="editPlan(plan.id)">Editar</button>
+      <button class="execute-plan-button" (click)="executePlan(plan.id)">Executar</button>
+      <h3 class="goto-plan-button">{{plan.title}}</h3>
     </div>
   </div>
 </div>

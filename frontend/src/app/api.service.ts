@@ -30,8 +30,32 @@ export class ApiService {
     return this.http.get(`${this.baseUrl}/study_plan/${id}/`);
   }
 
+  getExecuteStudyPlanById(id: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/study_plan/execute/${id}/`);
+  }
+
   getCurrentUser(): any {
     return this.http.get(`${this.baseUrl}/user/0/`);
+  }
+
+  followStudyPlan(plan_id: number): Observable<any> {
+    return this.http.post(`${this.baseUrl}/study_plan/follow/${plan_id}/`, {});
+  }
+
+  unfollowStudyPlan(plan_id: number): Observable<any> {
+    return this.http.post(`${this.baseUrl}/study_plan/unfollow/${plan_id}/`, {});
+  }
+
+  cloneStudyPlan(plan_id: number): Observable<any> {
+    return this.http.post(`${this.baseUrl}/study_plan/clone/${plan_id}/`, {});
+  }
+
+  markTopicAsDoneOrUndone(topic_id: number): Observable<any> {
+    return this.http.post(`${this.baseUrl}/study_plan/topic/mark/${topic_id}/`, {});
+  }
+
+  deleteStudyPlan(plan_id: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/study_plan/${plan_id}/`);
   }
 
 }

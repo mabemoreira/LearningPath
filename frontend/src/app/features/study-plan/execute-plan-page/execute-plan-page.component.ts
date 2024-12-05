@@ -1,32 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../../api.service';
 import { getStatsOptions } from '@angular-devkit/build-angular/src/tools/webpack/utils/helpers';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { TopicModalComponent } from '../topic-modal/topic-modal.component';
 
-// ng add @angular/material
-
-
 @Component({
-  selector: 'app-study-plan',
+  selector: 'app-execute-plan-page',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './study-plan.component.html',
-  styleUrl: './study-plan.component.css'
+  templateUrl: './execute-plan-page.component.html',
+  styleUrl: './execute-plan-page.component.css'
 })
-export class StudyPlanComponent implements OnInit {
+export class ExecutePlanPageComponent {
+
   studyPlan: any = {};
   title: string = 'Study Plan';
-  topics: { title: string; description: string }[] = [];
+  topics: { id: number, title: string; description: string; done: boolean }[] = [];
   visibility: string = 'private';
   author: any = {};
   planId: number | null = null;
   isAuthor: boolean = false;
   currentUser: any = null;
 
-  constructor(private route: ActivatedRoute, private apiService: ApiService, private dialog: MatDialog, private router: Router) { }
+  constructor(private route: ActivatedRoute, private apiService: ApiService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.planId = Number(this.route.snapshot.paramMap.get('id'));
@@ -62,7 +60,7 @@ export class StudyPlanComponent implements OnInit {
   }
 
   get_study_plan(planId: number): void {
-    this.apiService.getStudyPlanById(planId).subscribe(
+    this.apiService.getExecuteStudyPlanById(planId).subscribe(
       (data) => {
         console.log('Dados recebidos:', data);
         this.studyPlan = data; // Armazena os dados retornados
@@ -96,28 +94,9 @@ export class StudyPlanComponent implements OnInit {
     this.apiService.followStudyPlan(this.planId).subscribe(
       (data) => {
         console.log('Plano de estudo seguido com sucesso:', data);
-        this.router.navigate([`/planos/${this.planId}/executar`]);
       },
       (error) => {
         console.error('Erro ao seguir plano de estudo:', error);
-      }
-    );
-  }
-
-  cloneStudyPlan(): void {
-    if (!this.planId) {
-      console.error('ID do plano de estudo não encontrado');
-      return;
-    }
-    this.apiService.cloneStudyPlan(this.planId).subscribe(
-      (data) => {
-        console.log('Plano de estudo clonado com sucesso:', data);
-        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-          this.router.navigate([`/planos/${data.id}`]);
-        });
-      },
-      (error) => {
-        console.error('Erro ao clonar plano de estudo:', error);
       }
     );
   }
@@ -137,18 +116,28 @@ export class StudyPlanComponent implements OnInit {
     );
   }
 
-  deleteStudyPlan(): void {
+  cloneStudyPlan(): void {
     if (!this.planId) {
       console.error('ID do plano de estudo não encontrado');
       return;
     }
-    this.apiService.deleteStudyPlan(this.planId).subscribe(
+    this.apiService.cloneStudyPlan(this.planId).subscribe(
       (data) => {
-        console.log('Plano de estudo deletado com sucesso:', data);
-        this.router.navigate(['/planos']);
+        console.log('Plano de estudo clonado com sucesso:', data);
       },
       (error) => {
-        console.error('Erro ao deletar plano de estudo:', error);
+        console.error('Erro ao clonar plano de estudo:', error);
+      }
+    );
+  }
+
+  markAsDoneOrUndone(topic_id: number): void {
+    this.apiService.markTopicAsDoneOrUndone(topic_id).subscribe(
+      (data: any) => {
+        console.log('Tópico marcado como feito ou desfeito:', data);
+      },
+      (error: any) => {
+        console.error('Erro ao marcar tópico como feito ou desfeito:', error);
       }
     );
   }

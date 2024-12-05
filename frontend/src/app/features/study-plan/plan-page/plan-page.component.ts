@@ -61,11 +61,17 @@ export class PlanPageComponent implements OnInit {
     );
   }
 
-  executePlan(id: number) {
+  executePlan(id: number | undefined) {
+    if (!id) {
+      return;
+    }
     this.router.navigate([`/planos/${id}/executar`]);
   }
 
-  editPlan(id: number) {
+  editPlan(id: number | undefined) {
+    if (!id) {
+      return;
+    }
     this.router.navigate([`/planos/${id}`]);
   }
 

@@ -38,12 +38,26 @@ export class PlanPageComponent implements OnInit {
     description: 'Description of the new study plan'
   };
 
-  openStudyPlanModal() {
-    const dialogRef = this.dialog.open(PlanModalComponent);
-
-    dialogRef.afterClosed().subscribe((newPlan) => {
-      if (newPlan) {
-        this.studyPlans.push(newPlan); // Adicione o novo tópico à lista
+  openStudyPlanModal(studyPlan?: StudyPlan) {
+    const dialogRef = this.dialog.open(PlanModalComponent, {
+      data: {
+        isEditMode: !!studyPlan, // Define se é edição com base na existência de um plano
+        planData: studyPlan || null, // Dados do plano para edição ou null para criação
+      },
+    });
+  
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        if (studyPlan) {
+          // Caso seja edição, atualize o plano na lista
+          const index = this.studyPlans.findIndex((plan) => plan.id === studyPlan.id);
+          if (index !== -1) {
+            this.studyPlans[index] = result;
+          }
+        } else {
+          // Caso seja criação, adicione o novo plano
+          this.studyPlans.push(result);
+        }
       }
     });
   }

@@ -6,6 +6,10 @@
     <div class="title" id="title">
         <h1>{{title}}</h1>
     </div>
+    <div class="visibility" id="visibility">
+        <h2 *ngIf="visibility==='public'">Esse plano é público</h2>
+        <h2 *ngIf="visibility==='private'">Esse plano é privado</h2>
+    </div>
     <div class="study-plan-buttons">
         <div class="follow" id="follow">
             <button class="follow-button" id="follow-button" (click)="followStudyPlan()">Seguir</button>
@@ -15,8 +19,11 @@
         </div>
         <div *ngIf="isAuthor" class="author-controls" id="author-controls">
             <div class="delete-button" id="delete-button">
-                <button class="delete-button" (click)="deleteStudyPlan()">Deletar</button>
+                <button class="delete-button" (click)="openStudyPlanModal(studyPlan)">Deletar</button>
             </div>
+        </div>
+        <div class="edit-button" id="edit-button">
+            <button class="edit-button" (click)="openStudyPlanModal(studyPlan)">Editar</button>
         </div>
     </div>
     <div class="topics" id="topics" *ngFor="let topic of topics">

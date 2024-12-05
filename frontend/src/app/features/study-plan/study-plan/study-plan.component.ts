@@ -8,6 +8,7 @@ import { User } from '../../../shared/interfaces/user.interface';
 import { ResponseError } from '../../../shared/interfaces/response-error.interface';
 import { StudyPlan } from '../../../shared/interfaces/study-plan.interface';
 import { Topic } from '../../../shared/interfaces/topic.interface';
+import { PlanModalComponent } from '../plan-modal/plan-modal.component';
 
 // ng add @angular/material
 
@@ -52,6 +53,30 @@ export class StudyPlanComponent implements OnInit {
     });
   }
 
+
+  openStudyPlanModal(studyPlan?: StudyPlan) {
+    const dialogRef = this.dialog.open(PlanModalComponent, {
+      data: {
+        isEditMode: true,
+        planData: studyPlan || null,
+      },
+    });
+  
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        if (studyPlan) {
+          // Atualize o plano editado
+          if (this.studyPlan) {
+            Object.assign(this.studyPlan, result);
+            this.title = this.studyPlan.title;
+            this.visibility = this.studyPlan.visibility?.name;
+          }
+        } 
+      }
+    });
+  }
+  
+
   deleteTopic(topic_id: number) {
     console.log('Tópicos antes:', this.topics);
     console.log('Deletando tópico:', topic_id);
@@ -66,6 +91,7 @@ export class StudyPlanComponent implements OnInit {
     );
   }
 
+  
   checkIsAuthor(): void {
     // Assuming you have a method to get the current user
     this.apiService.getCurrentUser().subscribe(
@@ -169,6 +195,36 @@ export class StudyPlanComponent implements OnInit {
         console.error('Erro ao deletar plano de estudo:', error);
       }
     );
+  }
+
+  openEditModal(): void {
+    if (!this.planId) {
+      console.error('ID do plano de estudo não encontrado');
+      return;
+    }
+    const dialogRef = this.dialog.open(PlanModalComponent, {
+      data: this.studyPlan
+    });
+
+    dialogRef.afterClosed().subscribe((editedPlan) => {
+      if (editedPlan) {
+        if (! this.planId) {
+          console.error('ID do plano de estudo não encontrado');
+          return;
+        }
+        this.apiService.editStudyPlan(this.planId, editedPlan).subscribe(
+          (data) => {
+            console.log('Plano de estudo editado com sucesso:', data);
+            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+              this.router.navigate([`/planos/${this.planId}`]);
+            });
+          },
+          (error) => {
+            console.error('Erro ao editar plano de estudo:', error);
+          }
+        );
+      }
+    });
   }
 
 }

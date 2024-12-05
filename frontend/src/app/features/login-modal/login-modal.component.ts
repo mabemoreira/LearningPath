@@ -9,7 +9,7 @@ import {
 } from '@angular/material/dialog';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
-import { LoginService } from '../../../shared/services/login.service';
+import { LoginService } from '../../shared/services/login.service';
 import {
   FormGroup,
   FormControl,
@@ -18,8 +18,8 @@ import {
   ValidationErrors,
   ReactiveFormsModule
 } from '@angular/forms'
-import { environment } from '../../../../environments/environment';
-import { UserService } from '../../../shared/services/user.service';
+import { environment } from '../../../environments/environment';
+import { UserService } from '../../shared/services/user.service';
 
 @Component({
   selector: 'app-login-modal',

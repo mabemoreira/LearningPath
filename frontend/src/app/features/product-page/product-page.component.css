@@ -1,5 +1,7 @@
-.product-page {
+:host {
+    height: 100%;
+}
+
+.page-body {
     width: 75vw;
-    margin-left: 3rem;
-    text-align: left; 
 }

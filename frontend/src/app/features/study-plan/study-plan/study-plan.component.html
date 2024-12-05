@@ -1,40 +1,45 @@
-<div *ngIf="!isAuthor" class="author-controls" id="author-controls">
-    <h2> Você não tem permissão para editar esse plano</h2>
+<div *ngIf="!isAuthor" class="page-wrapper">
+    <div class="page-title">ACESSO NEGADO!</div>
+    <div class="page-body">Você não possui acesso a este plano!</div>
 </div>
 
-<div id="wrapper" class="wrapper">
-    <div class="title" id="title">
-        <h1>{{title}}</h1>
+<div *ngIf="isAuthor" class="page-wrapper">
+    <div class="page-title">
+        {{title}}
+        <div class="study-plan-options">
+            <button
+                mat-flat-button
+                color="primary"g
+            mat-flat-button
+            color="primary"
+            (click)="cloneStudyPlan()"
+            >
+                Clonar
+            </button>
+            <button
+                *ngIf="isAuthor"
+                mat-flat-button
+                color="primary"
+                (click)="deleteStudyPlan()"
+            >
+                Deletar
+            </button>
+        </div>
     </div>
-    <div class="study-plan-buttons">
-        <div class="follow" id="follow">
-            <button class="follow-button" id="follow-button" (click)="followStudyPlan()">Seguir</button>
-        </div>
-        <div class="clone" id="clone">
-            <button class="clone-button" id="clone-button" (click)="cloneStudyPlan()">Clonar</button>
-        </div>
-        <div *ngIf="isAuthor" class="author-controls" id="author-controls">
-            <div class="delete-button" id="delete-button">
-                <button class="delete-button" (click)="deleteStudyPlan()">Deletar</button>
+    <div class="page-body">
+        <div class="topics">
+            <div class="topic" *ngFor="let topic of topics">
+                <div class="page-section-title">{{topic.title}}</div>
+                <div class="page-section-body">{{topic.description}}</div>
             </div>
-        </div>
-    </div>
-    <div class="topics" id="topics" *ngFor="let topic of topics">
-        <div class="delete-topic-button" id="delete-topic-button">
-            <button class="delete-topic-button" (click)="deleteTopic(topic.id)">X</button>
-        </div>
-        <div class="topic-title" id="topic-title">
-            <h2>{{topic.title}}</h2>
-        </div>
-        <div class="topic-info" id="topic-info">
-            <div class="topic-description" id="topic-description">
-                <h2>{{topic.description}}</h2>
-            </div>
-        </div>
-    </div>
-    <div *ngIf="isAuthor" class="author-controls" id="author-controls">
-        <div class="add-topic-button" id="add-topic-button">
-            <button class="add-topic-button" (click)="openTopicModal()">+</button>
+            <button
+                *ngIf="isAuthor"
+                mat-flat-button
+                color="primary"
+                (click)="openTopicModal()"
+            >
+                Adicionar tópico
+            </button>
         </div>
     </div>
 </div>

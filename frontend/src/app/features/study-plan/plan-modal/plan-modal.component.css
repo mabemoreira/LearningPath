@@ -48,7 +48,7 @@ a {
     flex-direction: column;
 }
 
-.plan-modal-body form input {
+.plan-modal-body form input, select {
     background-color: var(--lighter-gray-color);
     border-radius: 0.25rem;
     border-width: 3px;
@@ -57,7 +57,7 @@ a {
     padding: 0.5rem;
 }
 
-.plan-modal-body form input:focus {
+.plan-modal-body form input:focus, select:focus {
     outline: none;
     border-color: transparent !important;
     border-bottom-color: var(--primary-color) !important;
@@ -65,13 +65,17 @@ a {
     color: var(--gray-color) !important;
 }
 
-.plan-modal-body form input.ng-invalid.ng-touched {
+.select-items {
+    border-radius: 0;
+}
+
+.plan-modal-body form input.ng-invalid.ng-touched, select.ng-invalid.ng-touched {
     border-width: 3px;
     background-color: var(--negative-contrast-color-light);
     border-color: var(--negative-contrast-color);
 }
 
-.plan-modal-body form input:not(:first-child){
+.plan-modal-body form input:not(:first-child), select {
     margin-top: 0.5rem;
 }
 
@@ -81,7 +85,6 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
 }
 
 ::ng-deep .mdc-button__label {
@@ -91,7 +94,7 @@ a {
 
 .mdc-button {
     padding: 1.5rem;
-    min-width: 8rem;
+    min-width: 6rem !important;
 }
 
 .plan-modal-footer p {

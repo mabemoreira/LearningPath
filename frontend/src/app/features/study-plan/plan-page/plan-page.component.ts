@@ -1,21 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from '../../login/layout/header/header.component';
-import { FooterComponent } from '../../login/layout/footer/footer.component';
 import { ApiService } from '../../../api.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { PlanModalComponent } from '../plan-modal/plan-modal.component';
 import { StudyPlan } from '../../../shared/interfaces/study-plan.interface';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-plan-page',
   standalone: true,
-  imports: [HeaderComponent, FooterComponent, CommonModule],
+  imports: [
+    CommonModule,
+    FontAwesomeModule,
+  ],
   templateUrl: './plan-page.component.html',
   styleUrl: './plan-page.component.css'
 })
 export class PlanPageComponent implements OnInit {
+  faCirclePlus = faCirclePlus;
   studyPlans: StudyPlan[] = []; // Variável para armazenar os dados retornados
 
   constructor(private apiService: ApiService,

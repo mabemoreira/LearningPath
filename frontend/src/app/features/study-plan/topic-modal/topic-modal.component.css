@@ -48,7 +48,7 @@ a {
     flex-direction: column;
 }
 
-.topic-modal-body form input {
+.topic-modal-body form input, textarea {
     background-color: var(--lighter-gray-color);
     border-radius: 0.25rem;
     border-width: 3px;
@@ -57,7 +57,7 @@ a {
     padding: 0.5rem;
 }
 
-.topic-modal-body form input:focus {
+.topic-modal-body form input:focus, textarea:focus {
     outline: none;
     border-color: transparent !important;
     border-bottom-color: var(--primary-color) !important;
@@ -65,13 +65,13 @@ a {
     color: var(--gray-color) !important;
 }
 
-.topic-modal-body form input.ng-invalid.ng-touched {
+.topic-modal-body form input.ng-invalid.ng-touched, textarea.ng-invalid.ng-touched {
     border-width: 3px;
     background-color: var(--negative-contrast-color-light);
     border-color: var(--negative-contrast-color);
 }
 
-.topic-modal-body form input:not(:first-child){
+.topic-modal-body form input:not(:first-child), textarea {
     margin-top: 0.5rem;
 }
 
@@ -81,7 +81,6 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
 }
 
 ::ng-deep .mdc-button__label {
@@ -90,8 +89,8 @@ a {
 }
 
 .mdc-button {
-    padding: 1.5rem;
-    min-width: 8rem;
+    min-width: 6rem !important;
+    height: 2rem;
 }
 
 .topic-modal-footer p {

@@ -1,0 +1,58 @@
+:host {
+    height: 100%;
+    overflow: auto;
+}
+
+.page-title {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+}
+
+.study-plan-options {
+    padding-top: 1rem;
+    display: flex;
+    min-width: 300px;
+    max-width: 500px;
+    width: 100%;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+}
+
+.page-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.page-section-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.topic-checkbox {
+    accent-color: var(--light-gray-color);
+    height: 1rem;
+    width: 1rem;
+}
+
+.topic-checkbox:checked {
+    accent-color: var(--primary-color);
+    height: 1rem;
+    width: 1rem;
+}
+
+.topics {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.topics .mdc-button {
+    margin-top: 1rem;
+    flex-shrink: 0;
+}

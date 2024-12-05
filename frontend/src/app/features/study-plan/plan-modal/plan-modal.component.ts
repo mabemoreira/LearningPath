@@ -46,7 +46,14 @@ export class PlanModalComponent {
         return { error: 'O título é obrigatório!' };
       },
     ]),
-    visibility: new FormControl(null, [Validators.required]),
+    visibility: new FormControl(null, [
+      (control) => {
+        if (control.value) {
+          return null;
+        }
+        return { error: 'Selecione uma opção!' }
+      }
+    ]),
   });
   public formErrors: string | null = null;
 

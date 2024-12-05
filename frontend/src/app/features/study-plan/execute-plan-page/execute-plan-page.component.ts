@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../../api.service';
-import { getStatsOptions } from '@angular-devkit/build-angular/src/tools/webpack/utils/helpers';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { TopicModalComponent } from '../topic-modal/topic-modal.component';
+import { Topic } from '../../../shared/interfaces/topic.interface';
+import { ResponseError } from '../../../shared/interfaces/response-error.interface';
+import { User } from '../../../shared/interfaces/user.interface';
+import { StudyPlan } from '../../../shared/interfaces/study-plan.interface';
 
 @Component({
   selector: 'app-execute-plan-page',
@@ -13,18 +16,22 @@ import { TopicModalComponent } from '../topic-modal/topic-modal.component';
   templateUrl: './execute-plan-page.component.html',
   styleUrl: './execute-plan-page.component.css'
 })
-export class ExecutePlanPageComponent {
+export class ExecutePlanPageComponent implements OnInit {
 
-  studyPlan: any = {};
-  title: string = 'Study Plan';
-  topics: { id: number, title: string; description: string; done: boolean }[] = [];
-  visibility: string = 'private';
-  author: any = {};
-  planId: number | null = null;
-  isAuthor: boolean = false;
-  currentUser: any = null;
+  studyPlan: StudyPlan | undefined;
+  title = 'Study Plan';
+  topics: Topic[] = [];
+  visibility = 'private';
+  author: User | undefined;
+  planId: number | undefined;
+  isAuthor = false;
+  currentUser: User | undefined;
 
-  constructor(private route: ActivatedRoute, private apiService: ApiService, private dialog: MatDialog) { }
+  constructor(
+    private route: ActivatedRoute,
+    private apiService: ApiService,
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
     this.planId = Number(this.route.snapshot.paramMap.get('id'));
@@ -45,15 +52,11 @@ export class ExecutePlanPageComponent {
   checkIsAuthor(): void {
     // Assuming you have a method to get the current user
     this.apiService.getCurrentUser().subscribe(
-      (data: any) => {
-        console.log('Dados recebidos:', data);
+      (data: User) => {
         this.currentUser = data; // Armazena os dados retornados
-        console.log('Current user:', this.currentUser);
-        console.log('Comparando:', this.currentUser.id, this.author.id);
-        this.isAuthor = this.currentUser.id === this.author.id;
-        console.log('Is author:', this.isAuthor);
+        this.isAuthor = this.currentUser.id === this.author?.id;
       },
-      (error: any) => {
+      (error: ResponseError) => {
         console.error('Erro ao buscar usuário atual:', error);
       }
     );
@@ -66,10 +69,10 @@ export class ExecutePlanPageComponent {
         this.studyPlan = data; // Armazena os dados retornados
 
         // Processar os dados recebidos
-        this.title = this.studyPlan.title;
-        this.topics = this.studyPlan.topics;
-        this.author = this.studyPlan.author;
-        this.visibility = this.studyPlan.visibility?.name;
+        this.title = this.studyPlan?.title;
+        this.topics = this.studyPlan?.topics || [];
+        this.author = this.studyPlan?.author;
+        this.visibility = this.studyPlan?.visibility?.name;
 
         console.log('Title:', this.title);
         console.log('Topics:', this.topics);
@@ -133,10 +136,10 @@ export class ExecutePlanPageComponent {
 
   markAsDoneOrUndone(topic_id: number): void {
     this.apiService.markTopicAsDoneOrUndone(topic_id).subscribe(
-      (data: any) => {
+      (data: Topic) => {
         console.log('Tópico marcado como feito ou desfeito:', data);
       },
-      (error: any) => {
+      (error: ResponseError) => {
         console.error('Erro ao marcar tópico como feito ou desfeito:', error);
       }
     );

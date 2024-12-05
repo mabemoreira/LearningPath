@@ -8,8 +8,16 @@ import {
 } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
-import { ReactiveFormsModule, FormGroup, FormControl, Validators, ValidationErrors } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormGroup,
+  FormControl,
+  Validators,
+  ValidationErrors
+} from '@angular/forms';
 import { ApiService } from '../../../api.service'; // Certifique-se de que o caminho está correto.
+import { ResponseError } from '../../../shared/interfaces/response-error.interface';
+import { StudyPlan } from '../../../shared/interfaces/study-plan.interface';
 
 @Component({
   selector: 'app-plan-modal',
@@ -54,7 +62,7 @@ export class PlanModalComponent {
 
   createStudyPlan() {
     if (this.planForm.valid) {
-      const payload = {
+      const payload: StudyPlan = {
         title: this.planForm.get('title')?.value,
         visibility: this.planForm.get('visibility')?.value,
       };      
@@ -63,11 +71,11 @@ export class PlanModalComponent {
           payload
         )
         .subscribe({
-          next: (response: any) => {
+          next: (response: StudyPlan) => {
             console.log('Plano Criado:', response);
             this.dialogRef.close(response); // Fecha o modal e retorna os dados.
           },
-          error: (error: any) => {
+          error: (error: ResponseError) => {
             console.error('Erro ao criar plano:', error);
             this.formErrors = 'Erro ao criar plano. Por favor, tente novamente.';
           },

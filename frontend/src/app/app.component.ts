@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { HeaderComponent } from './features/login/layout/header/header.component';
 import { RouterOutlet } from '@angular/router';
-import { ApiService } from './api.service';
 import { FooterComponent } from './features/login/layout/footer/footer.component';
 
 @Component({

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../../login/layout/header/header.component';
 import { FooterComponent } from '../../login/layout/footer/footer.component';
@@ -6,6 +6,7 @@ import { ApiService } from '../../../api.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { PlanModalComponent } from '../plan-modal/plan-modal.component';
+import { StudyPlan } from '../../../shared/interfaces/study-plan.interface';
 
 @Component({
   selector: 'app-plan-page',
@@ -14,8 +15,8 @@ import { PlanModalComponent } from '../plan-modal/plan-modal.component';
   templateUrl: './plan-page.component.html',
   styleUrl: './plan-page.component.css'
 })
-export class PlanPageComponent {
-  studyPlans: any[] = []; // Variável para armazenar os dados retornados
+export class PlanPageComponent implements OnInit {
+  studyPlans: StudyPlan[] = []; // Variável para armazenar os dados retornados
 
   constructor(private apiService: ApiService,
     private router: Router,

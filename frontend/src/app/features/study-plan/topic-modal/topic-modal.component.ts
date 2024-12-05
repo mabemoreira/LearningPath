@@ -1,5 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component,
+  ViewEncapsulation,
+  OnInit
+ } from '@angular/core';
 import {
   MatDialogRef,
   MatDialogContent,
@@ -7,9 +10,16 @@ import {
   MatDialogActions,
 } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { ReactiveFormsModule, FormGroup, FormControl, Validators, ValidationErrors } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormGroup,
+  FormControl,
+  Validators, 
+  ValidationErrors 
+} from '@angular/forms';
 import { ApiService } from '../../../api.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { Topic } from '../../../shared/interfaces/topic.interface';
 
 @Component({
   selector: 'app-topic-modal',
@@ -26,7 +36,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./topic-modal.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class TopicModalComponent {
+export class TopicModalComponent implements OnInit {
   public topicForm: FormGroup = new FormGroup({
     title: new FormControl(null, [
       Validators.required,
@@ -65,7 +75,8 @@ export class TopicModalComponent {
 
   createTopic() {
     if (this.topicForm.valid) {
-      const payload = {
+      const payload: Topic = {
+        id: 0, // Assuming 0 or any default value for the id
         title: this.topicForm.get('title')?.value,
         description: this.topicForm.get('description')?.value,
       };
@@ -77,10 +88,10 @@ export class TopicModalComponent {
       }
 
       this.apiService.createTopic(this.studyPlanId, payload).subscribe({
-        next: (response: any) => {
+        next: () => {
           this.dialogRef.close(payload); // Retorna o tópico criado ao componente pai
         },
-        error: (error: any) => {
+        error: (error) => {
           console.error('Erro ao criar tópico:', error);
           this.formErrors = 'Erro ao criar tópico. Por favor, tente novamente.';
         },

@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../../api.service';
-import { getStatsOptions } from '@angular-devkit/build-angular/src/tools/webpack/utils/helpers';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { TopicModalComponent } from '../topic-modal/topic-modal.component';
+import { User } from '../../../shared/interfaces/user.interface';
+import { ResponseError } from '../../../shared/interfaces/response-error.interface';
+import { StudyPlan } from '../../../shared/interfaces/study-plan.interface';
+import { Topic } from '../../../shared/interfaces/topic.interface';
 
 // ng add @angular/material
 
@@ -17,16 +20,21 @@ import { TopicModalComponent } from '../topic-modal/topic-modal.component';
   styleUrl: './study-plan.component.css'
 })
 export class StudyPlanComponent implements OnInit {
-  studyPlan: any = {};
-  title: string = 'Study Plan';
-  topics: { title: string; description: string }[] = [];
-  visibility: string = 'private';
-  author: any = {};
-  planId: number | null = null;
-  isAuthor: boolean = false;
-  currentUser: any = null;
+  studyPlan: StudyPlan | undefined;
+  title = 'Study Plan';
+  topics: Topic[] = [];
+  visibility = 'private';
+  author: User | undefined;
+  planId: number | undefined;
+  isAuthor = false;
+  currentUser: User | undefined;
 
-  constructor(private route: ActivatedRoute, private apiService: ApiService, private dialog: MatDialog, private router: Router) { }
+  constructor(
+    private route: ActivatedRoute,
+    private apiService: ApiService,
+    private dialog: MatDialog,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.planId = Number(this.route.snapshot.paramMap.get('id'));
@@ -47,15 +55,11 @@ export class StudyPlanComponent implements OnInit {
   checkIsAuthor(): void {
     // Assuming you have a method to get the current user
     this.apiService.getCurrentUser().subscribe(
-      (data: any) => {
-        console.log('Dados recebidos:', data);
+      (data: User) => {
         this.currentUser = data; // Armazena os dados retornados
-        console.log('Current user:', this.currentUser);
-        console.log('Comparando:', this.currentUser.id, this.author.id);
-        this.isAuthor = this.currentUser.id === this.author.id;
-        console.log('Is author:', this.isAuthor);
+        this.isAuthor = this.currentUser.id === this.author?.id;
       },
-      (error: any) => {
+      (error: ResponseError) => {
         console.error('Erro ao buscar usuário atual:', error);
       }
     );
@@ -68,9 +72,9 @@ export class StudyPlanComponent implements OnInit {
         this.studyPlan = data; // Armazena os dados retornados
 
         // Processar os dados recebidos
-        this.title = this.studyPlan.title;
-        this.topics = this.studyPlan.topics;
-        this.author = this.studyPlan.author;
+        this.title = this.studyPlan?.title;
+        this.topics = this.studyPlan?.topics || [];
+        this.author = this.studyPlan?.author;
         this.visibility = this.studyPlan.visibility?.name;
 
         console.log('Title:', this.title);

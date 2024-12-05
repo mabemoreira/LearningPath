@@ -53,6 +53,7 @@ export class StudyPlanComponent implements OnInit {
     });
   }
 
+
   openStudyPlanModal(studyPlan?: StudyPlan) {
     const dialogRef = this.dialog.open(PlanModalComponent, {
       data: {
@@ -76,7 +77,21 @@ export class StudyPlanComponent implements OnInit {
   }
   
 
+  deleteTopic(topic_id: number) {
+    console.log('Tópicos antes:', this.topics);
+    console.log('Deletando tópico:', topic_id);
+    this.apiService.deleteTopic(topic_id).subscribe(
+      () => {
+        console.log('Tópico deletado com sucesso:');
+        this.topics = this.topics.filter((topic) => topic.id !== topic_id);
+      },
+      (error: ResponseError) => {
+        console.error('Erro ao deletar tópico:', error);
+      }
+    );
+  }
 
+  
   checkIsAuthor(): void {
     // Assuming you have a method to get the current user
     this.apiService.getCurrentUser().subscribe(

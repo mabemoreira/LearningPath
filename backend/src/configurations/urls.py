@@ -49,7 +49,7 @@ urlpatterns = [
         StudyPlanTopicController.as_view(http_method_names=["post"]),
     ),
     path(
-        "study_plan/topic/<int:topic_id>/",
+        "study_plan/topic/<int:study_plan_topic_id>/",
         StudyPlanTopicController.as_view(http_method_names=["put", "get", "delete"]),
     ),
     path(

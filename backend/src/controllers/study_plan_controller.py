@@ -17,6 +17,7 @@ from src.services.study_plan_service import (
     create_study_plan,
     delete_study_plan,
     follow_study_plan,
+    get_visible_study_plans,
     read_study_plan,
     unfollow_study_plan,
     update_study_plan,
@@ -33,10 +34,13 @@ class StudyPlanController(APIView):
             UnauthorizedAccess.status_code: ExceptionSerializer,
         },
     )
-    def get(self, request: Request, study_plan_id: int):
+    def get(self, request: Request, study_plan_id: int = -1):
         try:
-            study_plan = read_study_plan(study_plan_id, request.user)
-            return JsonResponse(study_plan, status=200)
+            if study_plan_id > 0:
+                study_plan = read_study_plan(study_plan_id, request.user)
+                return JsonResponse(study_plan, status=200)
+            elif "get_all" in request.path:
+                return self.get_all(request)
         except ObjectDoesNotExist as e:
             return EntityNotFound()
         except PermissionDenied as e:
@@ -85,6 +89,13 @@ class StudyPlanController(APIView):
             return UnauthorizedAccess()
         except ObjectDoesNotExist as e:
             return EntityNotFound()
+        except Exception as e:
+            return InternalServerError()
+
+    def get_all(self, request: Request):
+        try:
+            visible_study_plans = get_visible_study_plans({}, request.user)
+            return JsonResponse(visible_study_plans, safe=False, status=200)
         except Exception as e:
             return InternalServerError()
 

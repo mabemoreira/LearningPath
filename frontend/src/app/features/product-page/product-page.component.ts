@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { HeaderComponent } from '../layout/header/header.component';
-import { FooterComponent } from '../layout/footer/footer.component';
+import { HeaderComponent } from '../login/layout/header/header.component';
+import { FooterComponent } from '../login/layout/footer/footer.component';
 
 @Component({
     selector: 'app-product-page',

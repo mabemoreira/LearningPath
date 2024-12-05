@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from src.exceptions.business_rules_exceptions import DomainDoesNotExist
@@ -27,6 +29,16 @@ def create_study_plan(data: dict, user) -> dict:
         ValidationError: se os dados forem inválidos.
     """
     # verifica se os dados sao validos
+    title = data.get("title", "")
+
+    if not re.match(r"^[\w\sÀ-ÿçÇ]+$", title):
+        raise Exception(
+            "Title must contain only letters (including accented), numbers, or spaces."
+        )
+
+    if len(title) > 255:
+        raise Exception("Title must be 255 characters or less.")
+
     StudyPlanSerializer(data=data).is_valid(raise_exception=True)  # verificacao dos dados
 
     # cria o plano de estudos
@@ -183,6 +195,23 @@ def follow_study_plan(data: dict, study_plan_id: int, user: User) -> dict:
 
     # retorna os dados serializados
     return UserFollowsStudyPlanSerializer(follow).data
+
+
+def get_visible_study_plans(data: dict, user: User) -> dict:
+    """Retorna todos os planos de estudos visíveis.
+
+    Returns:
+        dict: dados dos planos de estudos visíveis
+
+    Raises:
+        ObjectDoesNotExist: se o plano de estudos não existir
+        PermissionDenied: se o usuário não tiver permissão para acessar o plano
+    """
+    study_plans = list(StudyPlan.objects.filter(visibility__name="public"))
+    for plan in StudyPlan.objects.filter(visibility__name="private"):
+        if plan.access_allowed(user):
+            study_plans.append(plan)
+    return StudyPlanSerializer(study_plans, many=True).data
 
 
 def unfollow_study_plan(data: dict, study_plan_id: int, user: User) -> None:

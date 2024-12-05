@@ -8,6 +8,8 @@ from src.controllers.login_controller import LoginView
 from src.controllers.logout_controller import LogoutView
 from src.controllers.study_plan_controller import StudyPlanController
 
+from ..controllers.study_plan_topic_controller import StudyPlanTopicController
+
 urlpatterns = [
     # Django admin view
     path("admin/", admin.site.urls),
@@ -32,6 +34,19 @@ urlpatterns = [
     path(
         "study_plan/<int:study_plan_id>/",
         StudyPlanController.as_view(http_method_names=["put", "get", "delete"]),
+    ),
+    path(
+        "study_plan/get_all/",
+        StudyPlanController.as_view(http_method_names=["get"]),
+    ),
+    # Topic endpoints
+    path(
+        "study_plan/<int:study_plan_id>/topic/",
+        StudyPlanTopicController.as_view(http_method_names=["post"]),
+    ),
+    path(
+        "study_plan/topic/<int:topic_id>/",
+        StudyPlanTopicController.as_view(http_method_names=["put", "get", "delete"]),
     ),
     # Authentication endpoints
     path("auth/login/", LoginView.as_view()),

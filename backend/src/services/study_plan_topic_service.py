@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from src.exceptions.business_rules_exceptions import DomainDoesNotExist
@@ -10,7 +12,7 @@ from ..models.user_does_study_plan_and_topic_model import UserDoesStudyPlanAndTo
 from ..models.user_follows_study_plan_model import UserFollowsStudyPlan
 
 
-def create_study_plan_topic(data: dict, study_plan_id: int) -> StudyPlanTopic:
+def create_study_plan_topic(data: dict, user: User, study_plan_id: int) -> StudyPlanTopic:
     """
 
     Returns:
@@ -19,14 +21,35 @@ def create_study_plan_topic(data: dict, study_plan_id: int) -> StudyPlanTopic:
     Raises:
         ValidationError: se os dados forem inválidos.
     """
+    if not user.id == StudyPlan.objects.get(id=study_plan_id).author.user.id:
+        raise PermissionDenied(
+            "Você não tem permissão para criar um tópico neste plano de estudos."
+        )
 
-    # verifica se os dados sao validos
+    title = data.get("title", "")
+    description = data.get("description", "")
+
+    # Verifica se o título é válido
+    if not (1 <= len(title) <= 255) or not re.match(r"^[\w\sÀ-ÿçÇ]+$", title):
+        raise Exception(
+            "Title must be between 1 and 255 characters and contain only letters, numbers, or spaces."
+        )
+
+    # Verifica se a descrição é válida (se fornecida)
+    if description and (
+        not (1 <= len(description) <= 255) or not re.match(r"^[\w\sÀ-ÿçÇ]+$", description)
+    ):
+        raise Exception(
+            "Description must be between 1 and 255 characters and contain only letters, numbers, or spaces."
+        )
+
+    # Verifica se os dados são válidos
     StudyPlanTopicSerializer(data=data).is_valid(raise_exception=True)
 
     # cria o topico do plano de estudos
     study_plan_topic = StudyPlanTopic.objects.create(
-        title=data["title"],
-        description=data["description"],
+        title=title,
+        description=description,
         study_plan_id=study_plan_id,
     )
 

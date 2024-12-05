@@ -1,10 +1,18 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog'
+import { LoginModalComponent } from '../../login-modal/login-modal.component';
+import { CommonModule } from '@angular/common';
+import { LoginService } from '../../../../shared/services/login.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-header',
     standalone: true,
-    imports: [RouterLink],
+    imports: [
+        RouterLink,
+        CommonModule,
+    ],
     templateUrl: './header.component.html',
     styleUrl: './header.component.css',
 })
@@ -18,7 +26,26 @@ export class HeaderComponent {
             name: 'equipe',
             active: false,
         },
+        {
+            name: 'planos',
+            active: false,
+        }
     ];
+
+    get userIsLoggedIn(): boolean {
+        return !!localStorage.getItem('auth-token');
+    }
+
+    constructor(
+        public dialog: MatDialog,
+        public loginService: LoginService,
+    ) { }
+
+    public openLoginModal(): void {
+        this.dialog.open(
+            LoginModalComponent
+        ).afterClosed().subscribe();
+    }
 
     private get_path(requested_path: string): NavBarPath | undefined {
         return this.nav_bar_paths.find((path) => requested_path === path.name);
@@ -42,6 +69,12 @@ export class HeaderComponent {
         }
 
         return '';
+    }
+
+    logout(): void {
+        this.loginService.logout().subscribe(_ => {
+            localStorage.removeItem(environment.AuthToken);
+        });
     }
 }
 

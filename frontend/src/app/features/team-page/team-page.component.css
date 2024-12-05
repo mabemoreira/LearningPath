@@ -1,0 +1,76 @@
+:host {
+  height: 100%;
+}
+
+.team-page {
+  margin-left: 3rem;
+  margin-right: 3rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.team-member-cards-row {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.team-member-card {
+  width: 250px;
+  padding: 20px;
+  text-align: center;
+  min-height: 300px;
+  height: 40vh;
+}
+
+.team-member-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60%;
+}
+
+.team-member-card-body {
+  height: 30%;
+}
+ 
+.team-member-card-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  height: 10%;
+}
+
+.footer-icon {
+  color: var(--lighter-gray-color);
+}
+
+.footer-icon:hover {
+  color: var(--light-gray-color);
+  transition: 0.3s;
+}
+
+.profile-pic {
+  height: 100%;
+  border-radius: 50%;
+  transition: transform 0.3s ease-in-out;
+}
+  
+.profile-pic:hover {
+  transform: scale(1.1);
+}
+
+.member-name {
+  margin-top: 0.5rem;
+  font-family: var(--secondary-font-family);
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.member-description {
+  margin-top: 0.5rem;
+  height: 3rem;
+}

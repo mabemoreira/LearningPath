@@ -9,6 +9,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators, ValidationErrors } from '@angular/forms';
+import { ApiService } from '../../../api.service'; // Certifique-se de que o caminho está correto.
 
 @Component({
   selector: 'app-plan-modal',
@@ -45,35 +46,34 @@ export class PlanModalComponent {
     { value: 'private', label: 'Privado' },
     { value: 'public', label: 'Público' },
   ];
-  apiService: any;
 
-  constructor(private dialogRef: MatDialogRef<PlanModalComponent>) {}
-
-  createPlan() {
-    if (this.planForm.valid) {
-      const planData = this.planForm.value;
-      console.log('Plano Criado:', planData);
-      this.dialogRef.close(planData); // Fecha o modal e retorna os dados.
-    } else {
-      this.formErrors = 'Por favor, preencha todos os campos corretamente.';
-    }
-  }
+  constructor(
+    private dialogRef: MatDialogRef<PlanModalComponent>,
+    private apiService: ApiService // Injeção do ApiService
+  ) {}
 
   createStudyPlan() {
-    this.apiService.createStudyPlan(
-      this.planForm.get('title')?.value,
-      this.planForm.get('visibility')?.value
-    ).subscribe({
-      next: () => {
-        console.log('Study plan criado com sucesso:', response);
-        alert('Study plan criado com sucesso!');
-      },
-      error: (error) => {
-        console.error('Erro ao criar o study plan:', error);
-      }
-    });
+    if (this.planForm.valid) {
+      const payload = {
+        title: this.planForm.get('title')?.value,
+        visibility: this.planForm.get('visibility')?.value,
+      };      
+      this.apiService
+        .createStudyPlan(
+          payload
+        )
+        .subscribe({
+          next: (response: any) => {
+            console.log('Plano Criado:', response);
+            this.dialogRef.close(response); // Fecha o modal e retorna os dados.
+          },
+          error: (error: any) => {
+            console.error('Erro ao criar plano:', error);
+            this.formErrors = 'Erro ao criar plano. Por favor, tente novamente.';
+          },
+        });
+    }
   }
-
 
   close() {
     this.dialogRef.close(); // Fecha o modal sem retornar dados.

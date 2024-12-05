@@ -16,26 +16,36 @@ import { PlanModalComponent } from '../plan-modal/plan-modal.component';
 })
 export class PlanPageComponent {
   studyPlans: any[] = []; // Variável para armazenar os dados retornados
-  
+
   constructor(private apiService: ApiService,
     private router: Router,
     public dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.fetchStudyPlans();
   }
-  
+
   public openLoginModal(): void {
     this.dialog.open(
-        PlanModalComponent
+      PlanModalComponent
     ).afterClosed().subscribe();
-}
+  }
 
   studyPlanData = {
     name: 'New Study Plan',
     description: 'Description of the new study plan'
   };
+
+  openStudyPlanModal() {
+    const dialogRef = this.dialog.open(PlanModalComponent);
+
+    dialogRef.afterClosed().subscribe((newPlan) => {
+      if (newPlan) {
+        this.studyPlans.push(newPlan); // Adicione o novo tópico à lista
+      }
+    });
+  }
 
   fetchStudyPlans() {
     this.studyPlans = [];

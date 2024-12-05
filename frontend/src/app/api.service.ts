@@ -17,12 +17,21 @@ export class ApiService {
     return this.http.post(`${this.baseUrl}/study_plan/`, data);
   }
 
+  createTopic(plan_id: number, data: any): Observable<any> {
+    console.log('Criando tópico para o plano:', plan_id, 'com dados:', data);
+    return this.http.post(`${this.baseUrl}/study_plan/${plan_id}/topic/`, data);
+  }
+
   getAllStudyPlans(): Observable<any> {
     return this.http.get(`${this.baseUrl}/study_plan/get_all/`);
   }
   
   getStudyPlanById(id: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/study_plan/${id}/`);
+  }
+
+  getCurrentUser(): any {
+    return this.http.get(`${this.baseUrl}/user/0/`);
   }
 
 }

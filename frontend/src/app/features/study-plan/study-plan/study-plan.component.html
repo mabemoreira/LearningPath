@@ -19,7 +19,9 @@
             </div>
         </div>
     </div>
-    <div class="add-topic-button" id="add-topic-button">
-        <!--<button class="add-topic-button" (click)="addTopic()">+</button>-->
+    <div *ngIf="isAuthor" class="author-controls" id="author-controls">
+        <div class="add-topic-button" id="add-topic-button">
+            <button class="add-topic-button" (click)="openTopicModal()">+</button>
+        </div>
     </div>
 </div>

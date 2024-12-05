@@ -8,6 +8,8 @@ import {
 } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators, ValidationErrors } from '@angular/forms';
+import { ApiService } from '../../../api.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-topic-modal',
@@ -47,17 +49,45 @@ export class TopicModalComponent {
   });
   public formErrors: string | null = null;
 
-  constructor(private dialogRef: MatDialogRef<TopicModalComponent>) {}
+  constructor(
+    private dialogRef: MatDialogRef<TopicModalComponent>,
+    private apiService: ApiService,
+    private router: Router // Injeção do ActivatedRoute
+  ) { }
+
+  studyPlanId: number | null = null;
+
+  ngOnInit() {
+    const url = this.router.url; // Exemplo: "/planos/37"
+    this.studyPlanId = Number(url.split('/').pop());
+    console.log('ID do Plano extraído da URL:', this.studyPlanId);
+  }
 
   createTopic() {
     if (this.topicForm.valid) {
-      const topicData = this.topicForm.value;
-      console.log('Tópico Criado:', topicData);
-      this.dialogRef.close(topicData); // Fecha o modal e retorna os dados.
-    } else {
-      this.formErrors = 'Por favor, preencha todos os campos corretamente.';
+      const payload = {
+        title: this.topicForm.get('title')?.value,
+        description: this.topicForm.get('description')?.value,
+      };
+
+      if (!this.studyPlanId) {
+        console.error('ID do plano não encontrado!');
+        this.formErrors = 'Erro ao criar tópico. Por favor, tente novamente.';
+        return;
+      }
+
+      this.apiService.createTopic(this.studyPlanId, payload).subscribe({
+        next: (response: any) => {
+          this.dialogRef.close(payload); // Retorna o tópico criado ao componente pai
+        },
+        error: (error: any) => {
+          console.error('Erro ao criar tópico:', error);
+          this.formErrors = 'Erro ao criar tópico. Por favor, tente novamente.';
+        },
+      });
     }
   }
+
 
   close() {
     this.dialogRef.close(); // Fecha o modal sem retornar dados.

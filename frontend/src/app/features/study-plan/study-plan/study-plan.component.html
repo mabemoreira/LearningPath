@@ -20,6 +20,9 @@
         </div>
     </div>
     <div class="topics" id="topics" *ngFor="let topic of topics">
+        <div class="delete-topic-button" id="delete-topic-button">
+            <button class="delete-topic-button" (click)="deleteTopic(topic.id)">X</button>
+        </div>
         <div class="topic-title" id="topic-title">
             <h2>{{topic.title}}</h2>
         </div>

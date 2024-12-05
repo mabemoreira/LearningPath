@@ -1,0 +1,13 @@
+<div class="plan-page">
+  <h1>Página de planos</h1>
+  <div class="plan-wrapper">
+    <div class="plan-button">
+      <button class="create-plan-button" (click)="openStudyPlanModal()">+</button>
+    </div>
+    <div class="plan-button" *ngFor="let plan of studyPlans">
+      <button class="edit-plan-button" (click)="editPlan(plan.id)">Editar</button>
+      <button class="execute-plan-button" (click)="executePlan(plan.id)">Executar</button>
+      <h3 class="goto-plan-button">{{plan.title}}</h3>
+    </div>
+  </div>
+</div>

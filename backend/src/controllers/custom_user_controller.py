@@ -36,6 +36,8 @@ class UserController(APIView):
         },
     )
     def get(self, request: Request, user_id: int):
+        if user_id == 0:
+            user_id = request.user.id
         try:
             user = read_custom_user(user_id)
             return JsonResponse(user, status=200)

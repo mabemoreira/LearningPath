@@ -17,7 +17,10 @@ from src.services.study_plan_service import (
     create_study_plan,
     delete_study_plan,
     follow_study_plan,
+    get_execute_study_plan,
+    get_visible_study_plans,
     read_study_plan,
+    unfollow_study_plan,
     update_study_plan,
 )
 
@@ -32,10 +35,18 @@ class StudyPlanController(APIView):
             UnauthorizedAccess.status_code: ExceptionSerializer,
         },
     )
-    def get(self, request: Request, study_plan_id: int):
+    def get(self, request: Request, study_plan_id: int = -1):
         try:
-            study_plan = read_study_plan(study_plan_id, request.user)
-            return JsonResponse(study_plan, status=200)
+            if study_plan_id > 0:
+                if "execute" in request.path:
+                    return JsonResponse(
+                        get_execute_study_plan(request.user, study_plan_id), status=200
+                    )
+                else:
+                    study_plan = read_study_plan(study_plan_id, request.user)
+                    return JsonResponse(study_plan, status=200)
+            elif "get_all" in request.path:
+                return self.get_all(request)
         except ObjectDoesNotExist as e:
             return EntityNotFound()
         except PermissionDenied as e:
@@ -87,6 +98,13 @@ class StudyPlanController(APIView):
         except Exception as e:
             return InternalServerError()
 
+    def get_all(self, request: Request):
+        try:
+            visible_study_plans = get_visible_study_plans({}, request.user)
+            return JsonResponse(visible_study_plans, safe=False, status=200)
+        except Exception as e:
+            return InternalServerError()
+
     def post_create(self, request: Request):
         try:
             return JsonResponse(create_study_plan(request.data, request.user), status=200)
@@ -105,8 +123,24 @@ class StudyPlanController(APIView):
         },
     )
     def delete(self, request: Request, study_plan_id: int):
+        if "follow" in request.path:
+            return self.unfollow_plan(request, study_plan_id)
+        return self.delete_plan(request, study_plan_id)
+
+    def delete_plan(self, request: Request, study_plan_id: int):
         try:
             delete_study_plan(study_plan_id, request.user)
+            return JsonResponse({}, status=204)
+        except ObjectDoesNotExist:
+            return EntityNotFound()
+        except PermissionDenied:
+            return UnauthorizedAccess()
+        except Exception as e:
+            return InternalServerError()
+
+    def unfollow_plan(self, request: Request, study_plan_id: int):
+        try:
+            unfollow_study_plan("", study_plan_id, request.user)
             return JsonResponse({}, status=204)
         except ObjectDoesNotExist:
             return EntityNotFound()

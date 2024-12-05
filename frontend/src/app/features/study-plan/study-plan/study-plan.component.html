@@ -1,0 +1,47 @@
+<div *ngIf="!isAuthor" class="author-controls" id="author-controls">
+    <h2> Você não tem permissão para editar esse plano</h2>
+</div>
+
+<div id="wrapper" class="wrapper">
+    <div class="title" id="title">
+        <h1>{{title}}</h1>
+    </div>
+    <div class="visibility" id="visibility">
+        <h2 *ngIf="visibility==='public'">Esse plano é público</h2>
+        <h2 *ngIf="visibility==='private'">Esse plano é privado</h2>
+    </div>
+    <div class="study-plan-buttons">
+        <div class="follow" id="follow">
+            <button class="follow-button" id="follow-button" (click)="followStudyPlan()">Seguir</button>
+        </div>
+        <div class="clone" id="clone">
+            <button class="clone-button" id="clone-button" (click)="cloneStudyPlan()">Clonar</button>
+        </div>
+        <div *ngIf="isAuthor" class="author-controls" id="author-controls">
+            <div class="delete-button" id="delete-button">
+                <button class="delete-button" (click)="openStudyPlanModal(studyPlan)">Deletar</button>
+            </div>
+        </div>
+        <div class="edit-button" id="edit-button">
+            <button class="edit-button" (click)="openStudyPlanModal(studyPlan)">Editar</button>
+        </div>
+    </div>
+    <div class="topics" id="topics" *ngFor="let topic of topics">
+        <div class="delete-topic-button" id="delete-topic-button">
+            <button class="delete-topic-button" (click)="deleteTopic(topic.id)">X</button>
+        </div>
+        <div class="topic-title" id="topic-title">
+            <h2>{{topic.title}}</h2>
+        </div>
+        <div class="topic-info" id="topic-info">
+            <div class="topic-description" id="topic-description">
+                <h2>{{topic.description}}</h2>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="isAuthor" class="author-controls" id="author-controls">
+        <div class="add-topic-button" id="add-topic-button">
+            <button class="add-topic-button" (click)="openTopicModal()">+</button>
+        </div>
+    </div>
+</div>

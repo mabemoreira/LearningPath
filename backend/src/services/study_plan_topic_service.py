@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from src.exceptions.business_rules_exceptions import DomainDoesNotExist
@@ -6,8 +8,14 @@ from src.models.domain_model import Domain
 from src.models.study_plan_model import StudyPlan, StudyPlanSerializer
 from src.models.study_plan_topic_model import StudyPlanTopic, StudyPlanTopicSerializer
 
+from ..models.user_does_study_plan_and_topic_model import (
+    UserDoesStudyPlanAndTopic,
+    UserDoesStudyPlanAndTopicSerializer,
+)
+from ..models.user_follows_study_plan_model import UserFollowsStudyPlan
 
-def create_study_plan_topic(data: dict, study_plan_id: int) -> StudyPlanTopic:
+
+def create_study_plan_topic(data: dict, user: User, study_plan_id: int) -> StudyPlanTopic:
     """
 
     Returns:
@@ -16,16 +24,44 @@ def create_study_plan_topic(data: dict, study_plan_id: int) -> StudyPlanTopic:
     Raises:
         ValidationError: se os dados forem inválidos.
     """
+    if not user.id == StudyPlan.objects.get(id=study_plan_id).author.user.id:
+        raise PermissionDenied(
+            "Você não tem permissão para criar um tópico neste plano de estudos."
+        )
 
-    # verifica se os dados sao validos
+    title = data.get("title", "")
+    description = data.get("description", "")
+
+    # Verifica se o título é válido
+    if not (1 <= len(title) <= 255) or not re.match(r"^[\w\sÀ-ÿçÇ]+$", title):
+        raise Exception(
+            "Title must be between 1 and 255 characters and contain only letters, numbers, or spaces."
+        )
+
+    # Verifica se a descrição é válida (se fornecida)
+    if description and (
+        not (1 <= len(description) <= 255) or not re.match(r"^[\w\sÀ-ÿçÇ]+$", description)
+    ):
+        raise Exception(
+            "Description must be between 1 and 255 characters and contain only letters, numbers, or spaces."
+        )
+
+    # Verifica se os dados são válidos
     StudyPlanTopicSerializer(data=data).is_valid(raise_exception=True)
 
     # cria o topico do plano de estudos
     study_plan_topic = StudyPlanTopic.objects.create(
-        title=data["title"],
-        description=data["description"],
+        title=title,
+        description=description,
         study_plan_id=study_plan_id,
     )
+
+    # cria relacao de "does" para usuarios que seguem o plano
+    for follow in UserFollowsStudyPlan.objects.filter(study_plan_id=study_plan_id):
+        user = follow.user
+        UserDoesStudyPlanAndTopic.objects.create(
+            user_id=user.id, study_plan_topic_id=study_plan_topic.id
+        )
 
     # salva e retorna os dados serializados
     study_plan_topic.save()
@@ -86,6 +122,43 @@ def delete_study_plan_topic(study_plan_topic_id: int, user: User) -> None:
 
     # deleta o tópico
     study_plan_topic.delete()
+
+
+def mark_study_plan_topic(data: dict, user: User, topic_id: int) -> dict:
+    """
+    Marca o tópico do plano de estudos com o id passado como concluído.
+
+    Params:
+        data: dados do tópico do plano de estudos
+        user: usuário
+        study_plan_id: id do plano de estudos
+
+    Returns:
+        dict: dados do tópico do plano de estudos atualizados
+
+    Raises:
+        ObjectDoesNotExist: se o tópico do plano de estudos não existir
+        PermissionDenied: se o usuário não tiver permissão para marcar o tópico como concluído
+    """
+
+    # busca o tópico do plano de estudos, se nao existir gera uma excessao
+    study_plan_topic = StudyPlanTopic.objects.get(id=topic_id)
+
+    # gera uma excessao se usuario nao tiver permissao para marcar o tópico como concluído
+    check_permission_topic(study_plan_topic, user)
+
+    # verifica se os dados sao validos
+    if UserDoesStudyPlanAndTopic.objects.filter(
+        user_id=user.id, study_plan_topic_id=study_plan_topic.id
+    ).exists():
+        does = UserDoesStudyPlanAndTopic.objects.get(
+            user_id=user.id, study_plan_topic_id=study_plan_topic.id
+        )
+        does.done = not does.done
+        does.save()
+    else:
+        return PermissionDenied()
+    return UserDoesStudyPlanAndTopicSerializer(does).data
 
 
 def update_study_plan_topic(study_plan_topic_id: int, data: dict, user: User) -> dict:

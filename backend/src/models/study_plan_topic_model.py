@@ -20,5 +20,5 @@ class StudyPlanTopicSerializer(serializers.ModelSerializer):
         fields = ["id", "title", "description", "study_plan"]
 
     def get_study_plan(self, obj):
-        study_plan_info = {"id": obj.study_plan.id, "title": obj.study_plan.title}
+        study_plan_info = {"id": obj.study_plan.id, "plan_title": obj.study_plan.title}
         return study_plan_info

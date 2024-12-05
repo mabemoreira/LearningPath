@@ -1,0 +1,47 @@
+<div mat-dialog-title class="topic-modal-header">
+    <h2>Criar Tópico</h2>
+</div>
+
+<mat-dialog-content class="topic-modal-body">
+    <form [formGroup]="topicForm">
+        <input
+            id="title"
+            formControlName="title"
+            type="text"
+            placeholder="Título do Tópico"
+        />
+        <p
+            *ngIf="!topicForm.get('title')?.valid && topicForm.get('title')?.touched"
+            class="form-errors"
+        >
+            {{ topicForm.get('title')?.errors?.['error'] }}
+        </p>
+        <textarea
+            id="description"
+            formControlName="description"
+            placeholder="Descrição do Tópico"
+            rows="4"
+        ></textarea>
+        <p
+            *ngIf="!topicForm.get('description')?.valid && topicForm.get('description')?.touched"
+            class="form-errors"
+        >
+            {{ topicForm.get('description')?.errors?.['error'] }}
+        </p>
+    </form>
+    <p *ngIf="formErrors" class="form-errors">
+        {{ formErrors }}
+    </p>
+</mat-dialog-content>
+
+<mat-dialog-actions class="topic-modal-footer">
+    <button
+        mat-flat-button
+        color="primary"
+        [disabled]="!topicForm.valid"
+        (click)="createTopic()"
+    >
+        Criar
+    </button>
+    <button mat-flat-button color="warn" (click)="close()">Cancelar</button>
+</mat-dialog-actions>

@@ -42,3 +42,7 @@ nav a:nth-child(n + 2).active {
 nav :last-child {
     padding-right: 2rem !important;
 }
+
+a {
+    cursor: pointer;
+}

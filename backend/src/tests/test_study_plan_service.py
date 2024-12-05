@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.test import TestCase
+from rest_framework.exceptions import ValidationError
 from src.models.custom_user_model import CustomUser
 from src.models.domain_model import Domain
 from src.models.study_plan_model import StudyPlan
@@ -10,20 +11,33 @@ from src.services.study_plan_service import (
     delete_study_plan,
     follow_study_plan,
     read_study_plan,
+    unfollow_study_plan,
     update_study_plan,
 )
 
 from ..models.user_follows_study_plan_model import UserFollowsStudyPlan
 
 VALID_STUDY_PLAN_DATA = [
-    {"title": "Valid Plan 1", "visibility": "public"},
+    {"title": "1", "visibility": "public"},
     {"title": "Valid Plan 2", "visibility": "private"},
-    {"title": "Valid Plan 3"},
+    {
+        "title": "áBCDEFGHIJKLMNôPQRSTUVWXçZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFG",
+        "visibility": "private",
+    },
 ]
-
+# vamos de classe de equivalencia, o título tem que existir e ele deve ser composto apenas por letras (acentuadas ou não), números ou " ", além de ter no máximo 255 caracteres
 INVALID_STUDY_PLAN_DATA = [
     {"title": "Test Plan", "visibility": "invalid_visibility"},
-    {"visibility": "public"},
+    {"title": "", "visibility": "public"},
+    {
+        "title": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLL0ASLEIKKJW",
+        "visibility": "public",
+    },
+    {"title": "ol@", "visibility": "public"},
+    {
+        "title": "$BCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEF",
+        "visibility": "private",
+    },
 ]
 
 
@@ -199,3 +213,18 @@ class TestCloneStudyPlanService(TestCase):
         another_user = User.objects.create(username="otheruser")
         with self.assertRaises(PermissionDenied):
             clone_study_plan(dict(), another_user, self.study_plan.id)
+
+
+class TestFollowStudyPlanService(TestCase):
+    def setUp(self):
+        self.user1 = CustomUser.objects.create(
+            user=User.objects.create(username="testuser1")
+        )
+        self.user2 = CustomUser.objects.create(
+            user=User.objects.create(username="testuser2")
+        )
+        self.study_plan = StudyPlan.objects.create(
+            title=VALID_STUDY_PLAN_DATA[0]["title"],
+            visibility=Domain.objects.get(name="public"),
+            author=self.user1,
+        )

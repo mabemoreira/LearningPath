@@ -9,7 +9,7 @@ from src.models.study_plan_model import StudyPlan, StudyPlanSerializer
 from src.models.study_plan_topic_model import StudyPlanTopic, StudyPlanTopicSerializer
 
 
-def create_study_plan_topic(data: dict, study_plan_id: int) -> StudyPlanTopic:
+def create_study_plan_topic(data: dict, user: User, study_plan_id: int) -> StudyPlanTopic:
     """
 
     Returns:
@@ -18,6 +18,11 @@ def create_study_plan_topic(data: dict, study_plan_id: int) -> StudyPlanTopic:
     Raises:
         ValidationError: se os dados forem inválidos.
     """
+    if not user.id == StudyPlan.objects.get(id=study_plan_id).author.user.id:
+        raise PermissionDenied(
+            "Você não tem permissão para criar um tópico neste plano de estudos."
+        )
+
     title = data.get("title", "")
     description = data.get("description", "")
 

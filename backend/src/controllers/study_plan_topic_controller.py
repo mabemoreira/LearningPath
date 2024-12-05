@@ -52,7 +52,8 @@ class StudyPlanTopicController(APIView):
     def post(self, request: Request, study_plan_id: int):
         try:
             return JsonResponse(
-                create_study_plan_topic(request.data, study_plan_id), status=200
+                create_study_plan_topic(request.data, request.user, study_plan_id),
+                status=200,
             )
         except ValidationError as e:
             return UnprocessableEntity()

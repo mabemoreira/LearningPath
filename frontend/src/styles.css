@@ -21,15 +21,13 @@
     --base-font-family: "Urbanist";
     --primary-font-family: "Montserrat";
     --secondary-font-family: "Magra";
-
+    font-family: var(--base-font-family), "Helvetica Neue", sans-serif;
+    font-size: 16pt;
     padding: 0;
     margin: 0;
-    font-size: 16pt;
-    font-family: var(--base-font-family);
 }
 
-:root,
-a {
+:root, a {
     text-decoration: none;
 }
 
@@ -41,15 +39,33 @@ a {
     background-color: var(--lighter-gray-color);
 }
 
+:root, body {
+    height: 100%;
+}
+
 body {
     background-color: var(--background-color);
 }
+  
+.page-wrapper {
+    margin-left: 3rem;
+    margin-right: 3rem;
+    height: 100%;
+    overflow: hidden;
+}
 
 .page-title {
-    margin-top: 2rem;;
+    display: flex;
+    align-items: end;
+    height: 10%;
     font-family: var(--primary-font-family);
     font-size: 2rem;
     font-weight: 800;
+}
+
+.page-body {
+    height: 90%;
+    overflow-y: scroll;
 }
 
 .page-section-title {
@@ -62,6 +78,3 @@ body {
 .page-section-body {
     margin-top: 0.5rem;
 }
-
-html, body { height: 100%; }
-body { margin: 0; font-family: var(--base-font-family), "Helvetica Neue", sans-serif; }

@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog'
 import { LoginModalComponent } from '../../login-modal/login-modal.component';
 import { CommonModule } from '@angular/common';
-import { LoginService } from '../../../../shared/services/login.service';
-import { environment } from '../../../../../environments/environment';
+import { LoginService } from '../../../shared/services/login.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-header',
@@ -39,6 +39,7 @@ export class HeaderComponent {
     constructor(
         public dialog: MatDialog,
         public loginService: LoginService,
+        public router: Router,
     ) { }
 
     public openLoginModal(): void {
@@ -74,6 +75,7 @@ export class HeaderComponent {
     logout(): void {
         this.loginService.logout().subscribe(_ => {
             localStorage.removeItem(environment.AuthToken);
+            this.router.navigate(['']);
         });
     }
 }

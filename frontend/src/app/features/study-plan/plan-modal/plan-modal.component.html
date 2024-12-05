@@ -1,5 +1,6 @@
 <div mat-dialog-title class="plan-modal-header">
-    <h2>Criar Plano</h2>
+    <div class="header-logo-image"></div>
+    <p>Criar Plano</p>
 </div>
 
 <mat-dialog-content class="plan-modal-body">
@@ -17,14 +18,17 @@
             {{ planForm.get('title')?.errors?.['error'] }}
         </p>
 
-        <mat-form-field appearance="fill" class="dropdown-field">
-            <mat-label>Visibilidade</mat-label>
-            <mat-select formControlName="visibility">
-                <mat-option *ngFor="let option of visibilityOptions" [value]="option.value">
-                    {{ option.label }}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
+        <select
+            id="visibility"
+            formControlName="visibility"
+        >
+            <option
+                *ngFor="let opt of visibilityOptions"
+                [ngValue]="opt.value"
+            >
+                {{ opt.label }}
+            </option>
+        </select>
         <p
             *ngIf="!planForm.get('visibility')?.valid && planForm.get('visibility')?.touched"
             class="form-errors"

@@ -8,6 +8,7 @@ import { User } from '../../../shared/interfaces/user.interface';
 import { ResponseError } from '../../../shared/interfaces/response-error.interface';
 import { StudyPlan } from '../../../shared/interfaces/study-plan.interface';
 import { Topic } from '../../../shared/interfaces/topic.interface';
+import { MatButtonModule } from '@angular/material/button';
 
 // ng add @angular/material
 
@@ -15,7 +16,10 @@ import { Topic } from '../../../shared/interfaces/topic.interface';
 @Component({
   selector: 'app-study-plan',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+  ],
   templateUrl: './study-plan.component.html',
   styleUrl: './study-plan.component.css'
 })

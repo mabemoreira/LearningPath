@@ -1,13 +1,34 @@
-<div class="plan-page">
-  <h1>Página de planos</h1>
-  <div class="plan-wrapper">
-    <div class="plan-button">
-      <button class="create-plan-button" (click)="openStudyPlanModal()">+</button>
-    </div>
-    <div class="plan-button" *ngFor="let plan of studyPlans">
-      <button class="edit-plan-button" (click)="editPlan(plan.id)">Editar</button>
-      <button class="execute-plan-button" (click)="executePlan(plan.id)">Executar</button>
-      <h3 class="goto-plan-button">{{plan.title}}</h3>
+<div class="page-wrapper">
+  <div class="page-title">Planos</div>
+  <div class="page-body">
+    <div class="grid-wrapper">
+      <div class="study-plan-card-grid">
+        <div class="grid-cell">
+          <button class="study-plan-card create-study-plan-button" (click)="openStudyPlanModal()">
+            <fa-icon
+              [icon]="faCirclePlus"
+              size="2x"
+            ></fa-icon>
+          </button>
+        </div>
+        <div class="grid-cell" *ngFor="let plan of studyPlans">
+          <div class="study-plan-card">
+            <div class="study-plan-card-header">{{plan.title}}</div>
+            <div class="study-plan-card-actions">
+              <a class="study-plan-card-action"
+                  (click)="editPlan(plan.id)"
+              >
+                Editar
+              </a>
+              <a class="study-plan-card-action"
+                  (click)="executePlan(plan.id)"
+              >
+                Executar
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

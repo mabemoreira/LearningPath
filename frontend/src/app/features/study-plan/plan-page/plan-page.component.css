@@ -36,6 +36,7 @@
 .study-plan-card-header {
     display: flex;
     justify-content: center;
+    text-align: center;
     align-items: center;
     font-size: 1.5rem;
     height: 70%;

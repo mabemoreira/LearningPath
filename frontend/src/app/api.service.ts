@@ -60,4 +60,8 @@ export class ApiService {
     return this.http.delete<void>(`${this.baseUrl}/study_plan/${plan_id}/`);
   }
 
+  deleteTopic(topic_id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/study_plan/topic/${topic_id}/`);
+  }
+
 }

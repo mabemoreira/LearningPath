@@ -1,15 +1,15 @@
-<div *ngIf="!isAuthor" class="page-wrapper">
-    <div class="page-title">ACESSO NEGADO!</div>
-    <div class="page-body">Você não possui acesso a este plano!</div>
-</div>
-
-<div *ngIf="isAuthor" class="page-wrapper">
+<div class="page-wrapper">
     <div class="page-title">
         {{title}}
         <div class="study-plan-options">
             <button
                 mat-flat-button
-                color="primary"g
+                color="primary"
+                (click)="followStudyPlan()"
+            >
+                Seguir
+            </button>
+            <button
             mat-flat-button
             color="primary"
             (click)="cloneStudyPlan()"

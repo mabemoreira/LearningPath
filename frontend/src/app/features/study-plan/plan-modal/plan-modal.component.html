@@ -1,5 +1,5 @@
 <div mat-dialog-title class="plan-modal-header">
-    <h2>{{ isEditMode ? 'Editar Plano de Estudo' : 'Criar Plano de Estudo' }}</h2>
+    <h2>Criar Plano</h2>
 </div>
 
 <mat-dialog-content class="plan-modal-body">
@@ -42,9 +42,9 @@
         mat-flat-button
         color="primary"
         [disabled]="!planForm.valid"
-        (click)="savePlan()"
+        (click)="createStudyPlan()"
     >
-        {{ isEditMode ? 'Salvar Alterações' : 'Criar' }}
+        Criar
     </button>
     <button mat-flat-button color="warn" (click)="close()">Cancelar</button>
 </mat-dialog-actions>

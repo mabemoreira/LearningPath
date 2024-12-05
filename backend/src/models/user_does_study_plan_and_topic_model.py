@@ -24,7 +24,7 @@ class UserDoesStudyPlanAndTopicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserDoesStudyPlanAndTopic
-        fields = ["id", "user", "study_plan_topic", "done"]
+        fields = ["id", "user", "done", "study_plan_topic"]
 
     def get_user(self, obj):
         user_info = {"id": obj.user.id, "username": obj.user.user.username}

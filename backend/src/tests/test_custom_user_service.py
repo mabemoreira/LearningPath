@@ -98,8 +98,6 @@ class TestCreateCustomUserService(TestCase):
         for data in VALID_USER_INPUT_MOCK:
             # Teste para usuario valido
 
-            print(data)
-
             result = create_custom_user(data)
             # Pega usuario no BD
             user = User.objects.get(username=data["username"])

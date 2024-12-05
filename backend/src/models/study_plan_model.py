@@ -3,7 +3,7 @@ from django.db import models
 from rest_framework import serializers
 from src.models.base_model import BaseModel
 from src.models.custom_user_model import CustomUser, User
-from src.models.domain_model import Domain, DomainSerializer
+from src.models.domain_model import Domain
 
 
 def default_visibility():
@@ -46,7 +46,19 @@ class StudyPlan(BaseModel):
         Returns:
             bool: True se o usuário tem permissão, False caso contrário
         """
-        if self.is_private() and not self.author.id == user.id:
+        from src.models.user_follows_study_plan_model import UserFollowsStudyPlan
+
+        # plano foi deletado e usuario nao o segue
+        if (
+            self.deleted
+            and not UserFollowsStudyPlan.objects.filter(
+                user__id=user.id,
+                study_plan=self.id,
+            ).exists()
+        ):
+            return False
+        # plano eh privado e usuario nao eh o autor
+        elif self.is_private() and not self.author.id == user.id:
             return False
         return True
 

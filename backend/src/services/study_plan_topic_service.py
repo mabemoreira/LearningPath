@@ -40,7 +40,8 @@ def create_study_plan_topic(data: dict, user: User, study_plan_id: int) -> Study
 
     # Verifica se a descrição é válida (se fornecida)
     if description and (
-        not (1 <= len(description) <= 255) or not re.match(r"^[\w\sÀ-ÿçÇ]+$", description)
+        not (1 <= len(description) <= 255)
+        or not re.match(r"^[\w\sÀ-ÿçÇ,]+$", description)
     ):
         raise Exception(
             "Description must be between 1 and 255 characters and contain only letters, numbers, or spaces."

@@ -88,8 +88,8 @@ export class TopicModalComponent implements OnInit {
       }
 
       this.apiService.createTopic(this.studyPlanId, payload).subscribe({
-        next: () => {
-          this.dialogRef.close(payload); // Retorna o tópico criado ao componente pai
+        next: (response: Topic) => {
+          this.dialogRef.close(response); // Retorna o tópico criado ao componente pai
         },
         error: (error) => {
           console.error('Erro ao criar tópico:', error);

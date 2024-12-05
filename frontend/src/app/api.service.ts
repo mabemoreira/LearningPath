@@ -60,4 +60,8 @@ export class ApiService {
     return this.http.delete<void>(`${this.baseUrl}/study_plan/${plan_id}/`);
   }
 
+  editStudyPlan(plan_id: number, data: StudyPlan): Observable<StudyPlan> {
+    return this.http.put<StudyPlan>(`${this.baseUrl}/study_plan/${plan_id}/`, data);
+  }
+
 }

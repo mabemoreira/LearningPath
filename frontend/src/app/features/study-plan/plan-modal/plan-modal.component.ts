@@ -1,12 +1,7 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  ViewEncapsulation,
-  Inject, 
-  OnInit } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import {
   MatDialogRef,
-  MAT_DIALOG_DATA,
   MatDialogContent,
   MatDialogTitle,
   MatDialogActions,
@@ -20,10 +15,8 @@ import {
   Validators,
   ValidationErrors
 } from '@angular/forms';
-import { ApiService } from '../../../api.service'; 
-import {
-  ResponseError
-} from '../../../shared/interfaces/response-error.interface';
+import { ApiService } from '../../../api.service'; // Certifique-se de que o caminho está correto.
+import { ResponseError } from '../../../shared/interfaces/response-error.interface';
 import { StudyPlan } from '../../../shared/interfaces/study-plan.interface';
 
 @Component({
@@ -42,7 +35,7 @@ import { StudyPlan } from '../../../shared/interfaces/study-plan.interface';
   styleUrls: ['./plan-modal.component.css'],
   encapsulation: ViewEncapsulation.None,
 })
-export class PlanModalComponent implements OnInit {
+export class PlanModalComponent {
   public planForm: FormGroup = new FormGroup({
     title: new FormControl(null, [
       Validators.required,
@@ -55,88 +48,42 @@ export class PlanModalComponent implements OnInit {
     ]),
     visibility: new FormControl(null, [Validators.required]),
   });
-
   public formErrors: string | null = null;
+
   public visibilityOptions = [
     { value: 'private', label: 'Privado' },
     { value: 'public', label: 'Público' },
   ];
 
-  public isEditMode = false;
-
   constructor(
     private dialogRef: MatDialogRef<PlanModalComponent>,
-    private apiService: ApiService,
-    @Inject(MAT_DIALOG_DATA) public data:
-    { isEditMode: boolean; planData: StudyPlan } // Dados do modal
+    private apiService: ApiService // Injeção do ApiService
   ) {}
-  
-  ngOnInit() {
-    this.isEditMode = this.data.isEditMode; // Recebe o estado de edição
-    if (this.data.planData) {
-      this.planForm.patchValue({
-        title: this.data.planData.title,
-        visibility: this.data.planData.visibility,
-      });
-    }
-  }
 
-  private loadPlan(planId: number): void {
-    this.apiService.getStudyPlanById(planId).subscribe({
-      next: (plan: StudyPlan) => {
-        this.planForm.patchValue({
-          title: plan.title,
-          visibility: plan.visibility,
-        });
-      },
-      error: (error: ResponseError) => {
-        console.error('Erro ao carregar plano:', error);
-        this.formErrors = 'Erro ao carregar os dados do plano.';
-      },
-    });
-  }
-
-  savePlan() {
+  createStudyPlan() {
     if (this.planForm.valid) {
       const payload: StudyPlan = {
         title: this.planForm.get('title')?.value,
         visibility: this.planForm.get('visibility')?.value,
-      };
-      console.log('informações do modal:', payload, 'isEditMode:', this.isEditMode);
-
-      if (this.isEditMode && this.data.planData.id) {
-        this.apiService.editStudyPlan(this.data.planData.id, payload).subscribe({
-          next: (response: StudyPlan) => {
-            console.log('Plano Editado:', response);
-            this.dialogRef.close(response);
-          },
-          error: (error: ResponseError) => {
-            console.error('Erro ao editar plano:', error);
-            this.formErrors = 'Erro ao editar plano. Por favor, tente novamente.';
-          },
-        });
-      } else {
-        this.apiService.createStudyPlan(payload).subscribe({
+      };      
+      this.apiService
+        .createStudyPlan(
+          payload
+        )
+        .subscribe({
           next: (response: StudyPlan) => {
             console.log('Plano Criado:', response);
-            this.dialogRef.close(response);
+            this.dialogRef.close(response); // Fecha o modal e retorna os dados.
           },
           error: (error: ResponseError) => {
             console.error('Erro ao criar plano:', error);
             this.formErrors = 'Erro ao criar plano. Por favor, tente novamente.';
           },
         });
-      }
-    }
-  }
-
-  save() {
-    if (this.planForm.valid) {
-      this.dialogRef.close(this.planForm.value);
     }
   }
 
   close() {
-    this.dialogRef.close();
+    this.dialogRef.close(); // Fecha o modal sem retornar dados.
   }
 }

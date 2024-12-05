@@ -59,13 +59,9 @@ export class ApiService {
   deleteStudyPlan(plan_id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/study_plan/${plan_id}/`);
   }
-  
-  editStudyPlan(plan_id: number, data: StudyPlan): Observable<StudyPlan> {
-    return this.http.put<StudyPlan>(`${this.baseUrl}/study_plan/${plan_id}/`, data);
 
   deleteTopic(topic_id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/study_plan/topic/${topic_id}/`);
-
   }
 
 }

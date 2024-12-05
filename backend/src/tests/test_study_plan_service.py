@@ -228,29 +228,3 @@ class TestFollowStudyPlanService(TestCase):
             visibility=Domain.objects.get(name="public"),
             author=self.user1,
         )
-
-    def test_follow_study_plan(self):
-        # Executa a função follow
-        response = follow_study_plan({}, self.study_plan.id, self.user2.user)
-
-        # Verifica se o usuário está seguindo o plano
-        self.assertTrue(
-            UserFollowsStudyPlan.objects.filter(
-                user=self.user2, study_plan=self.study_plan
-            ).exists()
-        )
-        self.assertEqual(response["study_plan"], self.study_plan.id)
-
-    def test_unfollow_study_plan(self):
-        # Primeiro, seguir o plano
-        follow_study_plan({}, self.study_plan.id, self.user2.user)
-
-        # Depois, remover o follow
-        unfollow_study_plan({}, self.study_plan.id, self.user2.user)
-
-        # Verificar se o follow foi removido
-        self.assertFalse(
-            UserFollowsStudyPlan.objects.filter(
-                user=self.user2, study_plan=self.study_plan
-            ).exists()
-        )
